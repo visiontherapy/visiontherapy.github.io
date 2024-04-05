@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CP saccades exercise</title>
+  <meta name="darkreader-lock">
+  <link rel="stylesheet" href="vision.css" />
+  <script defer src="settings.js"></script>
+
+</head>
+
+<body>
+
+  <div id="main" data-mark="">
+  </div>
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+    
+    <div>Markers <input type="text" id="markers" /></div>
+    
+    <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
+
+    <div>Marker spacing <input id="markslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="markscale"></span></div>
+    
+    <div>Circle spacing <input id="spaceslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="spacescale"></span></div>
+
+    <div><input type="checkbox" id="colormode" /><label for="colormode">Colorful markers</label></div>
+
+    <div><input type="checkbox" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+  </div>
+
+
+    <button id="reload">Reload</button>
+    <input type="checkbox" id="help" />
+    <label for="help">Help</label>
+    <label id="helptext" for="help">
+      <h2>How to use this:</h2>
+      <h3>Customize Markers</h3>
+      Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
+      <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
+      <h3>Usage</h3>
+      Press the spacebar on the keyboard to display a new target marker in the central area.
+    </label>
+  <script>
+
+    let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
+
+    let buffer = 1.75;
+
+    let spots = [];
+
+    let box = document.querySelector("#main");
+
+    let origmarkers = "ABCDEFGHIJKLMOPQR".split("");
+
+    document.querySelector("#markers").value = origmarkers.join("");
+
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart();
+
+    };
+
+    document.querySelector("#markers").oninput = function (e) {
+      console.log(this.value);
+      if (this.value.match(",")) {
+        origmarkers = [...new Set(this.value.split(","))]; // get unique values
+        this.value = origmarkers.join(",");
+      } else {
+        origmarkers = [...new Set(this.value.split(""))]; // get unique values
+        this.value = origmarkers.join("");
+      }
+      showchart();
+    };
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      document.querySelector("#darkmode").checked = true;
+    }
+
+
+    document.querySelector("#darkmode").onchange = function (e) {
+      if (this.checked) {
+        
+        document.body.style.setProperty("--bg", "#000");
+        document.body.style.setProperty("--fg", "#fff");
+        document.body.style.setProperty("--ctrlbg", "#222");
+        
+        // document.body.style.removeProperty("--bg");
+        // document.body.style.removeProperty("--fg");
+        // document.body.style.removeProperty("--ctrlbg");
+      } else {
+        document.body.style.setProperty("--bg", "#fff");
+        document.body.style.setProperty("--fg", "#000");
+        document.body.style.setProperty("--ctrlbg", "#ddf");
+      }
+    };
+
+
+    let colormode = false;
+    document.querySelector("#colormode").onchange = function (e) {
+      colormode = this.checked;
+      showchart();
+    };
+
+
+
+
+    document.querySelector("#fontslider").oninput = function (e) {
+      document.querySelector("#fontscale").innerText = this.value;
+      document.body.style.setProperty('--fontsize', getComputedStyle(document.body).getPropertyValue('--basefont') * this.value);
+      showchart();
+    };
+
+
+    let markscale = 1;
+    document.querySelector("#markslider").oninput = function (e) {
+      markscale = document.querySelector("#markscale").innerText = this.value;
+      showchart();
+    };
+
+    let spacescale = 1;
+    document.querySelector("#spaceslider").oninput = function (e) {
+      spacescale = document.querySelector("#spacescale").innerText = this.value;
+      showchart();
+    };
+
+
+
+    let circlecenter = [50, 50];
+
+    showchart();
+
+    function showchart() {
+
+
+      let fontsize = getComputedStyle(document.body).getPropertyValue('--fontsize');
+      let marksize = fontsize * 3 * markscale;
+
+      let rinterval = fontsize * 3 * spacescale;
+
+      let markers = ashuffle(origmarkers);
+
+      let dot = document.createElement("div");
+      dot.className = "dot";
+      let bounds = box.getBoundingClientRect();
+      box.innerHTML = "";
+
+
+      let centerpoint = document.createElement("div");
+      centerpoint.id = "centerpoint";
+      centerpoint.className = "dot";
+      centeron(centerpoint, [50, 50], true);
+      centerpoint.onclick = function (e) {
+        nextletter();
+      };
+
+      function nextletter() {
+        let loopcount = 0;
+        let nextmark;
+        do {
+          nextmark = origmarkers[Math.floor(Math.random() * origmarkers.length)];
+          // console.log("checking mark",loopcount,nextmark,centerpoint.dataset.mark);
+          if (++loopcount > 5) break; // prevent infinite loop when only one mark is available
+        } while (nextmark && nextmark == centerpoint.dataset.mark);
+        centerpoint.dataset.mark = nextmark;
+      }
+
+
+      let maxlevels = 4;
+      for (let i = 1; i <= maxlevels; i++) {
+        if (markers.length == 0) break;
+        let marksforlevel = marksperlevel(i);
+        let angleforlevel = anglepermark(i);
+        console.log("level " + i, "marks " + marksforlevel, "angle " + angleforlevel);
+        for (let c = 1; c <= marksforlevel; c++) {
+          if (markers.length == 0) break;
+          let spotxy = getpoint(circlecenter, (rinterval * i), angleforlevel * c);
+
+          spots.push(spotxy);
+          let newdot = dot.cloneNode(true);
+          newdot.innerText = markers.shift();
+
+          centeron(newdot, spotxy);
+          if (markers.length == 0) break;
+        }
+
+      }
+
+
+
+
+
+      document.onkeydown = function (e) {
+        if (e.key === " ") {
+          e.preventDefault();
+          centerpoint.dataset.mark = origmarkers[Math.floor(Math.random() * origmarkers.length)];
+        }
+      };
+
+
+
+      function marksperlevel(lev) {
+        return Math.floor(2 * Math.PI * (marksize + rinterval * lev) / (marksize * buffer));
+      }
+
+      function anglepermark(lev) {
+        return 2 * Math.PI / marksperlevel(lev);
+      }
+
+
+      function centeron(thing, point, center = false) {
+        box.append(thing);
+        thing.style.left = `calc(${point[0]}% - 0.5em)`;
+        thing.style.top = `calc(${point[1]}% - 0.5em)`;
+        if (!center) {
+          thing.onclick = function (e) {
+            if (this.innerText == centerpoint.dataset.mark) {
+              console.log("YAY");
+              spark("50%", "50%", { anchor: box }).then(() => {
+
+                setTimeout(() => {
+                  nextletter();
+                }, 500);
+              });
+              spark(`${point[0]}%`, `${point[1]}%`, { anchor: box });
+            } else {
+              spark("50%", "50%", { anchor: box, color: "red" });
+            }
+          };
+          if (colormode) thing.style.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+      }
+
+
+      function getpoint(center, radius, angle) {
+        return [center[0] + radius * Math.cos(angle), center[1] + radius * Math.sin(angle)];
+      }
+
+
+    }
+
+
+    function ashuffle(array) {
+      return array.map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+    }
+
+    // direct cutoutfrom helpvideo.js
+    // improved - use this for basicutilities
+    function spark(x, y, { interval = 1000, anchor = document.body, ssize = "1.25em", color = "green" } = {}) {
+      return new Promise((resolve) => {
+        let spk = document.createElement("div");
+        spk.id = "sparky";
+        spk.style.left = x;
+        spk.style.top = y;
+        spk.style.borderColor = color;
+        anchor.append(spk);
+        setTimeout(() => {
+          spk.style.borderWidth = ssize;
+          spk.style.margin = `-${ssize} 0 0 -${ssize}`;
+          spk.style.opacity = 0;
+          setTimeout(() => {
+            spk.remove();
+          }, interval * 0.8);
+          setTimeout(() => {
+            resolve(true);
+          }, interval * 0.15);
+        }, 10);
+      });
+    }
+
+
+  </script>
+
+</body>
+
+</html>
