@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeatDroid</title>
+  <meta name="darkreader-lock">
+  <link rel="stylesheet" href="vision.css" />
+  <style>
+#beatdroid {
+position:fixed;
+top:1em;
+width:80%;
+bottom:1em;
+left:50%; transform:translate(-50%);
+}
+
+#beatdroid div {border: solid 3px green;}
+
+#bpmrow {
+display:table;
+position:relative;
+padding: 0.75em;
+vertical-align:middle;
+left:50%; transform:translate(-50%);
+}
+
+
+#tapp {
+height: calc( 100% - 3.5em);
+}
+
+#tapp:active {
+background: var(--ctrlbg);
+}
+
+
+#metronome {
+position:relative;
+display:inline-block;
+border:solid 1px red;
+width: 2em; height:2em;
+}
+
+#metrocheck {
+display:none;
+}
+
+svg {
+fill: var(--fg);
+stroke: var(--fg);
+border:solid 1px blue;
+width: 100%; height: 100%;
+}
+
+#metrocheck:checked + label #metro_on {
+display:inline-block;
+}
+
+#metrocheck:checked + label #metro_off {
+display:none;
+}
+
+#metrocheck:not(:checked) + label #metro_on {
+display:none;
+}
+
+#metrocheck:not(:checked) + label #metro_off {
+display:inline-block;
+}
+
+
+
+
+  </style>
+</head>
+
+<body>
+
+<div id="beatdroid">
+
+<div id="bpmrow">
+<label for="bpm">BPM</label> <input type="text" id="bpm"/>
+
+<div id="metronome">
+<input type="checkbox" id="metrocheck" />
+<label for="metrocheck">
+<svg id="metro_on" xmlns="http://www.w3.org/2000/svg" version="1.0"  width="500" height="500" viewBox="0 0 75 75">
+<path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z"
+style="stroke-width:5;stroke-linejoin:round;"
+/>
+<path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke-width:5;stroke-linecap:round"/>
+</svg>
+
+<svg id="metro_off" xmlns="http://www.w3.org/2000/svg" version="1.0" width="500" height="500" viewBox="0 0 75 75" stroke-width="5">
+<path d="m39,14-17,15H6V48H22l17,15z" stroke-linejoin="round"/>
+<path d="m49,26 20,24m0-24-20,24" fill="none" stroke-linecap="round"/>
+</svg>
+</label>
+</div>
+</div>
+
+<div id="tapp">
+
+</div>
+
+</div>
+
+  <script>
+
+
+    // let blip = new Audio("click.wav");
+    let bpm = 60;
+
+    let metronome;
+
+
+    let bpminput = document.querySelector("#bpm");
+		bpminput.oninput = function () {
+      console.log(this.value);
+      bpm = parseInt(this.value);
+    };
+
+    /* 
+    TODO: 
+    metronome on/off by spacebar
+    set BPM by slider / text
+    set bpm by tapping
+https://web.dev/articles/audio-scheduling
+
+TRY THIS ONE INSTEAD
+https://ircam-ismm.github.io/webaudio-tutorials/scheduling/timing-and-scheduling.html
+
+    */
+
+    let lasttime = 0;
+    let actx, g;
+    let beatcount = 10;
+    let beats = [];
+    let tappinterval;
+    let beatsavg;
+		let touchtimer;
+		let longtouchtime = 1000;
+		let metrocheck = document.querySelector("#metrocheck");
+    document.querySelector("#tapp").onmousedown = function (e) {
+
+	touchtimer = setTimeout(endandclear, longtouchtime);
+	
+		this.onmouseup = function() {
+			if (touchtimer) clearTimeout(touchtimer);
+		}
+	
+
+      console.log(tappinterval);
+      clearbeeps();
+      beep();
+      let interbeat = actx.currentTime - lasttime;
+      lasttime = actx.currentTime;
+      if (interbeat > beatsavg * 3) {
+        console.log("clearing beats");
+        beats = [];
+        interbeat = 0;
+      }
+      if (interbeat) beats.push(interbeat);
+      if (beats.length > beatcount) beats.shift();
+      let beatsum = 0;
+      beats.map(n => beatsum += n);
+      beatsavg = beatsum / beats.length;
+      // console.log(beats, beatsum, beats.length, beatsavg);
+      bpm = bpminput.value = interbeat ? Math.round(60 / beatsavg) : "--";
+      //console.log("Beatsavg",beatsavg);
+      if (beatsavg > 0) {
+        tappinterval = setTimeout(() => {
+          dometronome(beatsavg > 0);
+          console.log("metronoming");
+        }, beatsavg * 1000);
+      }
+    };
+
+	function endandclear() {
+	clearbeeps();
+				beats=[];
+				lasttime=0;
+				bpminput.value = "--";
+	}
+
+
+    function clearbeeps() {
+      if (metronome) clearInterval(metronome);
+      if (tappinterval) clearTimeout(tappinterval);
+      tappinterval = metronome = null;
+    }
+
+let metronomebox = document.querySelector("#metronome");
+    function beep(dobeep = true) {
+      if (!actx) actx = new AudioContext();
+      if (!g) g = actx.createGain();
+      osc = actx.createOscillator();
+      osc.frequency.value = 700;
+      let defgain = 0.5;
+      g.gain.value = defgain;
+      osc.connect(g);
+      g.connect(actx.destination);
+      if (dobeep) {
+        console.log("beeping");
+        osc.start(actx.currentTime);
+        g.gain.setTargetAtTime(0, actx.currentTime + 0.01, 0.07,);
+        osc.stop(actx.currentTime + 0.1);
+        g.gain.setTargetAtTime(defgain, actx.currentTime + 0.15, 0);
+				metrocheck.checked = true;
+				
+				spark("50%","50%",{ssize:"2.5em",color:"white",anchor:metronomebox});
+				
+				
+      }
+    }
+
+
+			metrocheck.onchange = function () {
+      if (metronome || !this.checked) {
+        console.log("clearing");
+        clearbeeps();
+				metrocheck.checked = false;
+				beats=[];
+				lasttime=0;
+      } else {
+
+        dometronome();
+      }
+      //metronome = !metronome;
+    };
+
+
+    function dometronome(firstbeep = true) {
+			bpminput.value =bpm;
+      beep(firstbeep);
+      //https://loophole-letters.vercel.app/web-audio-scheduling#built-in-web-audio-scheduling-methods
+      let phase = actx.currentTime;
+      // bpm = 
+      console.log("BPM", bpm);
+      const period = 0.5; // schedule period in seconds
+      const overlap = 0.25; // margin for errors
+
+      let interval = 60 / bpm;
+      function metronomecallback() {
+        // https://stackoverflow.com/questions/15091059/change-interval-of-setinterval
+        // do this so that interval can be updated with each go around...?
+        interval = 60 / bpm;
+        // time slice for this callback:
+        const lookahead = actx.currentTime + interval + overlap;
+        // step through each slice of time for this callback
+        while (phase < lookahead) {
+          const [begin, end] = [phase, phase + period];
+           console.log(begin, end, interval);
+          beep();
+          break;
+          phase += period;
+        }
+        metronome = setTimeout(metronomecallback, interval * 1000);
+      }
+      metronome = setTimeout(metronomecallback, interval * 1000);
+    }
+
+
+
+/*
+    function newjitterydometronome() {
+
+      beep(false);
+      function metro(currentTime) {
+        console.log(currentTime);
+        // play some sound at `currentTime`
+        beep();
+        // return the next time we want to do something
+        return currentTime + 60 / bpm;
+      }
+
+      // create a new LookaheadScheduler
+      const scheduler = new LookaheadScheduler();
+      // add the metronome to the scheduler, starting now
+      scheduler.add(metro, actx.currentTime);
+      metronome = scheduler.ticker;
+
+    }
+
+
+    class PriorityQueue {
+      constructor() {
+        // array in which we store the elements of the queue
+        this.queue = [];
+      }
+
+      // add an event with its associated priority into the queue
+      add(event, time) {
+        // pack `event` and `time` into a single data structure
+        const element = { event, time };
+        // add the data structure into the queue
+        this.queue.push(element);
+        // sort the queue so that the element with highest priority (i.e. smallest time)
+        // is at the beginning of the list
+        this.queue.sort((a, b) => a.time <= b.time ? -1 : 1);
+      }
+
+      // return the event with highest priority or `null` if the queue is empty
+      head() {
+        if (this.queue.length > 0) {
+          return this.queue[0];
+        } else {
+          return null;
+        }
+      }
+
+      // delete the first element of the queue
+      deleteHead() {
+        this.queue.shift();
+      }
+    }
+
+
+    class LookaheadScheduler {
+      constructor() {
+        this.priorityQueue = new PriorityQueue();
+        this.period = 0.05;
+        this.lookahead = 0.1;
+
+        // make sure the tick method is called with the right `this` context,
+        // whatever its call context (welcome to JavaScript :)
+        this.tick = this.tick.bind(this);
+        // launch the periodic `tick` call
+        this.ticker = setInterval(this.tick, this.period * 1000);
+      }
+
+      add(event, time) {
+        // insert the event, time pair into the queue
+        this.priorityQueue.add(event, time);
+      }
+
+      // This function is executed by the `setInterval` every 50 ms.
+      // This is where all the magic happens
+      tick() {
+        // get the current time of the audio context and the current head of the queue
+        const now = actx.currentTime;
+        let head = this.priorityQueue.head();
+
+        // unstack the queue while the head is in the time frame defined by the lookahead
+        while (head && head.time < now + this.lookahead) {
+          // the head will be processed so we can remove it from the queue
+          this.priorityQueue.deleteHead();
+          // pick the time and event from the head
+          // the time of the event is not `now`, it is somewhere between now and now + lookahead
+          const time = head.time;
+          const event = head.event;
+
+          // Execute the event giving it its time as argument.
+          // If the event returns a new time, i.e. it wants to be called again later,
+          // we can re-insert it right away into the queue.
+          const nextTime = event(time);
+
+          if (nextTime) {
+            this.priorityQueue.add(event, nextTime);
+          }
+
+          // pick the next event in the queue and check if it is in the lookahead
+          head = this.priorityQueue.head();
+        }
+      }
+    }
+
+*/
+
+
+    function spark(x, y, { interval = 1000, anchor = document.body, ssize = "1.25em", color = "green" } = {}) {
+      return new Promise((resolve) => {
+        let spk = document.createElement("div");
+        spk.id = "sparky";
+        spk.style.left = x;
+        spk.style.top = y;
+				spk.style.position = "absolute";
+        spk.style.borderColor = color;
+        anchor.append(spk);
+        setTimeout(() => {
+          spk.style.borderWidth = ssize;
+          spk.style.margin = `-${ssize} 0 0 -${ssize}`;
+          spk.style.opacity = 0;
+          setTimeout(() => {
+           // spk.remove();
+          }, interval * 0.8);
+          setTimeout(() => {
+            resolve(true);
+          }, interval * 0.15);
+        }, 10);
+      });
+    }
+
+
+
+  </script>
+
+</body>
+
+</html>
