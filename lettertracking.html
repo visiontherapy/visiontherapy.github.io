@@ -148,7 +148,11 @@ let maxwords = 80;
 
 let wordmin = 3;
 let wordmax = 5;
-let alpha = "abcdefghijklmnopqrstuvwxyz".split("");
+
+let alphabet = "abcdefghijklmnopqrstuvwxyz";
+let alpha = (alphabet + "#").split("");
+let alphareq = alphabet.split("");
+
 let sequence = "";
 let string = "";
 let wordlength = wordmin + Math.floor(Math.random()* (wordmax - wordmin +2));
@@ -179,6 +183,10 @@ function getchar(sequence = "") {
 	let chr = alpha[Math.floor(Math.random() * alpha.length)];
 	let prevchr = sequence ? sequence.match(/.$/)[0] : "";
 //console.log("prev", prevchr);
+
+if (char == "#") {
+alphareq.push(alphareq.shift());
+}
 
 /*
 	if (prevchr == chr) {
