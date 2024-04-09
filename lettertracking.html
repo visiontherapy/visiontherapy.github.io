@@ -14,6 +14,11 @@
       font-size: 25pt;
       margin: 1.5em 2em;
       line-height: 1.5em;
+      cursor: default;
+    }
+
+    #output:hover .alpha {
+      color: red;
     }
 
     .hovershow {
@@ -115,6 +120,9 @@ if at all.
   <br />
   <button id="reload">newchart</button>
 
+  <input type="checkbox" id="startstop" />
+  <label id="startstoplabel" for="startstop">start</label>
+  <div id="timer"></div>
   <div id="output"></div>
 
   <script>
@@ -173,6 +181,49 @@ if at all.
     }
 
 
+    let timer = document.querySelector("#timer");
+    let startbtn = document.querySelector("#startstop");
+    let startstop;
+    startbtn.onchange = function () {
+      startstoplabel.innerHTML = this.checked ? "stop" : "start";
+      if (this.checked) {
+        let zerotime = (new Date()).getTime();
+        startstop = setInterval(() => {
+          let timediff = (new Date()).getTime() - zerotime;
+          console.log(timediff);
+          document.querySelector("#timer").innerText = mstotime(timediff);
+        }, 100);
+      } else {
+        clearInterval(startstop);
+      }
+
+    };
+
+
+
+    //https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
+
+    function pad2start(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function mstotime(milliseconds) {
+      let seconds = Math.floor(milliseconds / 1000);
+      let minutes = Math.floor(seconds / 60);
+      let hours = Math.floor(minutes / 60);
+
+      let millis = Math.floor(milliseconds % 1000 /100)
+      seconds = seconds % 60;
+      minutes = minutes % 60;
+
+      // 👇️ If you don't want to roll hours over, e.g. 24 to 00
+      // 👇️ comment (or remove) the line below
+      // commenting next line gets you `24:00:00` instead of `00:00:00`
+      // or `36:15:31` instead of `12:15:31`, etc.
+      // hours = hours % 24;
+
+      return `${pad2start(hours)}:${pad2start(minutes)}:${pad2start(seconds)}.${millis}`;
+    }
 
 
 
@@ -196,16 +247,17 @@ if at all.
 
       while (wordcount < maxwords) {
         let newltr = getchar(sequence);
-
+        let alphatype = "";
         if (alphaorder.length > 0 && newltr == alphaorder[0]) {
           // if newltr is in alphabetical order, cross it off the list
           alphaorder.shift();
           // string += '"';
           // console.log("alphaorder", alphaorder, sequence + newltr);
+          alphatype += " alpha";
         }
 
         sequence += newltr;
-        string += newltr;
+        string += `<span class="${alphatype}">${newltr}</span>`;;
         //console.log(sequence.length, wordlength, sequence.length%wordlength);
         if (sequence.length == wordlength) {
           string += " ";
@@ -215,14 +267,14 @@ if at all.
         }
 
         if (wordcount == maxwords && alphaorder.length > 0) {
-          console.log("maxed out", alphaorder);
+          console.log("maxed out");// alphaorder);
           // need more words to complete the sequence
           wordcount -= alphaorder.length;
         }
       }
 
       //console.log(string);
-      document.querySelector("#output").innerHTML = string + "<span class='hovershow'>" + string.split(" ").length + "</span>";
+      document.querySelector("#output").innerHTML = string + "<span class='hovershow'>" + string.split("> <").length + "</span>";
 
       function getchar(sequence = "") {
         let chr = alpha[Math.floor(Math.random() * alpha.length)];
