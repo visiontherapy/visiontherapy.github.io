@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Letter Track</title>
-  <!-- <meta name="darkreader-lock" /> -->
-	
-  <link rel="stylesheet" href="vision.css" />
-	
-<style>
+  <meta name="darkreader-lock" />
 
-#output {
-font-size: 25pt;
-margin:1.5em 2em;
-line-height:1.5em;
-}
-</style>
+  <link rel="stylesheet" href="vision.css" />
+
+  <style>
+    #output {
+      font-size: 25pt;
+      margin: 1.5em 2em;
+      line-height: 1.5em;
+    }
+
+    .hovershow {
+      opacity: 0;
+      cursor: default;
+    }
+
+    .hovershow:hover {
+      opacity: 1;
+      ;
+    }
+  </style>
 </head>
 
 <body>
-Wordbank:
-<textarea id="wordbank">
+  Wordbank:
+  <textarea id="wordbank">
 There was nothing so very remarkable in that; nor did Alice think it so very much out of the way to hear the Rabbit say to itself, “Oh dear! Oh dear! I shall be late!” (when she thought it over afterwards, it occurred to her that she ought to have wondered at this, but at the time it all seemed quite natural); but when the Rabbit actually took a watch out of its waistcoat-pocket, and looked at it, and then hurried on, Alice started to her feet, for it flashed across her mind that she had never before seen a rabbit with either a waistcoat-pocket, or a watch to take out of it, and burning with curiosity, she ran across the field after it, and fortunately was just in time to see it pop down a large rabbit-hole under the hedge. THE term novel has been made to cover books of such diverse character,
 now-a-days, that the reader is almost entitled to demand of a novelist
 that he shall affix some distinct label to the book he is putting
@@ -51,7 +61,7 @@ the intrinsic interest of his themes and his dramatic presentation
 of them. Neither is it the antiquarian taste which is appealed to by
 such a book as the “Three Musketeers.” It may even be affirmed, on the
 other hand, that the interest with which stories are thus invested is
-essentially false, and foreign to the story-teller’s art.
+essentially false, and foreign to the story-tellers art.
 
 The keen pleasure with which the historical scholar reads the “Iliad”
 and the “Odyssey” is the accidental result of time, and certainly
@@ -68,7 +78,7 @@ interesting action,--the Greeks would have said, a great action. The
 characters which still live for us in fiction are those which their
 creators have revealed to us through their actions. The analytical
 novel of character, as it is termed, bears the same relation to true
-romance as the surgeon’s anatomical model bears to a portrait of
+romance as the surgeons anatomical model bears to a portrait of
 Velasquez. It is the business of the story-teller to produce, not a
 photograph of one who sits in a chair, but a kinetoscope, with every
 limb in motion. The analytical novelist, when he has written his
@@ -101,137 +111,172 @@ set forth that interpretation as a story to be read for its own sake,
 if at all.
 
 </textarea>
-<button id="go">go</button>
+  <button id="go">go</button>
+  <br />
+  <button id="reload">newchart</button>
 
-<div id="output"></div>
+  <div id="output"></div>
 
-<script>
-	let wordbank = document.querySelector("#wordbank");
-	let words = "";
-//document.querySelector("#go").onclick = function() {
-	//wordbank.value;
-	words = wordbank.value.replace(/[^\w\s]/g," ").toLowerCase();
-	
-	let digraphs = {};
+  <script>
+    let digraphs = {};
 
-	for (let word of words.split(/\s+/)) {
-			let sword = word.split("");
-			let letters = [];
-		for (let c = 0;c<sword.length;c ++) {			
-				letters.push(sword[c]);
-		
-			if (letters.length ==2) {
-				let digr = letters.join("");
-				//console.log(digr);
-				
-				if (typeof digraphs[letters[0]] === "undefined") {
-					digraphs[letters[0]] = { [letters[1]]: 1 };
-				} else if (typeof digraphs[letters[0]][letters[1]] === "undefined") { 
-					digraphs[letters[0]][letters[1]] = 1;
-				} else {
-					digraphs[letters[0]][letters[1]] ++;
-				}
-/*
-				if (typeof digraphs[digr] === "undefined") {
-					digraphs[digr] =1;
-				} else {
-					digraphs[digr] ++;
-				}
-	*/			
-				letters.shift();
-			}
-		}
-	}
+    document.querySelector("#go").onclick = function () {
+      getdigraphs();
+      showchart();
+    };
 
-console.log(digraphs);
-let maxwords = 80;
-
-let wordmin = 3;
-let wordmax = 5;
-
-let alphabet = "abcdefghijklmnopqrstuvwxyz";
-let alpha = (alphabet + "#").split("");
-let alphareq = alphabet.split("");
-
-let sequence = "";
-let string = "";
-let wordlength = wordmin + Math.floor(Math.random()* (wordmax - wordmin +2));
-let wordcount = 0;
-
-while (wordcount <maxwords) {
-	let newltr = getchar(sequence);
-	//console.log("newltr",newltr);
-	sequence += newltr;
-	string += newltr;
-	if (newltr == alpha[0]) {
-	alpha.push(alpha.shift()); // TODO - weighted random elements
-	console.log("rotate",alpha);
-	}
-	//console.log(sequence.length, wordlength, sequence.length%wordlength);
-	if (sequence.length == wordlength) {
-		string += " "; //":" + wordlength + "/" + sequence.length + " ";
-		sequence = "";
-		wordlength = 3+Math.floor(Math.random()*3);
-	wordcount ++;
-	}
-}
-
-//console.log(string);
-document.querySelector("#output").innerText = string;
-
-function getchar(sequence = "") {
-	let chr = alpha[Math.floor(Math.random() * alpha.length)];
-	let prevchr = sequence ? sequence.match(/.$/)[0] : "";
-//console.log("prev", prevchr);
-
-if (char == "#") {
-alphareq.push(alphareq.shift());
-}
-
-/*
-	if (prevchr == chr) {
-		getchar();
-	} else */
-	if (!prevchr && digraphs[chr]) {
-		return chr;
-	}
-	
-	if (!digraphs[prevchr]) {
-	console.log("no digraph with this start", prevchr);
-	return "";
-		//return getchar(sequence);
-	}
-
-	if (digraphs[prevchr] && digraphs[prevchr][chr]) {
-		//console.log("OK:", prevchr + chr);
-		return chr;
-	}
-	
-	//console.log("were here", prevchr,chr);
-	return getchar(sequence);
-
-}
-
-//}
-
-
-/*
-
-https://trekhleb.medium.com/weighted-random-in-javascript-4748ab3a1500
-
-The more efficient approach would be to:
-
-    Prepare the list of cumulative weights for each item (i.e. the cumulativeWeights list which will have the same number of elements as the original weights list). In our case it will look like this: cumulativeWeights = [3, 3 + 7, 3 + 7 + 1] = [3, 10, 11]
-    Generate the random number randomNumber from 0 to the highest cumulative weight value. In our case, the random number will be in a range of [0..11]. Let's say that we have randomNumber = 8.
-    Go through the cumulativeWeights list from left to right and pick the first element which is higher or equal to the randomNumber. The index of such element we will use to pick the item from the items array.
-
-The idea behind this approach is that the higher weights will “occupy” more numeric space. Therefore, there is a higher chance that the random number will fall into the “higher weight numeric bucket”.
+    document.querySelector("#reload").onclick = function () {
+      showchart();
+    };
 
 
 
 
-*/
-</script>
+    getdigraphs();
+    showchart();
+
+    function getdigraphs() {
+      let words = document.querySelector("#wordbank").value.replace(/[^\w\s]/g, " ").toLowerCase();
+
+
+      for (let word of words.split(/\s+/)) {
+        let sword = word.split("");
+        let letters = [];
+        for (let c = 0; c < sword.length; c++) {
+          letters.push(sword[c]);
+
+          if (letters.length == 2) {
+            let digr = letters.join("");
+            //console.log(digr);
+
+            if (typeof digraphs[letters[0]] === "undefined") {
+              digraphs[letters[0]] = { [letters[1]]: 1 };
+            } else if (typeof digraphs[letters[0]][letters[1]] === "undefined") {
+              digraphs[letters[0]][letters[1]] = 1;
+            } else {
+              digraphs[letters[0]][letters[1]]++;
+            }
+
+            letters.shift();
+          }
+        }
+      }
+
+      // console.log(digraphs);
+      // let flatdigraphs= [];
+      // for (const prima of Object.keys(digraphs)) {
+      //   for (const secund of Object.keys(digraphs[prima])) {
+      //     flatdigraphs.push(prima+secund);
+      //   }
+      // }
+      // console.log(flatdigraphs);
+    }
+
+
+
+
+
+    function showchart() {
+      let maxwords = 100;
+
+      let wordmin = 3;
+      let wordmax = 5;
+
+      let alphabet = "abcdefghijklmnopqrstuvwxyz";
+      let alpha = (alphabet + "#").split("");
+      let alphaorder = alphabet.split("");
+
+      let sequence = "";
+      let string = "";
+      let wordlength = wordmin + Math.floor(Math.random() * (wordmax - wordmin + 2));
+      let wordcount = 0;
+
+      // Need to drop alphaorder[0] at least once every maxwords/26 characters
+
+
+      while (wordcount < maxwords) {
+        let newltr = getchar(sequence);
+
+        if (alphaorder.length > 0 && newltr == alphaorder[0]) {
+          // if newltr is in alphabetical order, cross it off the list
+          alphaorder.shift();
+          // string += '"';
+          // console.log("alphaorder", alphaorder, sequence + newltr);
+        }
+
+        sequence += newltr;
+        string += newltr;
+        //console.log(sequence.length, wordlength, sequence.length%wordlength);
+        if (sequence.length == wordlength) {
+          string += " ";
+          sequence = "";
+          wordlength = 3 + Math.floor(Math.random() * 3);
+          wordcount++;
+        }
+
+        if (wordcount == maxwords && alphaorder.length > 0) {
+          console.log("maxed out", alphaorder);
+          // need more words to complete the sequence
+          wordcount -= alphaorder.length;
+        }
+      }
+
+      //console.log(string);
+      document.querySelector("#output").innerHTML = string + "<span class='hovershow'>" + string.split(" ").length + "</span>";
+
+      function getchar(sequence = "") {
+        let chr = alpha[Math.floor(Math.random() * alpha.length)];
+        let prevchr = sequence ? sequence.match(/.$/)[0] : "";
+
+        if (chr == "#") { //27th "letter" => ensure alpha order
+          chr = alphaorder[0]; //alphaorder.push(alphaorder.shift());
+        }
+
+        /*
+          if (prevchr == chr) {
+            getchar();
+          } else */
+        if (!prevchr && digraphs[chr]) {
+          return chr;
+        }
+
+        if (!digraphs[prevchr]) {
+          console.log("no digraph with this start", prevchr);
+          return "";
+          //return getchar(sequence);
+        }
+
+        if (digraphs[prevchr] && digraphs[prevchr][chr]) {
+          //console.log("OK:", prevchr + chr);
+          return chr;
+        }
+
+        //console.log("were here", prevchr,chr);
+        return getchar(sequence);
+
+      }
+    }
+    //}
+
+
+    /*
+    
+    https://trekhleb.medium.com/weighted-random-in-javascript-4748ab3a1500
+    
+    The more efficient approach would be to:
+    
+        Prepare the list of cumulative weights for each item (i.e. the cumulativeWeights list which will have the same number of elements as the original weights list). In our case it will look like this: cumulativeWeights = [3, 3 + 7, 3 + 7 + 1] = [3, 10, 11]
+        Generate the random number randomNumber from 0 to the highest cumulative weight value. In our case, the random number will be in a range of [0..11]. Let's say that we have randomNumber = 8.
+        Go through the cumulativeWeights list from left to right and pick the first element which is higher or equal to the randomNumber. The index of such element we will use to pick the item from the items array.
+    
+    The idea behind this approach is that the higher weights will “occupy” more numeric space. Therefore, there is a higher chance that the random number will fall into the “higher weight numeric bucket”.
+    
+    
+    
+    
+    */
+  </script>
 
 </body>
+
 </html>
