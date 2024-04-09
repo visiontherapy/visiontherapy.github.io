@@ -11,7 +11,7 @@
     --bg: #000;
     --fg: #fff;
     --ctrlbg: #222;
-    }
+  }
 }
 
 body {
@@ -93,7 +93,7 @@ a {
 }
 
 button#reload {
-  position:fixed;
+  position: fixed;
   top: 1em;
   right: 1em;
   padding: 0.25em 0.4em;
@@ -114,12 +114,12 @@ input#help {
 
 input#help + label {
   position: fixed;
-  top:4em;
+  top: 4em;
   right: 1em;
-  border:solid 1px var(--fg);
-  padding:0.25em 0.4em;
+  border: solid 1px var(--fg);
+  padding: 0.25em 0.4em;
   border-radius: 0.5em;
-  display:inline-block;
+  display: inline-block;
   cursor: pointer;
   transition: all 0.5s;
 }
@@ -142,6 +142,19 @@ input:checked + label + #helptext {
   top: 20%;
   line-height: 1.25em;
   padding: 0 0.5em 0.5em;
+}
+
+input[type="checkbox"] {
+  display: none;
+
+  + label.button {
+    display: table;
+    margin: 0.25em;
+    padding: 0.25em;
+    border-radius: 0.5em;
+    border: solid;
+    font-weight: bold;
+  }
 }
 
 label h2 {

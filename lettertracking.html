@@ -18,26 +18,26 @@
       cursor: default;
     }
 
-    #showsolution:checked+#output .alpha {
-      color: red;
-      text-decoration: underline;
-    }
 
-    #showsolution:checked+#output {
+
+    #showsolution:checked~#output {
       .selected {
-        color: grey;
+        color: grey; /* incorrect selection*/ 
       }
 
       .alpha {
-        color: red;
+        color: red; /* missed letter */
         text-decoration: underline;
 
 
         &.selected {
-          color: aqua;
+          color: aqua; /* correct selection */
         }
       }
+    }
 
+    #output span.selected {
+      color: aqua; /* default selection */
     }
 
 
@@ -48,10 +48,6 @@
 
     .wourdcount:hover {
       opacity: 1;
-    }
-
-    span.selected {
-      color: aqua;
     }
 
 
@@ -153,15 +149,18 @@ if at all.
   <button id="reload">newchart</button>
 
   <input type="checkbox" id="startstop" />
-  <label id="startstoplabel" for="startstop">start</label>
-  <div id="timer"></div>
-  <br />
-  <label for="showsolution">Show Solution</label>
+  <label class="button" for="startstop">start</label>
+  <span id="timer"></span>
+  
   <input type="checkbox" id="showsolution" />
+  <label class="button" for="showsolution">Show Solution</label>
   <div id="output"></div>
 
   <script>
     let digraphs = {};
+    let alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let missing;
+
 
     document.querySelector("#go").onclick = function () {
       getdigraphs();
@@ -172,14 +171,28 @@ if at all.
       showchart();
     };
 
-
-
-
     getdigraphs();
     showchart();
 
+
+    // need to check that all letters are represented in wordbank
+
+
     function getdigraphs() {
       let words = document.querySelector("#wordbank").value.replace(/[^\w\s]/g, " ").toLowerCase();
+
+      missing = [];
+      for (const ltr of alphabet.split("")) {
+        if (!words.match(new RegExp(ltr))) {
+          missing.push(ltr);
+        }
+      }
+      if (missing.length > 0) {
+        digraphs = {};
+        return;
+      }
+      console.log(missing);
+
 
 
       for (let word of words.split(/\s+/)) {
@@ -187,8 +200,8 @@ if at all.
         let letters = [];
         for (let c = 0; c < sword.length; c++) {
           letters.push(sword[c]);
-
           if (letters.length == 2) {
+            // check if current digraph exists in the digraph bank
             let digr = letters.join("");
             //console.log(digr);
 
@@ -199,20 +212,20 @@ if at all.
             } else {
               digraphs[letters[0]][letters[1]]++;
             }
-
-            letters.shift();
+            letters.shift(); // only keep 2 letters in array = digraphs
           }
         }
       }
 
-      // console.log(digraphs);
-      // let flatdigraphs= [];
-      // for (const prima of Object.keys(digraphs)) {
-      //   for (const secund of Object.keys(digraphs[prima])) {
-      //     flatdigraphs.push(prima+secund);
-      //   }
-      // }
-      // console.log(flatdigraphs);
+      console.log(digraphs);
+
+      let flatdigraphs = "";
+      for (const prima of Object.keys(digraphs)) {
+        for (const secund of Object.keys(digraphs[prima])) {
+          flatdigraphs += prima + secund + " ";
+        }
+      }
+      console.log(flatdigraphs);
     }
 
 
@@ -220,7 +233,7 @@ if at all.
     let startbtn = document.querySelector("#startstop");
     let startstop;
     startbtn.onchange = function () {
-      startstoplabel.innerHTML = this.checked ? "stop" : "start";
+      document.querySelector("#startstop+label").innerHTML = this.checked ? "stop" : "start";
       if (this.checked) {
         let zerotime = (new Date()).getTime();
         startstop = setInterval(() => {
@@ -258,7 +271,13 @@ if at all.
 
 
     function showchart() {
+      // console.log(digraphs.length>0,digraphs); return;
 
+      if (Object.keys(digraphs).length == 0) {
+        console.log("bad digraph collection", digraphs);
+        console.log("Missing:", missing);
+        return;
+      }
       document.querySelector("#showsolution").checked = false;
 
       let maxwords = 100;
@@ -266,7 +285,6 @@ if at all.
       let wordmin = 3;
       let wordmax = 5;
 
-      let alphabet = "abcdefghijklmnopqrstuvwxyz";
       let alpha = (alphabet + "#").split("");
       let alphaorder = alphabet.split("");
       let clickalpha = (alphabet).split("");
