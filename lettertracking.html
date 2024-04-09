@@ -14,21 +14,53 @@
       font-size: 25pt;
       margin: 1.5em 2em;
       line-height: 1.5em;
+      letter-spacing: 0.1ex;
       cursor: default;
     }
 
-    #output:hover .alpha {
+    #showsolution:checked+#output .alpha {
       color: red;
+      text-decoration: underline;
     }
 
-    .hovershow {
+    #showsolution:checked+#output {
+      .selected {
+        color: grey;
+      }
+
+      .alpha {
+        color: red;
+        text-decoration: underline;
+
+
+        &.selected {
+          color: aqua;
+        }
+      }
+
+    }
+
+
+    .wordcount {
       opacity: 0;
       cursor: default;
     }
 
-    .hovershow:hover {
+    .wourdcount:hover {
       opacity: 1;
-      ;
+    }
+
+    span.selected {
+      color: aqua;
+    }
+
+
+    #output span {
+      border: solid 1px var(--bg);
+    }
+
+    #output span:hover {
+      border: solid 1px var(--fg);
     }
   </style>
 </head>
@@ -123,6 +155,9 @@ if at all.
   <input type="checkbox" id="startstop" />
   <label id="startstoplabel" for="startstop">start</label>
   <div id="timer"></div>
+  <br />
+  <label for="showsolution">Show Solution</label>
+  <input type="checkbox" id="showsolution" />
   <div id="output"></div>
 
   <script>
@@ -212,15 +247,10 @@ if at all.
       let minutes = Math.floor(seconds / 60);
       let hours = Math.floor(minutes / 60);
 
-      let millis = Math.floor(milliseconds % 1000 /100)
+      let millis = Math.floor(milliseconds % 1000 / 100);
       seconds = seconds % 60;
       minutes = minutes % 60;
-
-      // 👇️ If you don't want to roll hours over, e.g. 24 to 00
-      // 👇️ comment (or remove) the line below
-      // commenting next line gets you `24:00:00` instead of `00:00:00`
-      // or `36:15:31` instead of `12:15:31`, etc.
-      // hours = hours % 24;
+      // hours = hours % 24; // roll over hours every 24 
 
       return `${pad2start(hours)}:${pad2start(minutes)}:${pad2start(seconds)}.${millis}`;
     }
@@ -228,6 +258,9 @@ if at all.
 
 
     function showchart() {
+
+      document.querySelector("#showsolution").checked = false;
+
       let maxwords = 100;
 
       let wordmin = 3;
@@ -236,14 +269,12 @@ if at all.
       let alphabet = "abcdefghijklmnopqrstuvwxyz";
       let alpha = (alphabet + "#").split("");
       let alphaorder = alphabet.split("");
+      let clickalpha = (alphabet).split("");
 
       let sequence = "";
       let string = "";
       let wordlength = wordmin + Math.floor(Math.random() * (wordmax - wordmin + 2));
       let wordcount = 0;
-
-      // Need to drop alphaorder[0] at least once every maxwords/26 characters
-
 
       while (wordcount < maxwords) {
         let newltr = getchar(sequence);
@@ -251,9 +282,7 @@ if at all.
         if (alphaorder.length > 0 && newltr == alphaorder[0]) {
           // if newltr is in alphabetical order, cross it off the list
           alphaorder.shift();
-          // string += '"';
-          // console.log("alphaorder", alphaorder, sequence + newltr);
-          alphatype += " alpha";
+          alphatype = "alpha"; // add class for cheat code
         }
 
         sequence += newltr;
@@ -273,8 +302,24 @@ if at all.
         }
       }
 
-      //console.log(string);
-      document.querySelector("#output").innerHTML = string + "<span class='hovershow'>" + string.split("> <").length + "</span>";
+      // finally display chart
+      document.querySelector("#output").innerHTML = string + "<span class='wordcount'>" + string.split("> <").length + "</span>";
+
+      document.querySelector("#output").onclick = function (e) {
+        console.log(e.target.innerText);
+
+        if (e.target.classList.contains("selected")) {
+          e.target.classList.remove("selected");
+        } else {
+          e.target.classList.add("selected");
+        }
+        // if (e.target.innerText == clickalpha[0]) {
+        //   e.target.style.color = "aqua";
+        //   clickalpha.shift();
+        // }
+      };
+
+
 
       function getchar(sequence = "") {
         let chr = alpha[Math.floor(Math.random() * alpha.length)];
@@ -308,25 +353,7 @@ if at all.
 
       }
     }
-    //}
 
-
-    /*
-    
-    https://trekhleb.medium.com/weighted-random-in-javascript-4748ab3a1500
-    
-    The more efficient approach would be to:
-    
-        Prepare the list of cumulative weights for each item (i.e. the cumulativeWeights list which will have the same number of elements as the original weights list). In our case it will look like this: cumulativeWeights = [3, 3 + 7, 3 + 7 + 1] = [3, 10, 11]
-        Generate the random number randomNumber from 0 to the highest cumulative weight value. In our case, the random number will be in a range of [0..11]. Let's say that we have randomNumber = 8.
-        Go through the cumulativeWeights list from left to right and pick the first element which is higher or equal to the randomNumber. The index of such element we will use to pick the item from the items array.
-    
-    The idea behind this approach is that the higher weights will “occupy” more numeric space. Therefore, there is a higher chance that the random number will fall into the “higher weight numeric bucket”.
-    
-    
-    
-    
-    */
   </script>
 
 </body>
