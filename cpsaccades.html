@@ -17,32 +17,32 @@
   </div>
   <div id="controls">
     <div id="settings">*SETTINGS*</div>
-    
+
     <div>Markers <input type="text" id="markers" /></div>
-    
+
     <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
 
     <div>Marker spacing <input id="markslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="markscale"></span></div>
-    
+
     <div>Circle spacing <input id="spaceslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="spacescale"></span></div>
 
-    <div><input type="checkbox" class="slider"  id="colormode" /><label class="button" for="colormode">Colorful markers</label></div>
+    <div><input type="checkbox" class="slider" id="colormode" /><label class="button" for="colormode">Colorful markers</label></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
   </div>
 
 
-    <button id="reload">Reload</button>
-    <input type="checkbox" id="help" />
-    <label for="help">Help</label>
-    <label id="helptext" for="help">
-      <h2>How to use this:</h2>
-      <h3>Customize Markers</h3>
-      Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
-      <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
-      <h3>Usage</h3>
-      Press the spacebar on the keyboard to display a new target marker in the central area.
-    </label>
+  <button id="reload">Reload</button>
+  <input type="checkbox" id="help" />
+  <label for="help">Help</label>
+  <label id="helptext" for="help">
+    <h2>How to use this:</h2>
+    <h3>Customize Markers</h3>
+    Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
+    <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
+    <h3>Usage</h3>
+    Press the spacebar on the keyboard to display a new target marker in the central area.
+  </label>
   <script>
 
     let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
@@ -60,7 +60,6 @@
 
     document.querySelector("#reload").onclick = function (e) {
       showchart();
-
     };
 
     document.querySelector("#markers").oninput = function (e) {

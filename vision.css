@@ -160,56 +160,67 @@ input[type="checkbox"] {
   }
 } */
 
+input[type="checkbox"].threestate {
+  display: none;
 
+  &[data-state="1"] + label {
+    /* color: green; */
+    opacity:1;
+    /* filler */
+  }
+
+  &[data-state="2"] + label {
+    /* color: red; */
+    opacity:1;
+    /* filler */
+  }
+}
 
 input[type="checkbox"].slider {
-
   --offborder: #888;
   --onborder: #55c;
   --offslider: #ccc;
   --onslider: #55c;
   --offbg: #777;
   --onbg: #ddd;
-  
-  appearance:none;
-  display:inline-block;
+
+  appearance: none;
+  display: inline-block;
   width: 3em;
   height: 1.5em;
-  padding:0.5em;
+  padding: 0.5em;
   line-height: 1em;
   vertical-align: middle;
-  position:relative;
+  position: relative;
   border: 0.1em solid var(--offborder);
   border-radius: 1em;
   background-color: var(--offbg);
   transition: all 0.25s linear;
-  
+
   &:checked {
     border-color: var(--onborder);
     background-color: var(--onbg);
   }
-  
+
   &::after {
-  content: "";
-  position:absolute;
-  display:block;
-  height: 1em;
-  width: 1em;
-  left:0.15em;
-  top: 50%;
-  transform: translate(0,-50%);
-  border-radius:1em;
-  background-color:var(--offslider);
-  transition: all 0.15s linear;
-  
+    content: "";
+    position: absolute;
+    display: block;
+    height: 1em;
+    width: 1em;
+    left: 0.15em;
+    top: 50%;
+    transform: translate(0, -50%);
+    border-radius: 1em;
+    background-color: var(--offslider);
+    transition: all 0.15s linear;
   }
-  
+
   &:checked::after {
-  left:calc(100% - 1.15em);
-  background-color:var(--onslider);
+    left: calc(100% - 1.15em);
+    background-color: var(--onslider);
   }
-  
-  }
+}
 
 label h2 {
   margin: 0.5em 0;

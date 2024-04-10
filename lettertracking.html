@@ -8,12 +8,12 @@
   <meta name="darkreader-lock" />
 
   <link rel="stylesheet" href="vision.css" />
-  <script defer src="settings.js"></script>
+  <script src="settings.js"></script>
 
   <style>
     #output {
       font-size: 25pt;
-      margin: 1.5em 2em;
+      margin: 0em 2em 1.5em;
       line-height: 1.5em;
       letter-spacing: 0.1ex;
       cursor: default;
@@ -59,12 +59,20 @@
 
     #output span {
       border: solid 1px var(--bg);
-      display:inline-block;
-
     }
 
     #output span:hover {
       border: solid 1px var(--fg);
+    }
+
+    .firstchar{
+      text-transform: uppercase;
+    }
+
+
+    #stopwatch+#timer {
+      font-size: 25pt;
+      margin-left: 2em;
     }
   </style>
 </head>
@@ -76,20 +84,24 @@
   <br />
   <button id="reload">New Chart</button>
 
-  <input type="checkbox" class="slider"  id="darkmode" /><label class="button" for="darkmode">Dark mode</label>
-<br/>
-  <input type="checkbox" id="startstop" />
-  <label class="button" for="startstop">start</label>
-  <span id="timer"></span>
-<br/>
+  <input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label>
+  <br />
   <input type="checkbox" class="slider" id="showsolution" />
   <label class="button" for="showsolution">Show Solution</label>
+  <br />
+  <br />
+  <input type="checkbox" data-state="0" class="threestate" id="stopwatch" /><label class="button" id="timer" for="stopwatch">start</label>
+
   <div id="output"></div>
 
   <script>
     let digraphs = {};
     let alphabet = "abcdefghijklmnopqrstuvwxyz";
     let missing;
+
+    let stopwatch = document.querySelector("#stopwatch");
+    let timer = document.querySelector("#timer");
+    let startstop;
 
 
     document.querySelector("#go").onclick = function () {
@@ -98,6 +110,11 @@
     };
 
     document.querySelector("#reload").onclick = function () {
+
+      console.log("reloading");
+      if (startstop) clearInterval(startstop);
+      timer.innerHTML = "start";
+      stopwatch.dataset.state = 0;
       showchart();
     };
 
@@ -163,61 +180,52 @@
     }
 
 
-    let timer = document.querySelector("#timer");
-    let startbtn = document.querySelector("#startstop");
-    let startstop;
-    startbtn.onchange = function () {
-      document.querySelector("#startstop+label").innerHTML = this.checked ? "stop" : "start";
-      if (this.checked) {
-        let zerotime = (new Date()).getTime();
-        startstop = setInterval(() => {
-          let timediff = (new Date()).getTime() - zerotime;
-          console.log(timediff);
-          document.querySelector("#timer").innerText = mstotime(timediff);
-        }, 100);
-      } else {
-        clearInterval(startstop);
+    stopwatch.onclick = function () {
+      let state = threestate(this);
+      switch (state) {
+        case "0":
+          timer.innerHTML = "start";
+          break;
+        case "1":
+          // running state
+          let zerotime = (new Date()).getTime();
+          startstop = setInterval(() => {
+            let timediff = (new Date()).getTime() - zerotime;
+            // console.log(timediff);
+            document.querySelector("#timer").innerText = mstotime(timediff);
+          }, 100);
+          break;
+
+        case "2":
+          // stopped state
+          clearInterval(startstop);
+          break;
+        case "3":
+          clearInterval(startstop);
+          timer.innerHTML = "start";
+          this.dataset.state = 0;
+          break;
+
       }
 
     };
-
-
-
-    //https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
-
-    function pad2start(num) {
-      return num.toString().padStart(2, '0');
-    }
-
-    function mstotime(milliseconds) {
-      let seconds = Math.floor(milliseconds / 1000);
-      let minutes = Math.floor(seconds / 60);
-      let hours = Math.floor(minutes / 60);
-
-      let millis = Math.floor(milliseconds % 1000 / 100);
-      seconds = seconds % 60;
-      minutes = minutes % 60;
-      // hours = hours % 24; // roll over hours every 24 
-
-      return `${pad2start(hours)}:${pad2start(minutes)}:${pad2start(seconds)}.${millis}`;
-    }
-
-
 
     function showchart() {
       // console.log(digraphs.length>0,digraphs); return;
 
       if (Object.keys(digraphs).length == 0) {
-       document.querySelector("#output").innerText = "Word bank is incomplete. The following letters are missing: " + missing.join(", ") + ".";
+        document.querySelector("#output").innerText = "Word bank is incomplete. The following letters are missing: " + missing.join(", ") + ".";
         // console.log("bad digraph collection", digraphs);
         return;
       }
       document.querySelector("#showsolution").checked = false;
 
-      let maxwords = 100;
+      let maxwords = 70;
 
       let wordmin = 3;
       let wordmax = 5;
+
+      // let wordspersentence = 3~7;
 
       let alpha = (alphabet + "#").split("");
       let alphaorder = alphabet.split("");
@@ -238,37 +246,56 @@
         }
 
         sequence += newltr;
-        string += `<span class="${alphatype}">${newltr}</span>`;;
+        let firstchar = "";
+        // firstchar = sequence.length ==1? " firstchar":""; // capitalization option
+
+
+        string += `<span class="${alphatype}${firstchar}">${newltr}</span>`;;
         //console.log(sequence.length, wordlength, sequence.length%wordlength);
         if (sequence.length == wordlength) {
           string += " ";
           sequence = "";
-          wordlength = 3 + Math.floor(Math.random() * 3);
+          wordlength = minmax(wordmin,wordmax);//3 + Math.floor(Math.random() * 3);
           wordcount++;
         }
 
         if (wordcount == maxwords && alphaorder.length > 0) {
           console.log("maxed out");// alphaorder);
           // need more words to complete the sequence
-          wordcount -= alphaorder.length;
+          maxwords += alphaorder.length;
         }
       }
 
       // finally display chart
-      document.querySelector("#output").innerHTML = string + "<span class='wordcount'>" + string.split("> <").length + "</span>";
 
-      document.querySelector("#output").onclick = function (e) {
-        console.log(e.target.innerText);
 
+      let output = document.querySelector("#output");
+
+
+
+
+      output.innerHTML = string + "<span class='wordcount'>" + string.split("> <").length + "</span>";
+
+      output.onclick = function (e) {
+        // console.log(e.target);
+        if (e.target.tagName != "SPAN" || e.target.classList.contains("wordcount")) return;
         if (e.target.classList.contains("selected")) {
           e.target.classList.remove("selected");
         } else {
           e.target.classList.add("selected");
         }
-        // if (e.target.innerText == clickalpha[0]) {
-        //   e.target.style.color = "aqua";
-        //   clickalpha.shift();
-        // }
+        let selectedltrs = [... new Set([...document.querySelectorAll("span.selected")].map(o => o.innerText))];
+
+        if (stopwatch.dataset.state == 0 && selectedltrs.length > 0) stopwatch.click(); // start timer if this is the first letter
+
+        // && e.target.innerText.toLowerCase() == "z" // not needed if length 26
+        if (selectedltrs.length >= 2 && stopwatch.dataset.state == 1) {
+          // finished the exercise, stop timer
+          stopwatch.click();
+          document.querySelector("#showsolution").checked = true;
+        }
+        console.log(selectedltrs.sort());
+
       };
 
 
