@@ -47,16 +47,6 @@
     }
 
 
-    .wordcount {
-      opacity: 0;
-      cursor: default;
-    }
-
-    .wourdcount:hover {
-      opacity: 1;
-    }
-
-
     #output span {
       border: solid 1px var(--bg);
     }
@@ -65,9 +55,32 @@
       border: solid 1px var(--fg);
     }
 
-    .firstchar{
-      text-transform: uppercase;
+
+    .period {
+      display: none;
     }
+
+    #leveltwo:checked~#output {
+      .firstchar {
+        text-transform: uppercase;
+      }
+
+      .period {
+        display: initial;
+      }
+    }
+
+
+    .wordcount {
+      opacity: 0;
+      cursor: default;
+    }
+
+    #output span.wordcount:hover {
+      opacity: 1;
+      border-color: transparent;
+    }
+
 
 
     #stopwatch+#timer {
@@ -89,6 +102,10 @@
   <input type="checkbox" class="slider" id="showsolution" />
   <label class="button" for="showsolution">Show Solution</label>
   <br />
+  <br />
+  <input type="checkbox" class="slider" id="leveltwo" />
+  <label class="button" for="leveltwo">Level 2</label>
+
   <br />
   <input type="checkbox" data-state="0" class="threestate" id="stopwatch" /><label class="button" id="timer" for="stopwatch">start</label>
 
@@ -168,13 +185,17 @@
 
       //** This section is for debugging only
       //** replace wordbank text with flatdigraphs to make it more concise
-      // let flatdigraphs = "";
-      // for (const prima of Object.keys(digraphs)) {
-      //   for (const secund of Object.keys(digraphs[prima])) {
-      //     flatdigraphs += prima + secund + " ";
-      //   }
-      // }
-      // console.log(flatdigraphs);
+      let showflat = false;
+      // showflat = true;
+      if (showflat) {
+        let flatdigraphs = "";
+        for (const prima of Object.keys(digraphs)) {
+          for (const secund of Object.keys(digraphs[prima])) {
+            flatdigraphs += prima + secund + " ";
+          }
+        }
+        console.log(flatdigraphs);
+      }
 
 
     }
@@ -225,7 +246,8 @@
       let wordmin = 3;
       let wordmax = 5;
 
-      // let wordspersentence = 3~7;
+      let wpsmin = 3;// words per sentence
+      let wpsmax = 6;
 
       let alpha = (alphabet + "#").split("");
       let alphaorder = alphabet.split("");
@@ -233,7 +255,7 @@
 
       let sequence = "";
       let string = "";
-      let wordlength = wordmin + Math.floor(Math.random() * (wordmax - wordmin + 2));
+      let wordlength = minmax(wordmin, wordmax); //wordmin + Math.floor(Math.random() * (wordmax - wordmin + 2));
       let wordcount = 0;
 
       while (wordcount < maxwords) {
@@ -246,16 +268,16 @@
         }
 
         sequence += newltr;
+        string += newltr;
         let firstchar = "";
         // firstchar = sequence.length ==1? " firstchar":""; // capitalization option
 
 
-        string += `<span class="${alphatype}${firstchar}">${newltr}</span>`;;
         //console.log(sequence.length, wordlength, sequence.length%wordlength);
         if (sequence.length == wordlength) {
           string += " ";
           sequence = "";
-          wordlength = minmax(wordmin,wordmax);//3 + Math.floor(Math.random() * 3);
+          wordlength = minmax(wordmin, wordmax);//3 + Math.floor(Math.random() * 3);
           wordcount++;
         }
 
@@ -265,20 +287,54 @@
           maxwords += alphaorder.length;
         }
       }
+      console.log("prelim wordcount", wordcount);
 
       // finally display chart
 
-
       let output = document.querySelector("#output");
+      let finalstring = "";
+      alphaorder = alphabet.split("");//reinitialize alphaorder for parsing
+      wordcount = 0; // reinitialize count
+      let wpscount = 0;// words per sentence
+      for (const word of string.split(" ")) {
+        wordcount++;
+
+        let lettercaps = "";
+        if (wordcount == 1) {
+          //first letter gets caps
+          lettercaps = " firstchar";
+          // get minmax value for random word count
+          wpscount = minmax(wpsmin, wpsmax);
+          // console.log("getting wps", wpscount);
+        }
+        for (const ltr of word.split("")) {
+          let alphatype = "letter";
+          if (alphaorder.length > 0 && ltr == alphaorder[0]) {
+            // if newltr is in alphabetical order, cross it off the list
+            alphaorder.shift();
+            alphatype += " alpha"; // add class for cheat code
+          }
+          finalstring += `<span class="${alphatype}${lettercaps}">${ltr}</span>`;;
+          lettercaps = ""; // reset it so not every char gets caps
+        }
+        if (wordcount == wpscount) {
+          // end of sentence
+          // console.log("wpscount met", wordcount);
+          wordcount = 0;
+          finalstring += '<span class="period">.</span>';
+        }
+
+        finalstring += " ";
+      }
 
 
 
 
-      output.innerHTML = string + "<span class='wordcount'>" + string.split("> <").length + "</span>";
+      output.innerHTML = finalstring + "<span class='wordcount'>" + string.split(" ").length + `,${wordcount}</span>`;
 
       output.onclick = function (e) {
         // console.log(e.target);
-        if (e.target.tagName != "SPAN" || e.target.classList.contains("wordcount")) return;
+        if (!e.target.classList.contains("letter")) return;
         if (e.target.classList.contains("selected")) {
           e.target.classList.remove("selected");
         } else {
@@ -298,6 +354,8 @@
 
       };
 
+      /* */
+
 
 
       function getchar(sequence = "") {
@@ -308,10 +366,6 @@
           chr = alphaorder[0]; //alphaorder.push(alphaorder.shift());
         }
 
-        /*
-          if (prevchr == chr) {
-            getchar();
-          } else */
         if (!prevchr && digraphs[chr]) {
           return chr;
         }

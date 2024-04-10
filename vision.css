@@ -19,6 +19,8 @@ body {
   color: var(--fg);
   margin: 0;
   padding: 0;
+  transition-property: background-color,color;
+  transition: linear 0.5s;
 }
 
 a {
