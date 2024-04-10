@@ -18,7 +18,3 @@ Instead of clicking the targets, you may use other means of identifying the targ
 - If all letters are not shown within target word count, keep generating words until all letters are accounted for
 - Allowable letter combinations taken from "wordbank".
 - If all letters are not present in the wordbank, script will show an error.
-
-TODO:
-- put start button in front of first letter.
-- Stop clock when last Z is clicked
