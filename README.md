@@ -9,7 +9,9 @@ Keep your eyes focused on the middle circle. Click the circle, or press the spac
 Instead of clicking the targets, you may use other means of identifying the target marker (eg, by placing a stick or physical pointer and verifying the correct target by looking there). In this case, pressing the space bar will advance the central marker to the next target.
 
 ### Hart Charts
-
+- Read each letter at a steady pace.
+- Use metronome if needed, to maintain the pace.
+  - Built in metronome may stutter occasionally as it is not 100% accurate.
 
 ### Letter Tracking
 - Target word count of 100
