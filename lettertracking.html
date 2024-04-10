@@ -48,7 +48,7 @@
 
 
     #output span {
-      border: solid 1px var(--bg);
+      border: solid 1px transparent;
     }
 
     #output span:hover {
@@ -345,7 +345,7 @@
         if (stopwatch.dataset.state == 0 && selectedltrs.length > 0) stopwatch.click(); // start timer if this is the first letter
 
         // && e.target.innerText.toLowerCase() == "z" // not needed if length 26
-        if (selectedltrs.length >= 2 && stopwatch.dataset.state == 1) {
+        if (selectedltrs.length >= 26 && stopwatch.dataset.state == 1) {
           // finished the exercise, stop timer
           stopwatch.click();
           document.querySelector("#showsolution").checked = true;
