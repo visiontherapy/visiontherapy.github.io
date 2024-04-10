@@ -26,9 +26,9 @@
     
     <div>Circle spacing <input id="spaceslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="spacescale"></span></div>
 
-    <div><input type="checkbox" id="colormode" /><label for="colormode">Colorful markers</label></div>
+    <div><input type="checkbox" id="colormode" /><label class="button" for="colormode">Colorful markers</label></div>
 
-    <div><input type="checkbox" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+    <div><input type="checkbox" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
   </div>
 
 
@@ -73,29 +73,6 @@
         this.value = origmarkers.join("");
       }
       showchart();
-    };
-
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      // dark mode
-      document.querySelector("#darkmode").checked = true;
-    }
-
-
-    document.querySelector("#darkmode").onchange = function (e) {
-      if (this.checked) {
-        
-        document.body.style.setProperty("--bg", "#000");
-        document.body.style.setProperty("--fg", "#fff");
-        document.body.style.setProperty("--ctrlbg", "#222");
-        
-        // document.body.style.removeProperty("--bg");
-        // document.body.style.removeProperty("--fg");
-        // document.body.style.removeProperty("--ctrlbg");
-      } else {
-        document.body.style.setProperty("--bg", "#fff");
-        document.body.style.setProperty("--fg", "#000");
-        document.body.style.setProperty("--ctrlbg", "#ddf");
-      }
     };
 
 

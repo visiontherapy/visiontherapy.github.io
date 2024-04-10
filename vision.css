@@ -22,7 +22,6 @@ body {
 }
 
 a {
-  margin: 1em;
   font-size: 20pt;
 }
 
@@ -150,10 +149,14 @@ input[type="checkbox"] {
   + label.button {
     display: table;
     margin: 0.25em;
-    padding: 0.25em;
+    padding: 0 0.5em;
     border-radius: 0.5em;
     border: solid;
     font-weight: bold;
+  }
+
+  &:checked + label.button {
+    color:red;
   }
 }
 
