@@ -7,8 +7,25 @@
   <title>Hart Chart exercise</title>
   <meta name="darkreader-lock">
   <link rel="stylesheet" href="vision.css" />
-  <script defer src="settings.js"></script>
+  <script src="settings.js"></script>
   <style>
+    #tapp {
+      cursor: pointer;
+      display: inline-block;
+      padding: 0.1em;
+      border: solid 1px green;
+      user-select: none;
+    }
+
+    #tapp:active {
+      border-color: red;
+    }
+
+    #bpm {
+      width: 3em;
+      margin-left: 0.5em;
+    }
+
     #main {
       height: min(85vh, 85vw);
       width: min(85vh, 85vw);
@@ -20,6 +37,28 @@
     .slot {
       position: relative;
       text-align: center;
+    }
+
+    #qrplace {
+      display: block;
+      position: fixed;
+      left: 50%;
+      transform: translate(-50%);
+      top: 0.5em;
+    }
+
+    .qrcode {
+      display: none;
+      padding: 10px;
+      background: #fff;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      top: 1.5em;
+    }
+
+    #qrtoggle:checked~.qrcode {
+      display: block;
     }
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
@@ -46,24 +85,8 @@
   </div>
   <button id="reload">Reload</button>
 
-  <style>
-    #tapp {
-      cursor: pointer;
-      display: inline-block;
-      padding: 0.1em;
-      border: solid 1px green;
-      user-select: none;
-    }
+  <div id="qrplace"></div>
 
-    #tapp:active {
-      border-color: red;
-    }
-
-    #bpm {
-      width: 3em;
-      margin-left: 0.5em;
-    }
-  </style>
   <script>
 
 
@@ -302,9 +325,24 @@ https://ircam-ismm.github.io/webaudio-tutorials/scheduling/timing-and-scheduling
 
     let main = document.querySelector("#main");
 
-    showchart();
-    function showchart() {
 
+    // const params = new URLSearchParams(window.location.search);
+
+    // let querypattern = params.get("q");
+    // console.log(params);
+    let querypattern = window.location.hash.replace(/^#/, "");
+    querypattern = querypattern.toUpperCase().replace(/[^A-Z]/g, "");
+    if (querypattern) {
+      // querypattern = 
+      showchart(querypattern.split(""));
+    } else {
+      showchart();
+    }
+
+
+
+    function showchart(pattern) {
+      let txferstring = "";
       main.innerHTML = "";
       let lastchar = "";
       for (let x = 0; x < 10; x++) {
@@ -313,11 +351,45 @@ https://ircam-ismm.github.io/webaudio-tutorials/scheduling/timing-and-scheduling
           slot.className = "slot";
           let breakcount;
           // while (nextchar == lastchar) {
-          slot.innerText = lastchar = nextletter(lastchar);
+          slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
+          txferstring += lastchar;
           main.append(slot);
         }
       }
 
+      // return txferstring;
+      // if (!pattern) {
+      let url = window.location.toString();
+      url.replace(/[\?#&].*$/, "");
+      let qrstring = url + "#" + txferstring;
+      console.log(qrstring);
+      getqr(qrstring);
+      // }
+
+    }
+
+    function getqr(data) {
+      let [w, h] = [250, 250];
+      let qrplace = document.querySelector("#qrplace");
+      let qrcode = document.createElement("a");
+      qrcode.className = "qrcode";
+      qrcode.href = data;
+      // qrcode.style = `padding:10px;background:#fff;position:absolute;left:50;top:1em;`;
+      // let theqrcode = 
+      new QRCode(qrcode, {
+        text: data,
+        width: w,
+        height: h,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctionLovel: QRCode.CorrectLevel.L,
+      });
+      // console.log(qrcode);
+
+
+      // input type="checkbox" class="slider" id="darkmode" checked="checked" /><label for="darkmode">Dark mode</label>
+      qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
+      qrplace.append(qrcode);
     }
 
 
@@ -338,6 +410,7 @@ https://ircam-ismm.github.io/webaudio-tutorials/scheduling/timing-and-scheduling
 
     document.querySelector("#reload").onclick = function (e) {
       showchart();
+      window.location.hash="";
     };
 
 
