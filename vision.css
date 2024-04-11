@@ -21,6 +21,7 @@ body {
   padding: 0;
   transition-property: background-color,color;
   transition: linear 0.3s;
+  position:relative;
 }
 
 a {
@@ -28,7 +29,7 @@ a {
 }
 
 #main {
-  position: fixed;
+  position: relative;
   height: min(98vh, 98vw);
   width: min(98vh, 98vw);
   margin: 0;
@@ -70,7 +71,7 @@ a {
 }
 
 #controls {
-  position: fixed;
+  position: absolute;
   /* height: 1.25em; */
   overflow: hidden;
   line-height: 2em;
@@ -94,7 +95,7 @@ a {
 }
 
 button#reload {
-  position: fixed;
+  position: absolute;
   top: 1em;
   right: 1em;
   padding: 0.25em 0.4em;
@@ -114,7 +115,7 @@ input#help {
 }
 
 input#help + label {
-  position: fixed;
+  position: absolute;
   top: 4em;
   right: 1em;
   border: solid 1px var(--fg);
@@ -133,7 +134,7 @@ input#help:checked + label {
   display: none;
   white-space: initial;
 }
-/* 
+
 input:checked + label + #helptext {
   background: green;
   display: block;
@@ -144,7 +145,7 @@ input:checked + label + #helptext {
   line-height: 1.25em;
   padding: 0 0.5em 0.5em;
 }
-
+/*
 input[type="checkbox"] {
   display: none;
 
