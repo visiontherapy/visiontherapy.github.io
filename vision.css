@@ -251,6 +251,14 @@ label h3 {
   margin: 0.5em 0 0.25em;
 }
 
+
+#homeicon {
+  height: 1.5em;
+  width:1.5em;
+}
+
+
+
 #sparky {
   position: fixed;
   display: block;
