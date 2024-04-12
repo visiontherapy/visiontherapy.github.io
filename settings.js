@@ -10,10 +10,12 @@ document.querySelector("#darkmode").onchange = function (e) {
     document.body.style.setProperty("--bg", "#000");
     document.body.style.setProperty("--fg", "#fff");
     document.body.style.setProperty("--ctrlbg", "#222");
+    document.body.style.setProperty("--highlight", "#0ff");
   } else {
     document.body.style.setProperty("--bg", "#fff");
     document.body.style.setProperty("--fg", "#000");
     document.body.style.setProperty("--ctrlbg", "#ddf");
+    document.body.style.setProperty("--highlight", "#099");
   }
 };
 

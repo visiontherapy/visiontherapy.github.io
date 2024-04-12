@@ -13,6 +13,17 @@
 
 <body>
 
+  <div id="ctrlbar">
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+    
+
+    <div><input type="checkbox" class="slider" id="colormode" /><label class="button" for="colormode">Colorful markers</label></div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+
   <div id="controls">
     <div id="settings">*SETTINGS*</div>
 
@@ -24,14 +35,12 @@
 
     <div>Circle spacing <input id="spaceslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="spacescale"></span></div>
 
-    <div><input type="checkbox" class="slider" id="colormode" /><label class="button" for="colormode">Colorful markers</label></div>
-
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
   </div>
 
 
   <div id="main" data-mark=""></div>
-  <button id="reload">Reload</button>
+
+
   <input type="checkbox" id="help" />
   <label for="help">Help</label>
   <label id="helptext" for="help">

@@ -13,15 +13,17 @@
   <style>
     #output {
       font-size: 25pt;
-      margin: 0em 2em 1.5em;
+      margin: 0.5em 2em 1.5em;
       line-height: 1.5em;
       letter-spacing: 0.1ex;
       cursor: default;
+      user-select: none;
     }
 
 
 
-    #showsolution:checked~#output {
+    #showsolution:checked~#output,
+    #output.showsolution {
       .selected {
         color: red;
         text-decoration: line-through;
@@ -42,7 +44,7 @@
     }
 
     #output span.selected {
-      color: aqua;
+      color: var(--highlight);
       /* default selection */
     }
 
@@ -60,7 +62,8 @@
       display: none;
     }
 
-    #leveltwo:checked~#output {
+    #leveltwo:checked~#output,
+    #output.leveltwo {
       .firstchar {
         text-transform: uppercase;
       }
@@ -83,30 +86,49 @@
 
 
 
+
     #stopwatch+#timer {
       font-size: 25pt;
       margin-left: 2em;
+      width: 7em;
+      border: solid 1px;
+      border-radius: 0.5em;
+      display: inline-block;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
-  Wordbank:
-  <textarea id="wordbank">th to ts te ti tu tc ta ty tl tt tr tw tg he hi ha ho ht hu hr hy er em ea el en ed ee et ev ef ei eh ex ew es eq eg ey ec ep ek eo ez eb re ry rk ra rw rd rr ri rt ro rn rg rm rs rv ru rc rh rl rp wa wh wo wi wn wr we wd as ar ab at al ay af av ac ai an ad ak am ag ap au ax no ng nk nd na ne ni nt nc ns nn ny nv nl nu nf ot or ou of oh ov oc on oo ok oa os op ow ol om og od oe ob ox in id ic it is im ie io iv ix ia ig ir if ip iq il ib so sa se sh st ss si su sl sp sc sm sk sq ve vo vi ma mu me mi mo my mp mb ms ka ke ks ki bl bb bi be bu bo by bj ba br le li lf ll la ly lo ld lm ls lu lt lk lw lv di de ds do dg da dy dd dm dr dv dl du df ce ch cc cu ct co ck cr cl ca ci cq uc ut ug ur ui ua un us ue ud um up ul ub gh ge gu gi ga gr go gn ft fe fo fl fi ff fa fu fr qu po pu pr pa pe pi pl ps pp ph pt ju je ys yi yl ye yt yw xc xe xy zo ze </textarea>
-  <button id="go">go</button>
-  <br />
-  <button id="reload">New Chart</button>
+  <div id="ctrlbar">
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
-  <input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label>
-  <br />
-  <input type="checkbox" class="slider" id="showsolution" />
-  <label class="button" for="showsolution">Show Solution</label>
-  <br />
-  <br />
-  <input type="checkbox" class="slider" id="leveltwo" />
-  <label class="button" for="leveltwo">Level 2</label>
+    <div>
+      <input type="checkbox" class="slider" id="showsolution" />
+      <label class="button" for="showsolution">Show Solution</label>
+    </div>
 
-  <br />
+    <div><input type="checkbox" class="slider" id="leveltwo" />
+      <label class="button" for="leveltwo">Level 2</label>
+    </div>
+
+
+    <button id="reload">New Chart</button>
+
+  </div>
+
+
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+
+    Wordbank:
+    <textarea id="wordbank">th to ts te ti tu tc ta ty tl tt tr tw tg he hi ha ho ht hu hr hy er em ea el en ed ee et ev ef ei eh ex ew es eq eg ey ec ep ek eo ez eb re ry rk ra rw rd rr ri rt ro rn rg rm rs rv ru rc rh rl rp wa wh wo wi wn wr we wd as ar ab at al ay af av ac ai an ad ak am ag ap au ax no ng nk nd na ne ni nt nc ns nn ny nv nl nu nf ot or ou of oh ov oc on oo ok oa os op ow ol om og od oe ob ox in id ic it is im ie io iv ix ia ig ir if ip iq il ib so sa se sh st ss si su sl sp sc sm sk sq ve vo vi ma mu me mi mo my mp mb ms ka ke ks ki bl bb bi be bu bo by bj ba br le li lf ll la ly lo ld lm ls lu lt lk lw lv di de ds do dg da dy dd dm dr dv dl du df ce ch cc cu ct co ck cr cl ca ci cq uc ut ug ur ui ua un us ue ud um up ul ub gh ge gu gi ga gr go gn ft fe fo fl fi ff fa fu fr qu po pu pr pa pe pi pl ps pp ph pt ju je ys yi yl ye yt yw xc xe xy zo ze </textarea>
+    <button id="go">go</button>
+    <br/>
+    Copy and paste any text here to use the letter combinations from that text.
+  </div>
+
+  <br /><br /><br />
   <input type="checkbox" data-state="0" class="threestate" id="stopwatch" /><label class="button" id="timer" for="stopwatch">start</label>
 
   <div id="output"></div>
@@ -119,6 +141,17 @@
     let stopwatch = document.querySelector("#stopwatch");
     let timer = document.querySelector("#timer");
     let startstop;
+
+    let output = document.querySelector("#output");
+
+
+    document.querySelector("#leveltwo").onclick = document.querySelector("#showsolution").onclick = function () {
+      if (this.checked) {
+        output.classList.add(this.id);
+      } else {
+        output.classList.remove(this.id);
+      }
+    };
 
 
     document.querySelector("#go").onclick = function () {
@@ -235,7 +268,7 @@
       // console.log(digraphs.length>0,digraphs); return;
 
       if (Object.keys(digraphs).length == 0) {
-        document.querySelector("#output").innerText = "Word bank is incomplete. The following letters are missing: " + missing.join(", ") + ".";
+        output.innerText = "Word bank is incomplete. The following letters are missing: " + missing.join(", ") + ".";
         // console.log("bad digraph collection", digraphs);
         return;
       }
@@ -291,7 +324,6 @@
 
       // finally display chart
 
-      let output = document.querySelector("#output");
       let finalstring = "";
       alphaorder = alphabet.split("");//reinitialize alphaorder for parsing
       wordcount = 0; // reinitialize count
