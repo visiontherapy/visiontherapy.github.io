@@ -12,7 +12,7 @@
 
   <style>
     #output {
-      font-size: 25pt;
+      font-size: 20pt;
       margin: 0.5em 2em 1.5em;
       line-height: 1.5em;
       letter-spacing: 0.1ex;
@@ -153,12 +153,17 @@
 
 
     document.querySelector("#leveltwo").onclick = document.querySelector("#showsolution").onclick = function () {
-      if (this.checked) {
-        output.classList.add(this.id);
-      } else {
-        output.classList.remove(this.id);
-      }
+      accents(this.checked, this.id);
     };
+
+function accents(checked, id) {
+
+if (checked) {
+        output.classList.add(id);
+      } else {
+        output.classList.remove(id);
+      }
+}
 
 
     document.querySelector("#go").onclick = function () {
@@ -298,6 +303,8 @@
       let wordlength = minmax(wordmin, wordmax); //wordmin + Math.floor(Math.random() * (wordmax - wordmin + 2));
       let wordcount = 0;
 
+let wordssincemark = 0;
+
       while (wordcount < maxwords) {
         let newltr = getchar(sequence);
         let alphatype = "";
@@ -305,6 +312,7 @@
           // if newltr is in alphabetical order, cross it off the list
           alphaorder.shift();
           alphatype = "alpha"; // add class for cheat code
+wordssincemark = 0;
         }
 
         sequence += newltr;
@@ -319,6 +327,7 @@
           sequence = "";
           wordlength = minmax(wordmin, wordmax);//3 + Math.floor(Math.random() * 3);
           wordcount++;
+wordssincemark++;
         }
 
         if (wordcount == maxwords && alphaorder.length > 0) {
@@ -401,7 +410,7 @@
         let chr = alpha[Math.floor(Math.random() * alpha.length)];
         let prevchr = sequence ? sequence.match(/.$/)[0] : "";
 
-        if (chr == "#") { //27th "letter" => ensure alpha order
+        if (chr == "#" ||wordssincemark>7 ) { //27th "letter" => ensure alpha order
           chr = alphaorder[0]; //alphaorder.push(alphaorder.shift());
         }
 
