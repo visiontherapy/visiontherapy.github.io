@@ -43,6 +43,12 @@
       }
     }
 
+    #output.red {
+      background: red;
+    }
+
+
+
     #output span.selected {
       color: var(--highlight);
       /* default selection */
@@ -97,10 +103,17 @@
       text-align: center;
     }
 
-@media print {
-#output {margin: 1em 4em 1em 3.5em; }
-#ctrlbar, #controls,#timer {display:none}
-}
+    @media print {
+      #output {
+        margin: 1em 4em 1em 3.5em;
+      }
+
+      #ctrlbar,
+      #controls,
+      #timer {
+        display: none
+      }
+    }
   </style>
 </head>
 
@@ -112,12 +125,18 @@
 
     <div>
       <input type="checkbox" class="slider" id="showsolution" />
-      <label class="button" for="showsolution">Show Solution</label>
+      <label class="button" for="showsolution">Solution</label>
     </div>
 
     <div><input type="checkbox" class="slider" id="leveltwo" />
       <label class="button" for="leveltwo">Level 2</label>
     </div>
+
+    <div><input type="checkbox" class="slider" id="red" />
+      <label class="button" for="red">Red</label>
+    </div>
+
+
 
 
     <button id="reload">New Chart</button>
@@ -131,7 +150,7 @@
     Wordbank:
     <textarea id="wordbank">th to ts te ti tu tc ta ty tl tt tr tw tg he hi ha ho ht hu hr hy er em ea el en ed ee et ev ef ei eh ex ew es eq eg ey ec ep ek eo ez eb re ry rk ra rw rd rr ri rt ro rn rg rm rs rv ru rc rh rl rp wa wh wo wi wn wr we wd as ar ab at al ay af av ac ai an ad ak am ag ap au ax no ng nk nd na ne ni nt nc ns nn ny nv nl nu nf ot or ou of oh ov oc on oo ok oa os op ow ol om og od oe ob ox in id ic it is im ie io iv ix ia ig ir if ip iq il ib so sa se sh st ss si su sl sp sc sm sk sq ve vo vi ma mu me mi mo my mp mb ms ka ke ks ki bl bb bi be bu bo by bj ba br le li lf ll la ly lo ld lm ls lu lt lk lw lv di de ds do dg da dy dd dm dr dv dl du df ce ch cc cu ct co ck cr cl ca ci cq uc ut ug ur ui ua un us ue ud um up ul ub gh ge gu gi ga gr go gn ft fe fo fl fi ff fa fu fr qu po pu pr pa pe pi pl ps pp ph pt ju je ys yi yl ye yt yw xc xe xy zo ze </textarea>
     <button id="go">go</button>
-    <br/>
+    <br />
     Copy and paste any text here to use the letter combinations from that text.
   </div>
 
@@ -152,18 +171,18 @@
     let output = document.querySelector("#output");
 
 
-    document.querySelector("#leveltwo").onclick = document.querySelector("#showsolution").onclick = function () {
+    document.querySelector("#red").onclick  = document.querySelector("#leveltwo").onclick = document.querySelector("#showsolution").onclick = function () {
       accents(this.checked, this.id);
     };
 
-function accents(checked, id) {
+    function accents(checked, id) {
 
-if (checked) {
+      if (checked) {
         output.classList.add(id);
       } else {
         output.classList.remove(id);
       }
-}
+    }
 
 
     document.querySelector("#go").onclick = function () {
@@ -285,7 +304,7 @@ if (checked) {
         return;
       }
       document.querySelector("#showsolution").checked = false;
-accents(false,"showsolution");
+      accents(false, "showsolution");
 
       let maxwords = 70;
 
@@ -304,7 +323,7 @@ accents(false,"showsolution");
       let wordlength = minmax(wordmin, wordmax); //wordmin + Math.floor(Math.random() * (wordmax - wordmin + 2));
       let wordcount = 0;
 
-let wordssincemark = 0;
+      let wordssincemark = 0;
 
       while (wordcount < maxwords) {
         let newltr = getchar(sequence);
@@ -313,7 +332,7 @@ let wordssincemark = 0;
           // if newltr is in alphabetical order, cross it off the list
           alphaorder.shift();
           alphatype = "alpha"; // add class for cheat code
-wordssincemark = 0;
+          wordssincemark = 0;
         }
 
         sequence += newltr;
@@ -328,7 +347,7 @@ wordssincemark = 0;
           sequence = "";
           wordlength = minmax(wordmin, wordmax);//3 + Math.floor(Math.random() * 3);
           wordcount++;
-wordssincemark++;
+          wordssincemark++;
         }
 
         if (wordcount == maxwords && alphaorder.length > 0) {
@@ -398,7 +417,7 @@ wordssincemark++;
           // finished the exercise, stop timer
           stopwatch.click();
           document.querySelector("#showsolution").checked = true;
-accents(true,"showsolution");
+          accents(true, "showsolution");
         }
         console.log(selectedltrs.sort());
 
@@ -412,7 +431,7 @@ accents(true,"showsolution");
         let chr = alpha[Math.floor(Math.random() * alpha.length)];
         let prevchr = sequence ? sequence.match(/.$/)[0] : "";
 
-        if (chr == "#" ||wordssincemark>7 ) { //27th "letter" => ensure alpha order
+        if (chr == "#" || wordssincemark > 7) { //27th "letter" => ensure alpha order
           chr = alphaorder[0]; //alphaorder.push(alphaorder.shift());
         }
 

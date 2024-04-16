@@ -7,26 +7,10 @@
   <title>Hart Chart exercise</title>
   <meta name="darkreader-lock">
   <link rel="stylesheet" href="vision.css" />
+  <link rel="stylesheet" href="metronome.css" />
   <script src="settings.js"></script>
   <script defer src="metronome.js"></script>
   <style>
-    #tapp {
-      cursor: pointer;
-      display: inline-block;
-      padding: 0.1em;
-      border: solid 1px green;
-      user-select: none;
-    }
-
-    #tapp:active {
-      border-color: red;
-    }
-
-    #bpm {
-      width: 3em;
-      margin-left: 0.5em;
-    }
-
     body {
       --scale: 1;
       --topgap: 2em;
@@ -116,34 +100,6 @@
 
 
 
-    #metrocheck {
-      display: none;
-    }
-
-    #metrocheck+label svg {
-      fill: var(--fg);
-      stroke: var(--fg);
-      width: 1.5em;
-      height: 1.5em;
-      vertical-align: middle;
-    }
-
-
-    #metrocheck:checked+label #metro_on {
-      display: inline-block;
-    }
-
-    #metrocheck:checked+label #metro_off {
-      display: none;
-    }
-
-    #metrocheck:not(:checked)+label #metro_on {
-      display: none;
-    }
-
-    #metrocheck:not(:checked)+label #metro_off {
-      display: inline-block;
-    }
 
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
@@ -239,7 +195,7 @@
       let url = window.location.toString();
       url.replace(/[\?#&].*$/, "");
       let qrstring = url + "#" + txferstring;
-      console.log(qrstring);
+      // console.log(qrstring);
       getqr(qrstring);
       // }
 

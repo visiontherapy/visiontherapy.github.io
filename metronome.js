@@ -1,4 +1,11 @@
 
+/* TODO:
+audio switch
+metronome switch
+- if no audio, just flash icon
+- if audio flash and beep
+*/
+
 
 // let blip = new Audio("click.wav");
 let bpm = 60;
@@ -33,7 +40,7 @@ document.querySelector("#tapp").onmousedown = function (e) {
 
   console.log(tappinterval);
   clearbeeps();
-  beep(false);
+  beep({dobeep:false});
   let interbeat = actx.currentTime - lasttime;
   lasttime = actx.currentTime;
   if (interbeat > beatsavg * 3) {
@@ -70,7 +77,9 @@ function clearbeeps() {
 }
 
 
-function beep(dobeep = true) {
+function beep({dobeep = true} = {}) {
+
+
   if (!actx) actx = new AudioContext();
   if (!g) g = actx.createGain();
   osc = actx.createOscillator();
@@ -80,6 +89,14 @@ function beep(dobeep = true) {
   osc.connect(g);
   g.connect(actx.destination);
   if (dobeep) {
+
+    /*
+
+      // flash icon
+    if (audioswitch) {
+    }
+    */
+
     console.log("beeping");
     osc.start(actx.currentTime);
     g.gain.setTargetAtTime(0, actx.currentTime + 0.01, 0.07,);
@@ -92,7 +109,7 @@ function beep(dobeep = true) {
 let metrocheck = document.querySelector("#metrocheck");
 
 metrocheck.onchange = function (e) {
-  console.log("metronome",metronome);
+  console.log("metronome", metronome);
   if (this.checked && !metronome) {
     dometronome();
   } else {
@@ -122,7 +139,7 @@ metrocheck.onchange = function (e) {
 function dometronome(firstbeep = true) {
   metrocheck.checked = true;
   console.log("do metroneme", metronome);
-  beep(firstbeep);
+  beep({dobeep:firstbeep});
   //https://loophole-letters.vercel.app/web-audio-scheduling#built-in-web-audio-scheduling-methods
   let phase = actx.currentTime;
   // bpm = 
@@ -155,7 +172,7 @@ function dometronome(firstbeep = true) {
 
 function newjitterydometronome() {
 
-  beep(false);
+  beep({dobeep:false});
   function metro(currentTime) {
     console.log(currentTime);
     // play some sound at `currentTime`
