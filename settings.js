@@ -1,23 +1,18 @@
 
-document.addEventListener("DOMContentLoaded", (e)=> {
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  // dark mode
-  document.querySelector("#darkmode").checked = true;
-}
-
-document.querySelector("#darkmode").onchange = function (e) {
-  if (this.checked) {
-    document.body.style.setProperty("--bg", "#000");
-    document.body.style.setProperty("--fg", "#fff");
-    document.body.style.setProperty("--ctrlbg", "#222");
-    document.body.style.setProperty("--highlight", "#0ff");
-  } else {
-    document.body.style.setProperty("--bg", "#fff");
-    document.body.style.setProperty("--fg", "#000");
-    document.body.style.setProperty("--ctrlbg", "#ddf");
-    document.body.style.setProperty("--highlight", "#099");
+document.addEventListener("DOMContentLoaded", (e) => {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // dark mode
+    document.querySelector("#darkmode").checked = true;
   }
-};
+
+  document.querySelector("#darkmode").onchange = function (e) {
+    if (this.checked) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+  };
 
 
 });
@@ -61,7 +56,7 @@ function mstotime(milliseconds) {
 
 // get random value between min/max, inclusive
 function minmax(min, max) {
-  return min + Math.floor(Math.random() * (max - min +1));
+  return min + Math.floor(Math.random() * (max - min + 1));
 }
 
 

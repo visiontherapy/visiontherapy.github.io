@@ -8,11 +8,12 @@
   <meta name="darkreader-lock">
 
   <link rel="stylesheet" href="vision.css">
+  <script src="settings.js"></script>
 
   <style>
     body {
-      margin: 1em;
       font-size: 18pt;
+      margin: 0 1em;
     }
 
 
@@ -21,25 +22,31 @@
       margin: 1.5em 0 0.5em;
     }
 
-    div {
-      margin: 0.5em 1em;
-      text-indent: 2em;
-    }
 
     .plain {
-      text-indent: 0;
+      margin: 0.5em 1em;
     }
 
     img {
       vertical-align: middle;
+    }
+
+    #homelogo {
+      width: 1.5em;
+      height: 1.5em;
     }
   </style>
 </head>
 
 <body>
 
+  <div id="ctrlbar">
+    <div id="homelogo"><img src="logo.svg" /></div>
+    <div><input type="checkbox" class="slider" id="darkmode" checked="checked" /><label for="darkmode">Dark mode</label></div>
 
-  <h2><img src="logo.svg" /> Vision Therapy exercises</h2>
+  </div>
+
+  <h2>Vision Therapy exercises</h2>
   <div class="plain">
     This open-source project is a work in progress.<br />
     To view the code, contribute, or provide feedback, visit:<br />
@@ -47,9 +54,9 @@
   </div>
 
   <h3><a href="cpsaccades.html">CP Saccades exercise</a></h3>
-  <div>Keep your eyes focused on the middle circle. Click the circle, or press the spacebar to display a the target marker/letter. Using your peripheral vision, locate the corresponding marker in one of the outer circles. Try to click the target marker without moving your eyes away from the central circle. A correct click will result in a green flash, and the central circle will advance to the next target marker. The central circle will flash red if the wrong target marker is clicked.</div>
+  <div class="plain">Keep your eyes focused on the middle circle. Click the circle, or press the spacebar to display a the target marker/letter. Using your peripheral vision, locate the corresponding marker in one of the outer circles. Try to click the target marker without moving your eyes away from the central circle. A correct click will result in a green flash, and the central circle will advance to the next target marker. The central circle will flash red if the wrong target marker is clicked.</div>
 
-  <div>Instead of clicking the targets, you may use other means of identifying the target marker (eg, by placing a stick or physical pointer and verifying the correct target by looking there). In this case, press the space bar to advance the central marker to the next target.</div>
+  <div class="plain">Instead of clicking the targets, you may use other means of identifying the target marker (eg, by placing a stick or physical pointer and verifying the correct target by looking there). In this case, press the space bar to advance the central marker to the next target.</div>
 
 
   <h3><a href="hartchart.html">Hart Chart</a></h3>
@@ -78,10 +85,13 @@
       </ul>
 
     </li>
-
-
   </ul>
 
+<h3><a href="tranaglyphs.html">Tranaglyphs</a></h3>
+<ul>
+  <li></li>
+  <li></li>
+</ul>
 </body>
 
 </html>

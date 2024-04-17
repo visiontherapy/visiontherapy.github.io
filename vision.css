@@ -1,19 +1,35 @@
 :root {
   --basefont: 7;
   --fontsize: var(--basefont);
+  --bg: #000;
+  --fg: #fff;
+  --ctrlbg: #222;
+  --highlight: #0ff;
+  --tranared: #880000;
+  --tranagreen: #008000;
+  --homefilter: saturate(0) brightness(100);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #fff;
+    --fg: #000;
+    --ctrlbg: #ddf;
+    --highlight: #099;
+    --tranared: #ff5500;
+    --tranagreen: aqua;
+    --homefilter: brightness(0);
+  }
+}
+[data-theme="light"] {
+  /* https://stackoverflow.com/questions/56300132/how-to-override-css-prefers-color-scheme-setting */
   --bg: #fff;
   --fg: #000;
   --ctrlbg: #ddf;
   --highlight: #099;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000;
-    --fg: #fff;
-    --ctrlbg: #222;
-    --highlight:#0ff;
-  }
+  --tranared: #ff5500;
+  --tranagreen: aqua;
+  --homefilter: brightness(0);
 }
 
 body {
@@ -21,9 +37,9 @@ body {
   color: var(--fg);
   margin: 0;
   padding: 0;
-  transition-property: background-color,color;
+  transition-property: background-color, color;
   transition: linear 0.3s;
-  position:relative;
+  position: relative;
 }
 
 a {
@@ -31,7 +47,6 @@ a {
   text-decoration: none;
   color: #6495ed;
 }
-
 
 #main {
   position: relative;
@@ -74,8 +89,6 @@ a {
   border: solid 1px #888;
 }
 
-
-
 #ctrlbar {
   display: flex;
   flex-direction: row;
@@ -91,7 +104,8 @@ a {
   background: transparent;
   padding: 0.5em;
   transition: all 0.25s linear;
-  width: 10em;
+  width: min(25em, 90%);
+  /* width: 10em; */
   max-height: 1.25em;
   /* white-space: nowrap; */
   z-index: 105;
@@ -101,12 +115,9 @@ a {
   display:inline-block;
 } */
 
-
-
 #controls:hover {
   max-height: 15em;
   background: var(--ctrlbg);
-  width: min(25em, 90%);
   transition: all 0.25s linear;
 }
 
@@ -185,13 +196,13 @@ input[type="checkbox"].threestate {
 
   &[data-state="1"] + label {
     /* color: green; */
-    opacity:1;
+    opacity: 1;
     /* filler */
   }
 
   &[data-state="2"] + label {
     /* color: red; */
-    opacity:1;
+    opacity: 1;
     /* filler */
   }
 }
@@ -250,13 +261,11 @@ label h3 {
   margin: 0.5em 0 0.25em;
 }
 
-
 #homeicon {
   height: 1.5em;
-  width:1.5em;
+  width: 1.5em;
+  filter: var(--homefilter);
 }
-
-
 
 #sparky {
   position: fixed;
