@@ -9,43 +9,108 @@
 
   <link rel="stylesheet" href="vision.css" />
   <script src="settings.js"></script>
-  
+
   <style>
+    input[type=range] {
+      width: 80%;
+      margin: 0.5em 0 0 10%;
+    }
+
+
     #circles {
       position: relative;
       top: 3em;
-      --size: 10em;
+      --size: 12em;
       --delta: 0;
-      --units: 1em;
+      --units: 1cm;
+      --maxoffset: 5cm;
+    }
+
+    .circle,
+    .center,
+    .mark {
+      width: var(--size);
+      height: var(--size);
+      border-radius: var(--size);
+      border: solid 20px;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
     }
 
     #red,
     #green {
-
-      width: var(--size);
-      height: var(--size);
-      border-radius: var(--size);
-      border: dotted 10px;
-      position: absolute;
       left: calc(50% - var(--delta) * var(--units));
       transform: translate(calc(-50% - var(--delta) * var(--units)));
     }
 
-    #red {
-      --units: -1em;
+    #red,
+    #red * {
+      --units: -1cm;
+      --tranacolor: var(--tranared);
       border-color: var(--tranared);
     }
 
-    #green {
+    #green,
+    #green * {
+      --tranacolor: var(--tranagreen);
       border-color: var(--tranagreen);
     }
 
-
-    input[type=range] {
-      width: 80%;
-      margin: 0.5em 0 0 10%;
-
+    .satellite {
+      width: calc(var(--size) * .15);
+      height: calc(var(--size) * .15);
+      border-width: 20px;
+      bottom: -20%;
     }
+
+
+    .inner {
+      width: calc(var(--size) * .65);
+      height: calc(var(--size) * .65);
+      top: 50%;
+      transform: translate(-47%, -50%);
+    }
+
+    .one {
+      left: -20%;
+    }
+
+    .two {
+      left: 120%;
+    }
+
+    .center {
+      width: calc(var(--size) * .25);
+      height: calc(var(--size) * .25);
+      border-width:0;
+      top:50%;
+      transform:translate(-50%,-50%);
+    }
+
+    .center::after, .center::before {
+      content: " ";
+      width: 100%;
+      height: 10px;
+      position:absolute;
+      background: var(--tranacolor);
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+    }
+
+    .center::after {
+      transform:translate(-50%,-50%) rotate(45deg);
+    }
+    
+      .center::before {
+        transform:translate(-50%,-50%) rotate(-45deg);
+    }
+
+
+    .marker {
+      display:none;
+    }
+
   </style>
 </head>
 
@@ -53,23 +118,56 @@
 
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="home.svg" alt="home" /></a></div>
-    <div><input type="checkbox" class="slider" id="darkmode" checked="checked" /><label for="darkmode">Dark mode</label></div>
+    <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
 
   </div>
 
-  <input type="range" id="slider" step="0.1" min="-10" max="10" />
+  <input type="range" id="slider" step="0.1" min="-5" max="5" />
   <div id="circles">
-    <div id="red"></div>
-    <div id="green"></div>
+    <div id="red" class="circle"></div>
+    <div id="green" class="circle">
+      <div class="inner circle"></div>
+      <div class="center"></div>
+      <div class="satellite circle one"></div>
+      <div class="satellite circle two"></div>
+      <div class="marker"></div>
+    </div>
   </div>
   <script>
 
     let slider = document.querySelector("#slider");
     let circles = document.querySelector("#circles");
     slider.oninput = function (e) {
-      console.log(parseFloat(this.value));
-      circles.style.setProperty("--delta", parseFloat(this.value));
+      movecircles();
+    };
+
+
+    function movecircles(key = false) {
+      // console.log(parseFloat(slider.value));
+      circles.style.setProperty("--delta", parseFloat(slider.value));
+      if (key) {
+        key.preventDefault();
+      }
     }
+
+    window.addEventListener("keydown", function (e) {
+      let delta = 0.1;
+      switch (e.keyCode) {
+        case 37: // left
+          slider.value -= delta; movecircles(); break;
+        case 39: //right
+          slider.value -= -delta; movecircles(); break;
+        case 38: //up
+          slider.value -= -delta; movecircles(); break;
+        case 40: //down
+          slider.value -= delta; movecircles(); break;
+      }
+      // console.log(e.key, e.keyCode, slider.value);
+
+    });
+
+
+
 
   </script>
 

@@ -1,11 +1,17 @@
 
 document.addEventListener("DOMContentLoaded", (e) => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  if ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    || document.documentElement.getAttribute("data-theme") == "dark") {
     // dark mode
     document.querySelector("#darkmode").checked = true;
+  } else if (document.documentElement.getAttribute("data-theme") == "light") {
+    document.querySelector("#darkmode").checked = false;
   }
 
-  document.querySelector("#darkmode").onchange = function (e) {
+
+
+  let darkmode = document.querySelector("#darkmode");
+  darkmode.onchange = function (e) {
     if (this.checked) {
       document.documentElement.setAttribute("data-theme", "dark");
     } else {
@@ -13,7 +19,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
 
   };
+});
 
+window.addEventListener("keydown", function (e) {
+  if (e.key === "d") {
+    e.preventDefault();
+    darkmode.checked = !darkmode.checked;
+    document.documentElement.setAttribute("data-theme", `${darkmode.checked ? "dark" : "light"}`);
+  }
 
 });
 
