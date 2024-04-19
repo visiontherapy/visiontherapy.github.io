@@ -12,6 +12,7 @@
 
   <style>
     input[type=range] {
+		--steps: 0.01;
       width: 80%;
       margin: 0.5em 0 0 10%;
     }
@@ -179,7 +180,7 @@ padding:1em;
 
   </div>
 
-  <input type="range" id="slider" step="1" min="-24" max="24" />
+  <input type="range" id="slider" min="-24" max="24" />
 	<div id="rangeout">0</div>
   <div id="circles">
     <div id="red" class="circle">
@@ -204,9 +205,12 @@ padding:1em;
 
       document.documentElement.setAttribute("data-theme", "light");
 // TODO - adjust settingsjs so checkbox does not  get checked
-
 			
     let slider = document.querySelector("#slider");
+		let basestep = parseFloat(getComputedStyle(slider).getPropertyValue("--steps"));
+		let fixpoint = basestep.toString().replace(/^\d*\.?/,"").length;
+		
+		slider.setAttribute("step", basestep);
     let circles = document.querySelector("#circles");
     slider.oninput = function (e) {
       movecircles();
@@ -220,30 +224,33 @@ padding:1em;
       // console.log(parseFloat(slider.value));
       circles.style.setProperty("--delta", parseFloat(slider.value) /24 * 2.6);
       if (key)    key.preventDefault();
-			
-			if (slider.value <0) {
-				rangeout.innerText = "C" + Math.abs(slider.value);
-			}	else if (slider.value >0) {
-				rangeout.innerText = "D" + slider.value;
+			let slidevalue = parseFloat(slider.value).toFixed(fixpoint)
+			if (slidevalue <0) {
+				rangeout.innerText = "C" + Math.abs(slidevalue);
+			}	else if (slidevalue> 0) {
+				rangeout.innerText = "D" + Math.abs(slidevalue);
 			} else { 
 				rangeout.innerText = "0";
 			}
-			
-			
-			
-    }
+		}
+    
 
     window.addEventListener("keydown", function (e) {
       switch (e.keyCode) {
         case 37: // left
         case 40: //down
-          slider.value --; movecircles(e); break;
+          slider.value -= basestep; movecircles(e); break;
         case 39: //right
         case 38: //up
-          slider.value ++; movecircles(e); break;
+          slider.value -= -basestep; movecircles(e); break;
+				case 33: //pgup
+          slider.value = Math.round(slider.value) +1 ; movecircles(e); break;
+				case 34: //pgdn
+          slider.value = Math.round(slider.value) -1 ; movecircles(e); break;
+				
           //slider.value -= delta; movecircles(e); break;
       }
-      // console.log(e.key, e.keyCode, slider.value);
+       console.log(e.key, e.keyCode, slider.value);
 
     });
 
