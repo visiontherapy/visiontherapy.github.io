@@ -5,8 +5,8 @@
   --fg: #fff;
   --ctrlbg: #222;
   --highlight: #0ff;
-  --tranared: #880000;
-  --tranagreen: #00c;
+  --tranared: #f005;
+  --tranagreen: #0f05;
   --trackred: var(--fg);
   --trackredbg: #ff0000;
   --homefilter: saturate(0) brightness(100);
