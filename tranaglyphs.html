@@ -20,19 +20,20 @@
     #circles {
       position: relative;
       top: 3em;
-      --size: 12em;
+      --size: 10.5cm;
       --delta: 0;
       --units: 1cm;
-      --maxoffset: 5cm;
     }
 
     .circle,
     .center,
-    .mark {
+    .marker,
+			.points {
       width: var(--size);
       height: var(--size);
       border-radius: var(--size);
-      border: solid 20px;
+			--bsize: 0.65cm;
+      border: solid var(--bsize);
       position: absolute;
       left: 50%;
       transform: translate(-50%);
@@ -40,8 +41,8 @@
 
     #red,
     #green {
-      left: calc(50% - var(--delta) * var(--units));
-      transform: translate(calc(-50% - var(--delta) * var(--units)));
+      left: calc(50% + var(--delta) * var(--units));
+      transform: translate(calc(-50% + var(--delta) * var(--units)));
     }
 
     #red,
@@ -57,32 +58,42 @@
       border-color: var(--tranagreen);
     }
 
-    .satellite {
-      width: calc(var(--size) * .15);
-      height: calc(var(--size) * .15);
-      border-width: 20px;
-      bottom: -20%;
-    }
 
 
     .inner {
-      width: calc(var(--size) * .65);
-      height: calc(var(--size) * .65);
+      width: calc(var(--size) * .75);
+      height: calc(var(--size) * .75);
       top: 50%;
       transform: translate(-47%, -50%);
     }
 
+		#green .inner {
+      transform: translate(-53%, -50%);
+		
+		}
+		
+		
+    .satellite {
+      width: calc(var(--size) * .065);
+      height: calc(var(--size) * .065);
+      bottom: -10%;
+    }
+		
+		#green .satellite {
+			top: -10%;
+		}
+
     .one {
-      left: -20%;
+      left: -7%;
     }
 
     .two {
-      left: 120%;
+      left: 107%;
     }
 
     .center {
-      width: calc(var(--size) * .25);
-      height: calc(var(--size) * .25);
+      width: calc(var(--size) * .22);
+      height: calc(var(--size) * .22);
       border-width:0;
       top:50%;
       transform:translate(-50%,-50%);
@@ -91,7 +102,7 @@
     .center::after, .center::before {
       content: " ";
       width: 100%;
-      height: 10px;
+      height: 0.35cm;
       position:absolute;
       background: var(--tranacolor);
       top:50%;left:50%;
@@ -108,8 +119,54 @@
 
 
     .marker {
-      display:none;
+      width: calc(var(--size) * .03);
+      height: calc(var(--size) * .03);
+      bottom: 22%;
     }
+
+
+		#green .marker {
+			border-radius:0.25cm;
+			top:22%;
+		}
+
+
+.points {
+	border:none;
+}
+
+.points::before, .points::after {
+	content:" ";
+	position:absolute;
+	height: 0;
+	width: 0;
+	--point: 0.5cm;
+	border-top: none;
+	border-left: solid calc(var(--point) /3) transparent;
+	border-right: solid calc(var(--point) /3) transparent;
+	border-bottom: solid var(--point) var(--tranacolor);
+	top: calc(var(--point) * (-1) - var(--bsize));
+	left:50%;
+	transform:translate(-50%);
+}
+
+.points::after {
+	content:" ";
+	border-top: solid var(--point) var(--tranacolor);
+	border-bottom:none;
+	top:auto;
+	bottom: calc(var(--point) * (-1) - var(--bsize));
+}
+
+
+#rangeout {
+text-align:center;
+height: 1.5em;
+line-height: 1.5em;
+margin: 0.5em;
+padding:1em;
+}
+
 
   </style>
 </head>
@@ -122,19 +179,33 @@
 
   </div>
 
-  <input type="range" id="slider" step="0.1" min="-5" max="5" />
+  <input type="range" id="slider" step="1" min="-24" max="24" />
+	<div id="rangeout">0</div>
   <div id="circles">
-    <div id="red" class="circle"></div>
+    <div id="red" class="circle">
+      <div class="inner circle"></div>
+      <div class="center"></div>
+      <div class="satellite circle one"></div>
+      <div class="satellite circle two"></div>
+      <div class="marker"></div>
+			<div class="points"></div>
+			</div>
     <div id="green" class="circle">
       <div class="inner circle"></div>
       <div class="center"></div>
       <div class="satellite circle one"></div>
       <div class="satellite circle two"></div>
       <div class="marker"></div>
+			<div class="points"></div>
     </div>
   </div>
   <script>
 
+
+      document.documentElement.setAttribute("data-theme", "light");
+// TODO - adjust settingsjs so checkbox does not  get checked
+
+			
     let slider = document.querySelector("#slider");
     let circles = document.querySelector("#circles");
     slider.oninput = function (e) {
@@ -142,25 +213,35 @@
     };
 
 
+
+			let rangeout = document.querySelector("#rangeout");
+			
     function movecircles(key = false) {
       // console.log(parseFloat(slider.value));
-      circles.style.setProperty("--delta", parseFloat(slider.value));
-      if (key) {
-        key.preventDefault();
-      }
+      circles.style.setProperty("--delta", parseFloat(slider.value) /24 * 2.6);
+      if (key)    key.preventDefault();
+			
+			if (slider.value <0) {
+				rangeout.innerText = "C" + Math.abs(slider.value);
+			}	else if (slider.value >0) {
+				rangeout.innerText = "D" + slider.value;
+			} else { 
+				rangeout.innerText = "0";
+			}
+			
+			
+			
     }
 
     window.addEventListener("keydown", function (e) {
-      let delta = 0.1;
       switch (e.keyCode) {
         case 37: // left
-          slider.value -= delta; movecircles(); break;
-        case 39: //right
-          slider.value -= -delta; movecircles(); break;
-        case 38: //up
-          slider.value -= -delta; movecircles(); break;
         case 40: //down
-          slider.value -= delta; movecircles(); break;
+          slider.value --; movecircles(e); break;
+        case 39: //right
+        case 38: //up
+          slider.value ++; movecircles(e); break;
+          //slider.value -= delta; movecircles(e); break;
       }
       // console.log(e.key, e.keyCode, slider.value);
 
