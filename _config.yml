@@ -1,9 +1,1 @@
-plugins:
-  - jekyll-relative-links
-relative_links:
-  enabled: true
-  collections: true
-include:
-  - mdtest.html
-  - README.md
-markdown: kramdown
+markdown: GFM
