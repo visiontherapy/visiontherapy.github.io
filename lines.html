@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Line Counting</title>
+  <meta name="darkreader-lock" />
+
+  <link rel="stylesheet" href="vision.css" />
+  <script src="settings.js"></script>
+
+  <style>
+    #barcode {
+      position: relative;
+      height: 10em;
+      margin: 2em 0;
+      background-color: #fff;
+      padding: 0.5em;
+      display: inline-block;
+    }
+
+    .bar {
+      background-color: #000;
+      height: 100%;
+      display: inline-block;
+    }
+
+    .blank {
+      background-color: #fff;
+      height: 100%;
+     display: inline-block;
+    }
+
+    #answer {
+      text-align: center;
+      font-size:120%;
+      width: 4em;
+      padding: 0.25em;
+    }
+
+    #content {
+    text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="home.svg" alt="home" /></a></div>
+    <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+    <button id="reload">New Chart</button>
+  </div>
+
+  <div id="content">
+
+    <div id="barcode"></div>
+    <br />
+    <input type="text" id="answer">
+
+  </div>
+  <script>
+    let linecount;
+    let barcode = document.querySelector("#barcode");
+    let widths = [1, 2.5];
+    let answer = document.querySelector("#answer");
+
+
+    document.querySelector("#reload").onclick = function () {
+
+      showchart();
+
+    };
+
+
+    answer.oninput = function (e) {
+      if (this.value == linecount) {
+        this.style.background = "green";
+      } else {
+        this.style = "";
+      }
+    };
+
+    function showchart() {
+      answer.value = "";
+      answer.style = "";
+      barcode.innerHTML = "";
+
+      linecount = 15 + Math.floor(Math.random() * 30);
+      console.log(linecount);
+
+      function randw() {
+        // return Math.floor(1 + Math.random() * 2) * 5 + "px";
+        return widths[Math.floor(Math.random() * 2)] * 5 + "px";
+      }
+
+      for (let l = 1; l <= linecount; l++) {
+        let bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.width = randw();
+        barcode.append(bar);
+        if (l < linecount) {
+          let blank = document.createElement("div");
+          blank.className = "blank";
+          blank.style.width = randw();
+          barcode.append(blank);
+        }
+      }
+
+    }
+
+
+    showchart();
+
+
+
+  </script>
+</body>
+
+</html>
