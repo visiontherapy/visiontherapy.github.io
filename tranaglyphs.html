@@ -12,7 +12,7 @@
 
   <style>
     input[type=range] {
-		--steps: 0.05;
+      --steps: 0.05;
       width: 80%;
       margin: 0.5em 0 0 10%;
     }
@@ -23,17 +23,17 @@
       top: 3em;
       --size: 10.5cm;
       --delta: 0;
-      --units: 1cm;
+      --units: calc(1cm * var(--size) / var(--size));
     }
 
     .circle,
     .center,
     .marker,
-			.points {
+    .points {
       width: var(--size);
       height: var(--size);
       border-radius: var(--size);
-			--bsize: 0.65cm;
+      --bsize: calc(var(--size) * 0.06);
       border: solid var(--bsize);
       position: absolute;
       left: 50%;
@@ -68,21 +68,21 @@
       transform: translate(-47%, -50%);
     }
 
-		#green .inner {
+    #green .inner {
       transform: translate(-53%, -50%);
-		
-		}
-		
-		
+
+    }
+
+
     .satellite {
       width: calc(var(--size) * .065);
       height: calc(var(--size) * .065);
       bottom: -10%;
     }
-		
-		#green .satellite {
-			top: -10%;
-		}
+
+    #green .satellite {
+      top: -10%;
+    }
 
     .one {
       left: -7%;
@@ -95,27 +95,29 @@
     .center {
       width: calc(var(--size) * .22);
       height: calc(var(--size) * .22);
-      border-width:0;
-      top:50%;
-      transform:translate(-50%,-50%);
+      border-width: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
 
-    .center::after, .center::before {
+    .center::after,
+    .center::before {
       content: " ";
       width: 100%;
       height: 0.35cm;
-      position:absolute;
+      position: absolute;
       background: var(--tranacolor);
-      top:50%;left:50%;
-      transform:translate(-50%,-50%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .center::after {
-      transform:translate(-50%,-50%) rotate(45deg);
+      transform: translate(-50%, -50%) rotate(45deg);
     }
-    
-      .center::before {
-        transform:translate(-50%,-50%) rotate(-45deg);
+
+    .center::before {
+      transform: translate(-50%, -50%) rotate(-45deg);
     }
 
 
@@ -126,49 +128,48 @@
     }
 
 
-		#green .marker {
-			border-radius:0.25cm;
-			top:22%;
-		}
+    #green .marker {
+      border-radius: 0.25cm;
+      top: 22%;
+    }
 
 
-.points {
-	border:none;
-}
+    .points {
+      border: none;
+    }
 
-.points::before, .points::after {
-	content:" ";
-	position:absolute;
-	height: 0;
-	width: 0;
-	--point: 0.5cm;
-	border-top: none;
-	border-left: solid calc(var(--point) /3) transparent;
-	border-right: solid calc(var(--point) /3) transparent;
-	border-bottom: solid var(--point) var(--tranacolor);
-	top: calc(var(--point) * (-1) - var(--bsize));
-	left:50%;
-	transform:translate(-50%);
-}
+    .points::before,
+    .points::after {
+      content: " ";
+      position: absolute;
+      height: 0;
+      width: 0;
+      --point: calc(var(--size) * 0.05);
+      border-top: none;
+      border-left: solid calc(var(--point) /3) transparent;
+      border-right: solid calc(var(--point) /3) transparent;
+      border-bottom: solid var(--point) var(--tranacolor);
+      top: calc(var(--point) * (-1) - var(--bsize));
+      left: 50%;
+      transform: translate(-50%);
+    }
 
-.points::after {
-	content:" ";
-	border-top: solid var(--point) var(--tranacolor);
-	border-bottom:none;
-	top:auto;
-	bottom: calc(var(--point) * (-1) - var(--bsize));
-}
-
-
-#rangeout {
-text-align:center;
-height: 1.5em;
-line-height: 1.5em;
-margin: 0.5em;
-padding:1em;
-}
+    .points::after {
+      content: " ";
+      border-top: solid var(--point) var(--tranacolor);
+      border-bottom: none;
+      top: auto;
+      bottom: calc(var(--point) * (-1) - var(--bsize));
+    }
 
 
+    #rangeout {
+      text-align: center;
+      height: 1.5em;
+      line-height: 1.5em;
+      margin: 0.5em;
+      padding: 1em;
+    }
   </style>
 </head>
 
@@ -181,7 +182,7 @@ padding:1em;
   </div>
 
   <input type="range" id="slider" min="-24" max="24" />
-	<div id="rangeout">0</div>
+  <div id="rangeout">0</div>
   <div id="circles">
     <div id="red" class="circle">
       <div class="inner circle"></div>
@@ -189,28 +190,28 @@ padding:1em;
       <div class="satellite circle one"></div>
       <div class="satellite circle two"></div>
       <div class="marker"></div>
-			<div class="points"></div>
-			</div>
+      <div class="points"></div>
+    </div>
     <div id="green" class="circle">
       <div class="inner circle"></div>
       <div class="center"></div>
       <div class="satellite circle one"></div>
       <div class="satellite circle two"></div>
       <div class="marker"></div>
-			<div class="points"></div>
+      <div class="points"></div>
     </div>
   </div>
   <script>
 
 
-      document.documentElement.setAttribute("data-theme", "light");
-// TODO - adjust settingsjs so checkbox does not  get checked
-			
+    document.documentElement.setAttribute("data-theme", "light");
+    // TODO - adjust settingsjs so checkbox does not  get checked
+
     let slider = document.querySelector("#slider");
-		let basestep = parseFloat(getComputedStyle(slider).getPropertyValue("--steps"));
-		let fixpoint = basestep.toString().replace(/^\d*\.?/,"").length;
-		
-		slider.setAttribute("step", basestep);
+    let basestep = parseFloat(getComputedStyle(slider).getPropertyValue("--steps"));
+    let fixpoint = basestep.toString().replace(/^\d*\.?/, "").length;
+
+    slider.setAttribute("step", basestep);
     let circles = document.querySelector("#circles");
     slider.oninput = function (e) {
       movecircles();
@@ -218,46 +219,48 @@ padding:1em;
 
 
 
-			let rangeout = document.querySelector("#rangeout");
-			
+    let rangeout = document.querySelector("#rangeout");
+
     function movecircles(key = false) {
       // console.log(parseFloat(slider.value));
-      circles.style.setProperty("--delta", parseFloat(slider.value) /24 * 2.6);
-      if (key)    key.preventDefault();
-			let slidevalue = parseFloat(slider.value).toFixed(fixpoint)
-			if (slidevalue <0) {
-				rangeout.innerText = "C" + Math.abs(slidevalue);
-			}	else if (slidevalue> 0) {
-				rangeout.innerText = "D" + Math.abs(slidevalue);
-			} else { 
-				rangeout.innerText = "0";
-			}
-		}
-    
+      circles.style.setProperty("--delta", parseFloat(slider.value) / 24 * 2.6);
+      if (key) key.preventDefault();
+      let slidevalue = parseFloat(slider.value).toFixed(fixpoint);
+      if (slidevalue < 0) {
+        rangeout.innerText = "C" + Math.abs(slidevalue);
+      } else if (slidevalue > 0) {
+        rangeout.innerText = "D" + Math.abs(slidevalue);
+      } else {
+        rangeout.innerText = "0";
+      }
+    }
 
     window.addEventListener("keydown", function (e) {
       switch (e.keyCode) {
         case 37: // left
         case 40: //down
-          slider.value -= basestep; movecircles(e); break;
+          slider.value -= basestep;
+          movecircles(e); break;
         case 39: //right
         case 38: //up
-          slider.value -= -basestep; movecircles(e); break;
-				case 33: //pgup
-          slider.value = Math.round(slider.value) +1 ; movecircles(e); break;
-				case 34: //pgdn
-          slider.value = Math.round(slider.value) -1 ; movecircles(e); break;
-				
-          //slider.value -= delta; movecircles(e); break;
+          slider.value -= -basestep;
+          movecircles(e); break;
+        case 33: //pgup
+          slider.value = Math.round(slider.value) + 1;
+          movecircles(e); break;
+        case 34: //pgdn
+          slider.value = Math.round(slider.value) - 1;
+          movecircles(e); break;
+        case 48: // Zero
+          slider.value = 0;
+          movecircles(e); break;
+
+        //slider.value -= delta; movecircles(e); break;
       }
-       console.log(e.key, e.keyCode, slider.value);
+      console.log(e.key, e.keyCode, slider.value);
 
-    });
-
-
-
-
-  </script>
+    });    
+    </script>
 
 </body>
 
