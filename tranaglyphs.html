@@ -253,6 +253,10 @@
       document.querySelector("#calibrate").innerText = this.value;
     };
 
+    slider.ontouchstart = calibrator.ontouchstart = function(e) {
+      // alert("tocuh start");
+      e.stopPropagation();
+    }
 
 
 

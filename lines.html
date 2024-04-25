@@ -57,7 +57,7 @@
 
     <div id="barcode"></div>
     <br />
-    <input type="text" id="answer">
+    <input type="text" id="answer"> <button style="font-size:18pt">&#10550;</button>
 <br/><br/>
 Count the lines and enter your answer.
   </div>
@@ -75,13 +75,23 @@ Count the lines and enter your answer.
     };
 
 
-    answer.oninput = function (e) {
+    answer.onchange = function (e) {
       if (this.value == linecount) {
         this.style.background = "green";
       } else {
         this.style = "";
       }
     };
+
+
+    answer.onkeydown = function(e) {
+      if (e.key == "Enter") {
+        this.blur();
+
+      }
+      console.log(e);
+    }
+
 
     function showchart() {
       answer.value = "";
