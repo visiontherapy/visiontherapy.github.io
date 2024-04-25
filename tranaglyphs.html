@@ -17,9 +17,13 @@
       --glyphsize: calc(4in * var(--scale));
     }
 
+    body {
+      text-align: center;
+    }
+
     input[type=range] {
-      width: 80%;
-      margin: 0.5em 0 0 10%;
+      width: 60%;
+      /* margin: 0.5em 0 0 10%; */
     }
 
 
@@ -189,6 +193,11 @@
       transform: translate(-50%);
       text-align: center;
     }
+
+    #calibrate::after {
+      content: attr(data-value) "x ⮕ 4in (10.16cm)";
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -199,9 +208,10 @@
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
   </div>
 
-  <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
-  <div id="calibrate"></div>
+  Calibrator: <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
+  <div id="calibrate" data-value="1.65"></div>
 
+  <br/>
   <input type="range" id="slider" min="-24" max="24" />
   <div id="rangeout">0</div>
 
@@ -250,13 +260,14 @@
     calibrator.oninput = function (e) {
       // parseFloat(docvars.getPropertyValue("--scale"));
       document.documentElement.style.setProperty("--scale", this.value);
-      document.querySelector("#calibrate").innerText = this.value;
+      // document.querySelector("#calibrate").innerText = this.value;
+      document.querySelector("#calibrate").dataset.value = parseFloat(this.value).toFixed(2);
     };
 
-    slider.ontouchstart = calibrator.ontouchstart = function(e) {
+    slider.ontouchstart = calibrator.ontouchstart = function (e) {
       // alert("tocuh start");
       e.stopPropagation();
-    }
+    };
 
 
 
