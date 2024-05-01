@@ -14,7 +14,10 @@
     :root {
       --scale: 1.65;
       --steps: 0.05;
-      --glyphsize: calc(4in * var(--scale));
+      --glyphscale: 1;
+      --basesize: calc(4in * var(--scale));
+      /* // todo - fix this so that calibrator does not change */
+      --glyphsize: calc(var(--basesize) * var(--glyphscale));
     }
 
     body {
@@ -33,6 +36,19 @@
       --delta: 0;
       --units: 1cm;
     }
+
+
+    #circles.fusion {
+      filter: brightness(0) saturate(0);
+
+      #red,
+      #green {
+        left: calc(50% + var(--scale) * 1.2 * var(--units));
+        transform: translate(calc(-50% + var(--scale) * 1.2 * var(--units)));
+      }
+
+    }
+
 
     .circle,
     .center,
@@ -59,13 +75,13 @@
     #red * {
       --units: -1cm;
       --tranacolor: var(--tranared);
-      border-color: var(--tranared);
+      border-color: var(--tranacolor);
     }
 
     #green,
     #green * {
       --tranacolor: var(--tranagreen);
-      border-color: var(--tranagreen);
+      border-color: var(--tranacolor);
     }
 
 
@@ -133,8 +149,8 @@
 
 
     .marker {
-      width: calc(var(--glyphsize) * .03);
-      height: calc(var(--glyphsize) * .03);
+      width: calc(var(--basesize) * .03);
+      height: calc(var(--basesize) * .03);
       bottom: 22%;
     }
 
@@ -155,7 +171,7 @@
       position: absolute;
       height: 0;
       width: 0;
-      --point: calc(var(--glyphsize) * 0.05);
+      --point: calc(var(--basesize) * 0.05);
       border-top: none;
       border-left: solid calc(var(--point) /3) transparent;
       border-right: solid calc(var(--point) /3) transparent;
@@ -184,7 +200,7 @@
 
     #calibrate {
       position: relative;
-      width: var(--glyphsize);
+      width: var(--basesize);
       height: 1.5em;
       line-height: 1.5em;
       border-left: 2px solid var(--fg);
@@ -205,13 +221,14 @@
 
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="home.svg" alt="home" /></a></div>
+    <div><input type="checkbox" class="slider" id="fusion" /><label for="fusion">Fusion mode</label></div>
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
   </div>
 
   Calibrator: <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
   <div id="calibrate" data-value="1.65"></div>
 
-  <br/>
+  <br />
   <input type="range" id="slider" min="-24" max="24" />
   <div id="rangeout">0</div>
 
@@ -238,23 +255,46 @@
     // document.querySelector("#calibrate");
 
 
-    document.documentElement.setAttribute("data-theme", "light");
-    // TODO - adjust settingsjs so checkbox does not  get checked
-
     let slider = document.querySelector("#slider");
     let docvars = getComputedStyle(document.documentElement);
 
     let basestep = parseFloat(docvars.getPropertyValue("--steps"));
 
     let fixpoint = basestep.toString().replace(/^\d*\.?/, "").length;
+    let circles = document.querySelector("#circles");
+
+    let fusion = document.querySelector("#fusion");
+    let calibrator = document.querySelector("#calibrator");
+    let rangeout = document.querySelector("#rangeout");
+
+
+
+    fusion.onchange = function (e) {
+      if (this.checked) {
+        document.documentElement.style.setProperty("--glyphscale", "0.33");
+        // document.documentElement.style.setProperty("--saturate", "0");
+        circles.classList.add("fusion");
+        // document.documentElement.setAttribute("data-theme", "dark");
+      } else {
+        document.documentElement.style.setProperty("--glyphscale", "1");
+        // document.documentElement.style.setProperty("--saturate", "1");
+        circles.classList.remove("fusion");
+        // document.documentElement.setAttribute("data-theme", "light");
+      }
+
+    };
+
+
+
+    document.documentElement.setAttribute("data-theme", "light");
+    // TODO - adjust settingsjs so checkbox does not  get checked
+
 
     slider.setAttribute("step", basestep);
-    let circles = document.querySelector("#circles");
     slider.oninput = function (e) {
       movecircles();
     };
 
-    let calibrator = document.querySelector("#calibrator");
 
 
     calibrator.oninput = function (e) {
@@ -272,7 +312,6 @@
 
 
 
-    let rangeout = document.querySelector("#rangeout");
 
     function movecircles(key = false) {
       // console.log(parseFloat(slider.value));
