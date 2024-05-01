@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
   if ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
     || document.documentElement.getAttribute("data-theme") == "dark") {
     // dark mode
-    document.querySelector("#darkmode").checked = true;
+    if (typeof defaultlight === "undefined") document.querySelector("#darkmode").checked = true;
   } else if (document.documentElement.getAttribute("data-theme") == "light") {
     document.querySelector("#darkmode").checked = false;
   }

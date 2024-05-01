@@ -254,6 +254,7 @@
 
     // document.querySelector("#calibrate");
 
+    let defaultlight = true;
 
     let slider = document.querySelector("#slider");
     let docvars = getComputedStyle(document.documentElement);
@@ -270,7 +271,12 @@
 
 
     fusion.onchange = function (e) {
-      if (this.checked) {
+      fusiontoggle();
+    };
+
+
+    function fusiontoggle () {
+      if (fusion.checked) {
         document.documentElement.style.setProperty("--glyphscale", "0.33");
         // document.documentElement.style.setProperty("--saturate", "0");
         circles.classList.add("fusion");
@@ -281,8 +287,19 @@
         circles.classList.remove("fusion");
         // document.documentElement.setAttribute("data-theme", "light");
       }
+    }
 
-    };
+
+window.addEventListener("keydown", function (e) {
+  if (e.key === "f") {
+    e.preventDefault();
+    fusion.checked = !fusion.checked
+    fusiontoggle()
+  }
+
+});
+
+
 
 
 
