@@ -72,6 +72,12 @@ a {
   text-align: center;
   height: 1em;
   width: 1em;
+  border-radius: 1em;
+}
+
+#main.midspace .dot:not(#centerpoint) {
+  background:var(--fg);
+  color:var(--fg);
 }
 
 /* centerpoint is also a dot */
@@ -106,7 +112,7 @@ a {
   position: relative;
   width: min(25em, 90%);
   line-height: 2em;
-  overflow:visible;
+  overflow: visible;
 }
 
 #settings {
@@ -114,11 +120,11 @@ a {
 }
 
 .ctrlbox {
-  position:absolute;
+  position: absolute;
   background: transparent;
   transition: all 0.25s linear;
   width: 100%;
-  height:auto;
+  height: auto;
   /* white-space: nowrap; */
   overflow: hidden;
   z-index: 1005;
@@ -127,7 +133,8 @@ a {
   visibility: hidden;
 }
 
-#controls:hover .ctrlbox, .ctrlbox:hover {
+#controls:hover .ctrlbox,
+.ctrlbox:hover {
   background: var(--ctrlbg);
   transition: all 0.25s linear;
   opacity: 1;
@@ -204,22 +211,6 @@ input[type="checkbox"] {
   }
 } */
 
-input[type="checkbox"].threestate {
-  display: none;
-
-  &[data-state="1"] + label {
-    /* color: green; */
-    opacity: 1;
-    /* filler */
-  }
-
-  &[data-state="2"] + label {
-    /* color: red; */
-    opacity: 1;
-    /* filler */
-  }
-}
-
 input[type="checkbox"].slider {
   --offborder: #888;
   --onborder: #55c;
@@ -261,6 +252,69 @@ input[type="checkbox"].slider {
   }
 
   &:checked::after {
+    left: calc(100% - 1.15em);
+    background-color: var(--onslider);
+  }
+}
+
+
+
+input[type="checkbox"].threestate {
+  --offborder: #888;
+  --midborder: #77f;
+  --onborder: #55c;
+
+  --offslider: #ccc;
+  --midslider: #77f;
+  --onslider: #55c;
+
+  --offbg: #777;
+  --midbg: #333;
+  --onbg: #ddd;
+
+  appearance: none;
+  display: inline-block;
+  width: 3em;
+  height: 1.5em;
+  padding: 0.5em;
+  line-height: 1em;
+  vertical-align: middle;
+  position: relative;
+  border: 0.1em solid var(--offborder);
+  border-radius: 1em;
+  background-color: var(--offbg);
+  transition: all 0.25s linear;
+
+  &[data-state="1"] {
+    border-color: var(--midborder);
+    background-color: var(--midbg);
+  }
+
+  &[data-state="2"] {
+    border-color: var(--onborder);
+    background-color: var(--onbg);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    display: block;
+    height: 1em;
+    width: 1em;
+    left: 0.15em;
+    top: 50%;
+    transform: translate(0, -50%);
+    border-radius: 1em;
+    background-color: var(--offslider);
+    transition: all 0.15s linear;
+  }
+
+  &[data-state="1"]::after {
+    left: calc(50% - 0.575em);
+    background-color: var(--midslider);
+  }
+
+  &[data-state="2"]::after {
     left: calc(100% - 1.15em);
     background-color: var(--onslider);
   }

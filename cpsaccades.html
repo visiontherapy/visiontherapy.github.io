@@ -18,6 +18,8 @@
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
+    <div><input type="checkbox" class="threestate" id="spacefix" /><label class="button" for="spacefix">Space Fixator</label></div>
+
 
     <div><input type="checkbox" class="slider" id="colormode" /><label class="button" for="colormode">Colorful markers</label></div>
 
@@ -67,9 +69,21 @@
 
     let origmarkers = "ABCDEFGHIJKLMOPQR".split("");
 
+    let spacefix = document.querySelector("#spacefix");
+
     document.querySelector("#markers").value = origmarkers.join("");
 
 
+    spacefix.onclick = function(e) {
+      threestate(this);
+      if (spacefix.dataset.state ==1) {
+        box.classList.add("midspace");
+      } else {
+        box.classList.remove("midspace");
+      }
+      showchart(); 
+    }
+    
     document.querySelector("#reload").onclick = function (e) {
       showchart();
     };
@@ -129,7 +143,9 @@
 
       let rinterval = fontsize * 3 * spacescale;
 
-      let markers = ashuffle(origmarkers);
+      let markers = ashuffle(spacefix.dataset.state>0 ? "1,2,3,4,5,6,7,8,9,10,11,12".split(",") : origmarkers);
+
+
 
       let dot = document.createElement("div");
       dot.className = "dot";
@@ -157,12 +173,13 @@
       }
 
 
-      let maxlevels = 4;
+      let maxlevels = spacefix.dataset.state>0 ? 2 : 4;
       for (let i = 1; i <= maxlevels; i++) {
+        if (spacefix.dataset.state>0 && i==1) continue;
         if (markers.length == 0) break;
         let marksforlevel = marksperlevel(i);
         let angleforlevel = anglepermark(i);
-        console.log("level " + i, "marks " + marksforlevel, "angle " + angleforlevel);
+        // console.log("level " + i, "marks " + marksforlevel, "angle " + angleforlevel);
         for (let c = 1; c <= marksforlevel; c++) {
           if (markers.length == 0) break;
           let spotxy = getpoint(circlecenter, (rinterval * i), angleforlevel * c);
@@ -191,7 +208,7 @@
 
 
       function marksperlevel(lev) {
-        return Math.floor(2 * Math.PI * (marksize + rinterval * lev) / (marksize * buffer));
+        return spacefix.dataset.state>0? 12: Math.floor(2 * Math.PI * (marksize + rinterval * lev) / (marksize * buffer));
       }
 
       function anglepermark(lev) {

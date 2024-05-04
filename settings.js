@@ -32,6 +32,8 @@ window.addEventListener("keydown", function (e) {
 
 
 function threestate(target) {
+  // usage:
+  // .onclick = function() {threestate(this)}
   console.log(target.dataset.state);
   if (!target.dataset.state) target.dataset.state = 0;
   if (target.dataset.state == "3") return "3";
@@ -45,6 +47,7 @@ function threestate(target) {
   console.log(target.dataset.state);
   return target.dataset.state;
 }
+
 
 
 //https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
