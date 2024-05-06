@@ -223,8 +223,13 @@ display: none;
       text-align: center;
     }
 
-#ctrlbar:has(#fusion:checked) ~ #slider {
+#ctrlbar:has(#fusion:checked) {
+ ~ #slider {
 display: none;
+}
+~ #rangeout{
+display: none;
+}
 }
 
   </style>
