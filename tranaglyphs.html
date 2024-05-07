@@ -387,7 +387,21 @@ window.addEventListener("keydown", function (e) {
       }
       console.log(e.key, e.keyCode, slider.value);
 
-    });    
+    });
+
+document.addEventListener("wheel", function(e) {
+if (e.deltaY <0) {
+//up
+          slider.value -= -(basestep*2);
+          movecircles(e);
+} else if (e.deltaY>0) {
+//down
+    slider.value -= basestep*2;
+  movecircles(e);
+}
+}, {passive:false});
+
+
   </script>
 
 </body>
