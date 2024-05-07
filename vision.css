@@ -18,7 +18,7 @@
     --fg: #000;
     --ctrlbg: #ddf;
     --highlight: #099;
-    --tranared: #fc0;
+    --tranared: #f00;
     --tranagreen: #0ff;
     --trackred: #f00;
     --trackredbg: var(--bg);
@@ -31,7 +31,7 @@
   --fg: #000;
   --ctrlbg: #ddf;
   --highlight: #099;
-  --tranared: #fc0;
+  --tranared: #f00;
   --tranagreen: #0ff;
   --trackred: #f00;
   --trackredbg: var(--bg);
