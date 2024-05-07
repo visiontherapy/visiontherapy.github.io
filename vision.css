@@ -18,8 +18,8 @@
     --fg: #000;
     --ctrlbg: #ddf;
     --highlight: #099;
-    --tranared: #fc07;
-    --tranagreen: #0ff4;
+    --tranared: #fc0;
+    --tranagreen: #0ff;
     --trackred: #f00;
     --trackredbg: var(--bg);
     --homefilter: brightness(0);
@@ -31,8 +31,8 @@
   --fg: #000;
   --ctrlbg: #ddf;
   --highlight: #099;
-  --tranared: #fc07;
-  --tranagreen: #0ff4;
+  --tranared: #fc0;
+  --tranagreen: #0ff;
   --trackred: #f00;
   --trackredbg: var(--bg);
   --homefilter: brightness(0);
