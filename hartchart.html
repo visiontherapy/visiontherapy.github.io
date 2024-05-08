@@ -182,7 +182,7 @@
 					slot.id= "slot" + x + "-" + y;
           let breakcount;
           // while (nextchar == lastchar) {
-          slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
+         slot.dataset.c= slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
           txferstring += lastchar;
           main.append(slot);
         }
