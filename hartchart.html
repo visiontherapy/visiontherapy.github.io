@@ -26,7 +26,7 @@
       height: var(--boxsize);
       width: var(--boxsize);
       font-size: var(--basefont);
-      top: 1em;
+      margin-top: 1em;
       display: grid;
       grid-template-columns: repeat(10, 1fr);
       grid-template-rows: repeat(10, 1fr);
@@ -140,9 +140,8 @@
 
   <div id="boxscale"><input type="range" id="scale" max="1" min="0.3" value="1" step="0.01" /></div>
 
-  <div id="main" data-mark="">
-  </div>
-
+  <div id="main" data-mark=""></div>
+<div id="codeout"></div>
   <script>
 
 
@@ -196,7 +195,36 @@
       getqr(qrstring);
       // }
 
+hartcode();
     }
+
+
+
+function hartcode(text="this is a secret message") {
+
+let codeout = document.querySelector("#codeout");
+codeout.innerText = "";
+//codeout.style.gridArea = "11 / 1 / 11 / 10";
+
+for (const c of text.toUpperCase().split(/ ?/)) {
+
+let found = main.querySelectorAll(`div[data-c="${c}"]`);
+
+if (found.length>0) {
+
+let coords = found[Math.floor(Math.random() * found.length)];
+console.log(c, coords.id);
+codeout.innerHTML += "[" + coords.id.replace(/^slot/,"") + "] &nbsp; ";
+
+} else {
+console.log("NOTFOUND", c);
+}
+// find it in the grid
+
+}
+
+}
+
 
     function getqr(data) {
       let [w, h] = [250, 250];
