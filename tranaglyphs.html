@@ -35,12 +35,16 @@
       top: 3em;
       --delta: 0;
       --units: 1cm;
+mix-blend-mode: difference;
     }
 
 
     #circles.fusion {
-      filter: brightness(0) saturate(0);
+     /* filter: brightness(0) saturate(0);*/
+mix-blend-mode: normal; 
 
+--tranared: var(--fg);
+--tranagreen: var(--fg);
       #red,
       #green {
         left: calc(50% + var(--scale) * 1.2 * var(--units));
@@ -71,7 +75,6 @@ display: none;
       position: absolute;
       left: 50%;
       transform: translate(-50%);
-mix-blend-mode: difference;
     }
 
     #red,
