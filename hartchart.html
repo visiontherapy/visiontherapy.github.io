@@ -178,6 +178,8 @@
         for (let y = 0; y < 10; y++) {
           let slot = document.createElement("div");
           slot.className = "slot";
+
+					slot.id= "slot" + x + "-" + y;
           let breakcount;
           // while (nextchar == lastchar) {
           slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
