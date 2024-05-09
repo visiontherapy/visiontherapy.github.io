@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="metronome.css" />
   <script src="settings.js"></script>
   <script defer src="metronome.js"></script>
+  <script src="quotes.js"></script>
   <style>
     body {
       --scale: 1;
@@ -191,9 +192,10 @@
 
 
 
-    function hartcode(text = "this is a secret message") {
-
-      codeout.innerText = "";
+    function hartcode(text) {
+      let qq = quotes.filter((q)=> {return q.length<50});
+      text ??= qq[Math.floor(Math.random() * qq.length)];
+      codeout.innerHTML = text + "<br/>";
 
       for (const c of text.toUpperCase().split(/ ?/)) {
 
