@@ -1,6 +1,5 @@
 
-let quotes =`
-After fighting off the alligator, Brian still had to face the anaconda
+let quotes =`After fighting off the alligator, Brian still had to face the anaconda
 A glittering gem is not enough
 All she wanted was the answer, but she had no idea how much she would hate it
 All they could see was the blue water surrounding their sailboat
@@ -95,5 +94,4 @@ When he asked her favorite number, she answered without hesitation that it was d
 When I cook spaghetti, I like to boil it a few minutes past al dente so the noodles are super slippery
 When nobody is around, the trees gossip about the people who have walked under them
 When she didn’t like a guy who was trying to pick her up, she started using sign language
-You can't compare apples and oranges, but what about bananas and plantains?
-`.split("\n");
+You can't compare apples and oranges, but what about bananas and plantains?`.split("\n");

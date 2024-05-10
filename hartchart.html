@@ -70,6 +70,7 @@
       display: block;
     }
 
+
     #boxscale {
       position: relative;
       top: 1em;
@@ -97,6 +98,52 @@
     #boxscale::after {
       font-size: 150%;
       right: -1.5em;
+    }
+
+    #hartchart {
+      display: flex;
+      flex-direction: column;
+
+      #codeout {
+        order: 2;
+
+        .lettercode {
+          padding: 0 0.25em;
+          cursor: pointer;
+
+        }
+      }
+      
+      #main {
+        order: 1;
+      }
+
+      #codeout:has([data-row="1"]:hover)~#main [data-row="1"],
+      #codeout:has([data-row="2"]:hover)~#main [data-row="2"],
+      #codeout:has([data-row="3"]:hover)~#main [data-row="3"],
+      #codeout:has([data-row="4"]:hover)~#main [data-row="4"],
+      #codeout:has([data-row="5"]:hover)~#main [data-row="5"],
+      #codeout:has([data-row="6"]:hover)~#main [data-row="6"],
+      #codeout:has([data-row="7"]:hover)~#main [data-row="7"],
+      #codeout:has([data-row="8"]:hover)~#main [data-row="8"],
+      #codeout:has([data-row="9"]:hover)~#main [data-row="9"],
+      #codeout:has([data-row="10"]:hover)~#main [data-row="10"],
+      #codeout:has([data-col="1"]:hover)~#main [data-col="1"],
+      #codeout:has([data-col="2"]:hover)~#main [data-col="2"],
+      #codeout:has([data-col="3"]:hover)~#main [data-col="3"],
+      #codeout:has([data-col="4"]:hover)~#main [data-col="4"],
+      #codeout:has([data-col="5"]:hover)~#main [data-col="5"],
+      #codeout:has([data-col="6"]:hover)~#main [data-col="6"],
+      #codeout:has([data-col="7"]:hover)~#main [data-col="7"],
+      #codeout:has([data-col="8"]:hover)~#main [data-col="8"],
+      #codeout:has([data-col="9"]:hover)~#main [data-col="9"],
+      #codeout:has([data-col="10"]:hover)~#main [data-col="10"]
+      {
+        color: var(--highlight);
+      }
+
+
+
     }
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
@@ -137,8 +184,11 @@
 
   <div id="boxscale"><input type="range" id="scale" max="1" min="0.3" value="1" step="0.01" /></div>
 
-  <div id="main" data-mark=""></div>
-  <div id="codeout"></div>
+  <div id="hartchart">
+    <div id="codeout"></div>
+    <div id="main" data-mark=""></div>
+  </div>
+
   <script>
 
 
@@ -170,9 +220,12 @@
           let slot = document.createElement("div");
           slot.className = "slot";
 
-          slot.id = "slot" + x + "-" + y;
+          //slot.id = "slot" + x + "-" + y;
+          slot.dataset.slot = [x, y];
+          slot.dataset.row = x;
+          slot.dataset.col = y;
           let breakcount;
-          slot.dataset.c = slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
+          slot.dataset.char = slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
           txferstring += lastchar;
           main.append(slot);
         }
@@ -193,23 +246,31 @@
 
 
     function hartcode(text) {
-      let qq = quotes.filter((q)=> {return q.length<50});
+      let qq = quotes.filter((q) => { return q.length < 50; });
       text ??= qq[Math.floor(Math.random() * qq.length)];
-      codeout.innerHTML = text + "<br/>";
+      codeout.innerHTML = "Hart Code:<br/>";
+      codeout.title = text;
 
-      for (const c of text.toUpperCase().split(/ ?/)) {
+      for (const c of text.toUpperCase().split("")) {
 
-        let found = main.querySelectorAll(`div[data-c="${c}"]`);
+        let found = main.querySelectorAll(`div[data-char="${c}"]`);
 
+        let lettercode = document.createElement("span");
+        lettercode.className = "lettercode";
+        lettercode.dataset.char = c;
+        codeout.append(lettercode);
         if (found.length > 0) {
 
           let coords = found[Math.floor(Math.random() * found.length)];
           // console.log(c, coords.id);
-          codeout.innerHTML += "[" + coords.id.replace(/^slot/, "") + "] &nbsp; ";
+          // lettercode.innerHTML = "[" + coords.id.replace(/^slot/, "") + "]";
+          lettercode.innerHTML = "[" + coords.dataset.slot + "]";
+          lettercode.dataset.row = coords.dataset.row;
+          lettercode.dataset.col = coords.dataset.col;
 
         } else {
           console.log("NOTFOUND", c);
-          codeout.innerHTML += "[" + c + "] &nbsp; ";
+          lettercode.innerHTML = c; 
         }
 
       }
