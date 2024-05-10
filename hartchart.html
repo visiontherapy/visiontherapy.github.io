@@ -104,44 +104,69 @@
       display: flex;
       flex-direction: column;
 
+
+      #main {
+        order: 1;
+      }
+
       #codeout {
+        font-size: calc(var(--basefont) /2);
         order: 2;
 
         .lettercode {
           padding: 0 0.25em;
           cursor: pointer;
+          background: transparent;
+          border: none;
+          width: 5ex;
+          color: var(--fg);
+          font-size: 90%;
+          text-align: center;
+          display: inline-block;
 
+          &.correct {
+            color: var(--highlight);
+          }
+        }
+
+        .lettercode:not([data-row]) {
+          pointer-events: none;
+        }
+
+      }
+
+
+      #codehints {
+        order: 3;
+      }
+
+
+
+      #codehints:has(input:checked)~#codeout {
+
+        &:has([data-row="1"]:hover)~#main [data-row="1"],
+        &:has([data-row="2"]:hover)~#main [data-row="2"],
+        &:has([data-row="3"]:hover)~#main [data-row="3"],
+        &:has([data-row="4"]:hover)~#main [data-row="4"],
+        &:has([data-row="5"]:hover)~#main [data-row="5"],
+        &:has([data-row="6"]:hover)~#main [data-row="6"],
+        &:has([data-row="7"]:hover)~#main [data-row="7"],
+        &:has([data-row="8"]:hover)~#main [data-row="8"],
+        &:has([data-row="9"]:hover)~#main [data-row="9"],
+        &:has([data-row="10"]:hover)~#main [data-row="10"],
+        &:has([data-col="1"]:hover)~#main [data-col="1"],
+        &:has([data-col="2"]:hover)~#main [data-col="2"],
+        &:has([data-col="3"]:hover)~#main [data-col="3"],
+        &:has([data-col="4"]:hover)~#main [data-col="4"],
+        &:has([data-col="5"]:hover)~#main [data-col="5"],
+        &:has([data-col="6"]:hover)~#main [data-col="6"],
+        &:has([data-col="7"]:hover)~#main [data-col="7"],
+        &:has([data-col="8"]:hover)~#main [data-col="8"],
+        &:has([data-col="9"]:hover)~#main [data-col="9"],
+        &:has([data-col="10"]:hover)~#main [data-col="10"] {
+          color: var(--highlight);
         }
       }
-      
-      #main {
-        order: 1;
-      }
-
-      #codeout:has([data-row="1"]:hover)~#main [data-row="1"],
-      #codeout:has([data-row="2"]:hover)~#main [data-row="2"],
-      #codeout:has([data-row="3"]:hover)~#main [data-row="3"],
-      #codeout:has([data-row="4"]:hover)~#main [data-row="4"],
-      #codeout:has([data-row="5"]:hover)~#main [data-row="5"],
-      #codeout:has([data-row="6"]:hover)~#main [data-row="6"],
-      #codeout:has([data-row="7"]:hover)~#main [data-row="7"],
-      #codeout:has([data-row="8"]:hover)~#main [data-row="8"],
-      #codeout:has([data-row="9"]:hover)~#main [data-row="9"],
-      #codeout:has([data-row="10"]:hover)~#main [data-row="10"],
-      #codeout:has([data-col="1"]:hover)~#main [data-col="1"],
-      #codeout:has([data-col="2"]:hover)~#main [data-col="2"],
-      #codeout:has([data-col="3"]:hover)~#main [data-col="3"],
-      #codeout:has([data-col="4"]:hover)~#main [data-col="4"],
-      #codeout:has([data-col="5"]:hover)~#main [data-col="5"],
-      #codeout:has([data-col="6"]:hover)~#main [data-col="6"],
-      #codeout:has([data-col="7"]:hover)~#main [data-col="7"],
-      #codeout:has([data-col="8"]:hover)~#main [data-col="8"],
-      #codeout:has([data-col="9"]:hover)~#main [data-col="9"],
-      #codeout:has([data-col="10"]:hover)~#main [data-col="10"]
-      {
-        color: var(--highlight);
-      }
-
 
 
     }
@@ -185,8 +210,11 @@
   <div id="boxscale"><input type="range" id="scale" max="1" min="0.3" value="1" step="0.01" /></div>
 
   <div id="hartchart">
+    <div id="codehints"><input type="checkbox" class="slider" id="cheatcode" /><label for="cheatcode">Show Hints</label></div>
     <div id="codeout"></div>
     <div id="main" data-mark=""></div>
+
+
   </div>
 
   <script>
@@ -250,28 +278,50 @@
       text ??= qq[Math.floor(Math.random() * qq.length)];
       codeout.innerHTML = "Hart Code:<br/>";
       codeout.title = text;
-
+      let count = 0;
       for (const c of text.toUpperCase().split("")) {
 
         let found = main.querySelectorAll(`div[data-char="${c}"]`);
-
-        let lettercode = document.createElement("span");
-        lettercode.className = "lettercode";
-        lettercode.dataset.char = c;
-        codeout.append(lettercode);
+        let lettercode;
         if (found.length > 0) {
+          lettercode = document.createElement("input");
+          lettercode.type = "text";
 
           let coords = found[Math.floor(Math.random() * found.length)];
-          // console.log(c, coords.id);
-          // lettercode.innerHTML = "[" + coords.id.replace(/^slot/, "") + "]";
-          lettercode.innerHTML = "[" + coords.dataset.slot + "]";
+
+          lettercode.placeholder = "[" + coords.dataset.slot + "]";
           lettercode.dataset.row = coords.dataset.row;
           lettercode.dataset.col = coords.dataset.col;
 
+          lettercode.oninput = function (e) {
+            if (this.value.toUpperCase() == this.dataset.char) {
+              this.value = this.value.toUpperCase();
+              this.classList.add("correct");
+              // console.log(this.nextElementSibling);
+              // this.nextElementSibling.click();
+              document.querySelector("#" + this.id + "~ input").focus();
+
+            } else {
+              this.classList.remove("correct");
+
+
+            }
+          };
+
+
+
         } else {
+          lettercode = document.createElement("div");
+
           console.log("NOTFOUND", c);
-          lettercode.innerHTML = c; 
+          lettercode.innerText = c;
+          lettercode.setAttribute("disabled", true);
         }
+        lettercode.id = "lettercode" + count++;
+        lettercode.dataset.char = c;
+        lettercode.className = "lettercode";
+        codeout.append(lettercode);
+
 
       }
 

@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
   };
 });
 
-window.addEventListener("keydown", function (e) {
+/*window.addEventListener("keydown", function (e) {
+  console.log(e);
   if (e.key === "d") {
     e.preventDefault();
     darkmode.checked = !darkmode.checked;
@@ -29,7 +30,7 @@ window.addEventListener("keydown", function (e) {
   }
 
 });
-
+*/
 
 function threestate(target) {
   // usage:
