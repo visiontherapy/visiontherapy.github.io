@@ -39,7 +39,6 @@ I covered my friend in baby oil
 I hear that Nancy is very pretty
 Imagine his surprise when he discovered that the safe was full of pudding
 I met an interesting turtle while the song on the radio blasted away
-I often see the time 11:11 or 12:34 on clocks
 It didn't make sense unless you had the power to eat colors
 It didn't take long for Gary to detect the robbers were amateurs
 It was the best sandcastle he had ever seen

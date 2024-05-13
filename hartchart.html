@@ -112,6 +112,7 @@
       #codeout {
         font-size: calc(var(--basefont) /2);
         order: 2;
+        transition: all 0.5s;
 
         .lettercode {
           padding: 0 0.25em;
@@ -134,6 +135,15 @@
         }
 
       }
+
+      #codeout.finished {
+        background:green;
+
+        .lettercode.correct {
+          color: var(--fg);
+        }
+      }
+
 
 
       #codehints {
@@ -167,9 +177,9 @@
           color: var(--highlight);
         }
       }
-
-
     }
+
+
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
   <!-- https://dev.to/murtuzaalisurti/how-to-make-a-qr-code-generator-using-vanilla-javascript-3cla -->
@@ -278,6 +288,7 @@
       text ??= qq[Math.floor(Math.random() * qq.length)];
       codeout.innerHTML = "Hart Code:<br/>";
       codeout.title = text;
+      codeout.className ="";
       let count = 0;
       for (const c of text.toUpperCase().split("")) {
 
@@ -299,21 +310,27 @@
               this.classList.add("correct");
               // console.log(this.nextElementSibling);
               // this.nextElementSibling.click();
-              document.querySelector("#" + this.id + "~ input").focus();
-
+              let nextbox =        document.querySelector("#" + this.id + "~ input:not(.correct)");
+              if (nextbox) {
+                 nextbox.focus();
+              } else {
+                this.blur();
+              }
+              if (codeout.querySelectorAll("input.lettercode.correct").length  == codeout.querySelectorAll("input.lettercode").length) {
+                console.log("FINISHED", text);
+                codeout.className ="finished";
+              }
             } else {
               this.classList.remove("correct");
-
+              codeout.classList.remove("finished");
 
             }
           };
 
-
-
         } else {
           lettercode = document.createElement("div");
 
-          console.log("NOTFOUND", c);
+          // console.log("NOTFOUND", c);
           lettercode.innerText = c;
           lettercode.setAttribute("disabled", true);
         }
