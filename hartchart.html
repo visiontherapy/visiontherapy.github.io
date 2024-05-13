@@ -137,10 +137,16 @@
       }
 
       #codeout.finished {
-        background:green;
+        background: green;
 
-        .lettercode.correct {
-          color: var(--fg);
+        .lettercode {
+          padding: 0;
+          margin: 0;
+          width: 1em;
+
+          .correct {
+            color: var(--fg);
+          }
         }
       }
 
@@ -178,8 +184,6 @@
         }
       }
     }
-
-
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
   <!-- https://dev.to/murtuzaalisurti/how-to-make-a-qr-code-generator-using-vanilla-javascript-3cla -->
@@ -288,7 +292,7 @@
       text ??= qq[Math.floor(Math.random() * qq.length)];
       codeout.innerHTML = "Hart Code:<br/>";
       codeout.title = text;
-      codeout.className ="";
+      codeout.className = "";
       let count = 0;
       for (const c of text.toUpperCase().split("")) {
 
@@ -310,15 +314,15 @@
               this.classList.add("correct");
               // console.log(this.nextElementSibling);
               // this.nextElementSibling.click();
-              let nextbox =        document.querySelector("#" + this.id + "~ input:not(.correct)");
+              let nextbox = document.querySelector("#" + this.id + "~ input:not(.correct)");
               if (nextbox) {
-                 nextbox.focus();
+                nextbox.focus();
               } else {
                 this.blur();
               }
-              if (codeout.querySelectorAll("input.lettercode.correct").length  == codeout.querySelectorAll("input.lettercode").length) {
+              if (codeout.querySelectorAll("input.lettercode.correct").length == codeout.querySelectorAll("input.lettercode").length) {
                 console.log("FINISHED", text);
-                codeout.className ="finished";
+                codeout.className = "finished";
               }
             } else {
               this.classList.remove("correct");
