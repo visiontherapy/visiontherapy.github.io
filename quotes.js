@@ -101,19 +101,26 @@ function getquote() {
 
 function quoteapi() {
   fetch("https://api.quotable.io",
-{method:"GET",
-mode:"cors",
-headers: {
-  "Content-Type": "text/xml",
+    {
+      method: "GET",
+      mode: "no-cors",
+    }
+  ).then(resp => {
+    console.log(resp);
+    console.log(resp.json());
+
+  })
+    // .then(thing => {
+    //     console.log(thing);
+    //   })
+    .catch(e => console.log(e));
 }
 
-}
 
-).then(resp => { 
-  console.log(resp.json());
-
-  }).catch(e => console.log(e));
-
-}
-
-
+const API_URL = 'https://api.quotable.io';
+async function getq(endpoint, params = {}) {
+  const requestURL = `${API_URL}${endpoint}}`;
+  const response = await fetch(requestURL);
+  if (!response.ok) return { error: await response.json() };
+  return response.json();
+};
