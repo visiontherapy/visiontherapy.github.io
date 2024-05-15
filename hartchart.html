@@ -288,8 +288,9 @@
 
 
     function hartcode(text) {
-      let qq = quotes.filter((q) => { return q.length < 50; });
-      text ??= qq[Math.floor(Math.random() * qq.length)];
+      // let qq = quotes.filter((q) => { return q.length < 50; });
+      // text ??= qq[Math.floor(Math.random() * qq.length)];
+      text ??= getquote();
       codeout.innerHTML = "Hart Code:<br/>";
       codeout.title = text;
       codeout.className = "";
