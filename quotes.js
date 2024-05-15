@@ -99,28 +99,26 @@ function getquote() {
 
 }
 
-function quoteapi() {
-  fetch("https://api.quotable.io",
+function quoteapi(url = "https://api.quotable.io") {
+  fetch(url,
     {
       method: "GET",
-      mode: "no-cors",
+      mode: "cors",
+      headers: {
+        "Content-Type": "text/plain"
+      }
     }
-  ).then(resp => {
+  ).then((resp) => {
     console.log(resp);
-    console.log(resp.json());
+    return resp.text();
 
   })
+    .then((text) => {
+      console.log(text);
+      resolve(text);
+    })
     // .then(thing => {
     //     console.log(thing);
     //   })
     .catch(e => console.log(e));
 }
-
-
-const API_URL = 'https://api.quotable.io';
-async function getq(endpoint, params = {}) {
-  const requestURL = `${API_URL}${endpoint}}`;
-  const response = await fetch(requestURL);
-  if (!response.ok) return { error: await response.json() };
-  return response.json();
-};
