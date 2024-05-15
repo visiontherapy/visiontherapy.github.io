@@ -1,4 +1,3 @@
-
 let quotes = `After fighting off the alligator, Brian still had to face the anaconda
 A glittering gem is not enough
 All she wanted was the answer, but she had no idea how much she would hate it
@@ -99,8 +98,11 @@ function getquote() {
 
 }
 
-function quoteapi(url = "https://api.quotable.io") {
-  fetch(url,
+
+
+
+async function quoteapi(url = "https://api.quotable.io") {
+  return fetch(url,
     {
       method: "GET",
       mode: "cors",
@@ -114,11 +116,21 @@ function quoteapi(url = "https://api.quotable.io") {
 
   })
     .then((text) => {
-      console.log(text);
-      resolve(text);
+      // console.log(text);
+      return text; //(text);
     })
     // .then(thing => {
     //     console.log(thing);
     //   })
     .catch(e => console.log(e));
 }
+
+/*
+let bounce = null;// "abc";
+quoteapi() //("https://visiontherapy.github.io/README.md")
+.then((t) => {
+bounce ??= t;
+console.log("bounced", bounce);
+
+});
+*/
