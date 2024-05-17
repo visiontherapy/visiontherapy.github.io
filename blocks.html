@@ -12,16 +12,19 @@
   <script src="customblock.js"></script>
 
   <style>
+    :root {
+      --blocksize: 2.5em;
+    }
+
     bl-ock {
       position: relative;
-      --size: 4em;
-      --half: calc(var(--size) / 2);
+      --half: calc(var(--blocksize) / 2);
       --margins: -0.5em;
       --rot: 0deg;
-      width: var(--size);
-      height: var(--size);
+      width: var(--blocksize);
+      height: var(--blocksize);
       display: inline-block;
-      margin: 1em;
+      margin: calc(var(--blocksize) /3);
       transform: rotate(var(--rot));
       transition: all 0.5s;
       border: solid 1px blue;
@@ -92,13 +95,27 @@
 
     }
 
-    .triangle {
-      width: 0;
-      height: 0;
-      border-bottom: 0;
-      border-left: 150px solid transparent;
-      border-right: 0;
-      border-top: 150px solid red;
+    #playfield {
+      --blocksize: 4em;
+      width: calc(6 * var(--blocksize));
+      height: calc(6 * var(--blocksize));
+      border: solid 1px gray;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%);
+
+      .playslot {
+        width: var(--blocksize);
+        height: var(--blocksize);
+        background: blue;
+        display: inline-block;
+
+        bl-ock {
+        display:inline;
+        margin:0;
+        }
+      }
+
     }
   </style>
 </head>
@@ -108,10 +125,10 @@
     <div><a href="index.html"><img id="homeicon" src="home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
-
   </div>
 
-<div id="tileholder"></div>
+  <div id="tileholder"></div>
+  <div id="playfield"></div>
   <script>
     let block = document.querySelector("bl-ock");
 
@@ -160,13 +177,55 @@
       let tile = document.createElement("bl-ock");
       tile.value = b;
       tileholder.append(tile);
+      tile.setAttribute("draggable", true);
+      tile.addEventListener("dragstart", function (e) {
+        // console.log(e);
+        // e.preventDefault();
+        e.dataTransfer.effectAllowed = "move";
+        console.log(e.target.id);
+        e.dataTransfer.setData("application/my-app", e.target.id);
+      });
+
     }
+
+    let playfield = document.querySelector("#playfield");
+    for (let i = 0; i < 36; i++) {
+      let box = document.createElement("div");
+      box.className = "playslot";
+      box.innerHTML = "&nbsp;";
+      playfield.append(box);
+    }
+
+
+//     playfield.addEventListener("dragenter", (event) => {
+//   event.preventDefault();
+// });
+
+// playfield.addEventListener("dragover", (event) => {
+//   event.preventDefault();
+// });
+
+    playfield.ondragover = playfield.ondragenter = function (e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      // console.log("dragging",e.target);
+    };
+
+    playfield.ondrop = function (e) {
+      e.preventDefault();
+      console.log("dropped", e.target);
+      e.target.append(document.getElementById(e.dataTransfer.getData("application/my-app")));
+    }
+
+
   </script>
-<pre>
+  <pre>
 TODO:
 - make draggable
 - snap to grid
 - error checking
+- maintain rotation on drag
+- keep click action (rotatable)
 </pre>
 </body>
 

@@ -31,6 +31,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
   connectedCallback() {
     this.value = this.getAttribute("value");
+    this.id="block" + this.value;
 
     for (let i = 1; i <= 8; i++) {
       let b = document.createElement("div");
