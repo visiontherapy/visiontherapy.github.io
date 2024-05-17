@@ -17,7 +17,8 @@
       --topgap: 2em;
       /* clamp(2.5rem, 2.5em, 10vh); */
       /* --slotsize: calc(var(--boxsize) / 10); */
-      --boxsize: min(calc(95vh - var(--topgap)), calc(95vw - var(--topgap)));
+      --codegap: 2.5em;
+      --boxsize: min(calc(95vh - var(--topgap) - var(--codegap)), calc(95vw - var(--topgap) -  var(--codegap)));
       --basefont: calc(var(--boxsize) / 13);
     }
 
