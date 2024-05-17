@@ -38,6 +38,7 @@
         border-right: 0;
         border-bottom: 0;
         display: inline-block;
+        pointer-events: none;
       }
 
       .part_1 {
@@ -102,8 +103,9 @@
 
     #playfield {
       --blocksize: 4em;
-      width: calc(6 * var(--blocksize));
-      height: calc(6 * var(--blocksize));
+      --gridsize: 8;
+      width: calc(var(--gridsize)* var(--blocksize));
+      height: calc(var(--gridsize) * var(--blocksize));
       border: solid 1px gray;
       position: relative;
       left: 50%;
@@ -119,6 +121,18 @@
         bl-ock {
           margin: 0;
           position: absolute;
+
+          &::after {
+            transition: all 0.5s;
+            content: "";
+            display: block;
+            position: absolute;
+            inset: 0;
+          }
+
+          &.fail::after {
+            background: #f003;
+          }
         }
       }
 
@@ -186,30 +200,29 @@
       tile.setAttribute("draggable", true);
       tile.addEventListener("dragstart", function (e) {
         // console.log(e);
-        // e.preventDefault();
         e.dataTransfer.effectAllowed = "move";
-        console.log(e.target.id);
-        e.dataTransfer.setData("application/my-app", e.target.id);
+        e.dataTransfer.setDragImage(this, e.target.clientHeight / 2, e.target.clientWidth / 2);
+        console.log(e.target);
+        e.dataTransfer.setData("blockid", e.target.id);
+        // e.preventDefault();
+
       });
 
 
     }
 
     let playfield = document.querySelector("#playfield");
-    for (let i = 0; i < 36; i++) {
-      let box = document.createElement("div");
-      box.className = "playslot";
-      playfield.append(box);
+    let gridsize = getComputedStyle(playfield).getPropertyValue("--gridsize");
+    for (let x = 0; x < gridsize; x++) {
+      for (let y = 0; y < gridsize; y++) {
+        let box = document.createElement("div");
+        box.className = "playslot";
+        box.dataset.x = x;
+        box.dataset.y = y;
+        playfield.append(box);
+      }
     }
 
-
-    //     playfield.addEventListener("dragenter", (event) => {
-    //   event.preventDefault();
-    // });
-
-    // playfield.addEventListener("dragover", (event) => {
-    //   event.preventDefault();
-    // });
 
     playfield.ondragover = playfield.ondragenter = function (e) {
       e.preventDefault();
@@ -219,19 +232,39 @@
 
     playfield.ondrop = function (e) {
       e.preventDefault();
-      let thisblock = document.getElementById(e.dataTransfer.getData("application/my-app"));
-      console.log(e.target.parentElement, thisblock);
-      // Not sure how this negative equivalence works, but it works.
-      if (thisblock && e.target.parentElement != thisblock) e.target.append(thisblock);
+      let thisblock = document.getElementById(e.dataTransfer.getData("blockid"));
+      console.log("target,parent,thisblock", e.target, e.target.parentElement, thisblock);
+      console.log("block inside", e.target);
+      if (thisblock
+        && e.target.tagName != "BL-OCK"
+        && e.target != thisblock
+      ) {
+        e.target.append(thisblock);
+        //find neighbors:
+
+        thisblock.checker();
+
+      } else if (e.target.tagName == "BL-OCK"
+        && e.target != thisblock
+      ) {
+        console.log("swap it");
+      }
+
     }
 
 
   </script>
   <pre>
-TODO:
+DONE:
 - error checking
-- maintain rotation on drag
-- keep click action (rotatable)
+- rotate tiles
+- error check neighbors when rotated - DONE
+
+TODO:
+- place back to tileholder? or swap places?
+- error check *FORMER* neighbors when moved away
+- reset button
+- resizable grid setting
 </pre>
 </body>
 
