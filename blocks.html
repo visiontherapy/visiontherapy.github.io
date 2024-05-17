@@ -107,7 +107,7 @@
       .playslot {
         width: var(--blocksize);
         height: var(--blocksize);
-        background: blue;
+        background: var(--ctrlbg);
         display: inline-block;
 
         bl-ock {
@@ -185,6 +185,7 @@
         console.log(e.target.id);
         e.dataTransfer.setData("application/my-app", e.target.id);
       });
+      
 
     }
 
@@ -214,7 +215,8 @@
     playfield.ondrop = function (e) {
       e.preventDefault();
       console.log("dropped", e.target);
-      e.target.append(document.getElementById(e.dataTransfer.getData("application/my-app")));
+      let newnode = document.getElementById(e.dataTransfer.getData("application/my-app")).cloneNode(true);
+      e.target.append(newnode);
     }
 
 
