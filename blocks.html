@@ -95,6 +95,11 @@
 
     }
 
+    #tileholder,
+    #playfield {
+      user-select: none;
+    }
+
     #playfield {
       --blocksize: 4em;
       width: calc(6 * var(--blocksize));
@@ -102,6 +107,7 @@
       border: solid 1px gray;
       position: relative;
       left: 50%;
+      line-height: 0;
       transform: translate(-50%);
 
       .playslot {
@@ -111,8 +117,8 @@
         display: inline-block;
 
         bl-ock {
-        display:inline;
-        margin:0;
+          margin: 0;
+          position: absolute;
         }
       }
 
@@ -185,7 +191,7 @@
         console.log(e.target.id);
         e.dataTransfer.setData("application/my-app", e.target.id);
       });
-      
+
 
     }
 
@@ -193,18 +199,17 @@
     for (let i = 0; i < 36; i++) {
       let box = document.createElement("div");
       box.className = "playslot";
-      box.innerHTML = "&nbsp;";
       playfield.append(box);
     }
 
 
-//     playfield.addEventListener("dragenter", (event) => {
-//   event.preventDefault();
-// });
+    //     playfield.addEventListener("dragenter", (event) => {
+    //   event.preventDefault();
+    // });
 
-// playfield.addEventListener("dragover", (event) => {
-//   event.preventDefault();
-// });
+    // playfield.addEventListener("dragover", (event) => {
+    //   event.preventDefault();
+    // });
 
     playfield.ondragover = playfield.ondragenter = function (e) {
       e.preventDefault();
@@ -214,17 +219,16 @@
 
     playfield.ondrop = function (e) {
       e.preventDefault();
-      console.log("dropped", e.target);
-      let newnode = document.getElementById(e.dataTransfer.getData("application/my-app")).cloneNode(true);
-      e.target.append(newnode);
+      let thisblock = document.getElementById(e.dataTransfer.getData("application/my-app"));
+      console.log(e.target.parentElement, thisblock);
+      // Not sure how this negative equivalence works, but it works.
+      if (thisblock && e.target.parentElement != thisblock) e.target.append(thisblock);
     }
 
 
   </script>
   <pre>
 TODO:
-- make draggable
-- snap to grid
 - error checking
 - maintain rotation on drag
 - keep click action (rotatable)

@@ -31,8 +31,8 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
   connectedCallback() {
     this.value = this.getAttribute("value");
-    this.id="block" + this.value;
-
+    this.id = "block" + this.value;
+    console.log("connected");
     for (let i = 1; i <= 8; i++) {
       let b = document.createElement("div");
       // b.innerText = i;
@@ -45,13 +45,13 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       this.append(b);
     }
 
-    this.onclick = function(e) {
-      this.state = ++this.state%4;
-      // console.log(this.state);
+    this.onclick = function (e) {
+      this.state = ++this.state % 4;
+      console.log(this.state);
 
-// console.log(this.rotations[this.state]);
-      this.style.setProperty("--rot",this.rotations[this.state]);
-    }
+      // console.log(this.rotations[this.state]);
+      this.style.setProperty("--rot", this.rotations[this.state]);
+    };
 
   }
 
