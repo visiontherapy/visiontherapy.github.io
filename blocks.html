@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLOCKS</title>
+  <meta name="darkreader-lock" />
+
+  <link rel="stylesheet" href="vision.css" />
+  <script src="settings.js"></script>
+  <script src="customblock.js"></script>
+
+  <style>
+    bl-ock {
+      position: relative;
+      --size: 4em;
+      --half: calc(var(--size) / 2);
+      --margins: -0.5em;
+      --rot: 0deg;
+      width: var(--size);
+      height: var(--size);
+      display: inline-block;
+      margin: 1em;
+      transform: rotate(var(--rot));
+      transition: all 0.5s;
+      border: solid 1px blue;
+
+      div {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-top: var(--half) solid var(--color);
+        border-left: var(--half) solid transparent;
+        border-right: 0;
+        border-bottom: 0;
+        display: inline-block;
+      }
+
+      .part_1 {
+        transform: rotate(0);
+        left: 0;
+        top: 0;
+      }
+
+      .part_2 {
+        transform: rotate(-90deg);
+        left: var(--half);
+        top: 0;
+      }
+
+      .part_3 {
+        transform: rotate(90deg);
+        top: 0;
+        left: var(--half);
+      }
+
+      .part_4 {
+        transform: rotate(0);
+        top: var(--half);
+        left: var(--half);
+      }
+
+
+      .part_5 {
+        transform: rotate(180deg);
+        top: var(--half);
+        left: var(--half);
+      }
+
+
+      .part_6 {
+        transform: rotate(90deg);
+        top: var(--half);
+        left: 0;
+      }
+
+
+      .part_7 {
+        transform: rotate(-90deg);
+        top: var(--half);
+        left: 0;
+      }
+
+
+      .part_8 {
+        transform: rotate(180deg);
+        top: 0;
+        left: 0;
+      }
+
+
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-bottom: 0;
+      border-left: 150px solid transparent;
+      border-right: 0;
+      border-top: 150px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+  </div>
+
+<div id="tileholder"></div>
+  <script>
+    let block = document.querySelector("bl-ock");
+
+    let blocks = `
+1368
+13457
+26
+23
+34578
+138
+12368
+367
+1
+1358
+23467
+13458
+23578
+2568
+123456
+124568
+12578
+245678
+12568
+12
+234567
+1257
+246
+13
+234
+1236
+1267
+467
+1234
+1567
+8
+27
+123
+134
+12348
+157`.trim().split("\n");
+    //36
+
+    let tileholder = document.querySelector("#tileholder");
+
+    for (let b of blocks) {
+      let tile = document.createElement("bl-ock");
+      tile.value = b;
+      tileholder.append(tile);
+    }
+  </script>
+<pre>
+TODO:
+- make draggable
+- snap to grid
+- error checking
+</pre>
+</body>
+
+</html>
