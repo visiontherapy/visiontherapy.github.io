@@ -65,7 +65,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
       if (moveaway) {
         for (const nab of naboer) {
-          console.log("nab",nab);
+          // console.log("nab",nab);
           if (nab && nab !=this) nab.checker();
         }
       } else {

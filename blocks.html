@@ -258,7 +258,11 @@
       } else if (e.target.tagName == "BL-OCK"
         && e.target != thisblock
       ) {
-        console.log("swap it");
+        let targetbox = e.target.parentElement;
+        targetbox.append(thisblock);
+        tileholder.append(e.target);
+
+        // console.log("swap it", thisblock, e.target);
       }
 
     }
