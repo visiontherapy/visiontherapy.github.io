@@ -202,9 +202,13 @@
         // console.log(e);
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setDragImage(this, e.target.clientHeight / 2, e.target.clientWidth / 2);
-        console.log(e.target);
+        // console.log(e.target);
         e.dataTransfer.setData("blockid", e.target.id);
         // e.preventDefault();
+        console.log(e.target.parentElement.dataset);
+        // e.target.checker(e.target.parentElement.dataset.x,e.target.parentElement.dataset.y);
+        e.dataTransfer.setData("movefrom", [e.target.parentElement.dataset.x,e.target.parentElement.dataset.y]);
+
 
       });
 
@@ -233,8 +237,8 @@
     playfield.ondrop = function (e) {
       e.preventDefault();
       let thisblock = document.getElementById(e.dataTransfer.getData("blockid"));
-      console.log("target,parent,thisblock", e.target, e.target.parentElement, thisblock);
-      console.log("block inside", e.target);
+      // console.log("target,parent,thisblock", e.target, e.target.parentElement, thisblock);
+      // console.log("block inside", e.target);
       if (thisblock
         && e.target.tagName != "BL-OCK"
         && e.target != thisblock
@@ -243,6 +247,13 @@
         //find neighbors:
 
         thisblock.checker();
+        let movefrom = e.dataTransfer.getData("movefrom").split(",");
+        console.log(movefrom);
+        // if (movefrom[0]) thisblock.checker(movefrom[0],movefrom[1]);
+        // let fromspot = playfield.querySelector(`.playslot[data-x='${movefrom[0]}'][data-y='${movefrom[1]}'] bl-ock`);
+        // if (fromspot) fromspot.checker();
+
+        // thisblock.checker(movefrom);
 
       } else if (e.target.tagName == "BL-OCK"
         && e.target != thisblock

@@ -33,28 +33,32 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       return burst;
     };
 
-    this.checker = function () {
-      let slot = this.parentElement;
-      let playspace = slot.parentElement;
+    this.checker = function (x, y) {
+      let slot = x ? document.querySelector(`.playslot[data-x='${x}'][data-y='${y}']`) : this.parentElement;
+      let flower = x? [,,,]: this.flower;
+      let playfield = slot.parentElement;
+      x ??= slot.dataset.x;
+      y ??= slot.dataset.y;
       let naboer = [
-        playspace.querySelector(".playslot[data-x='" + (slot.dataset.x - 1) + "'][data-y='" + slot.dataset.y + "'] bl-ock"),
-        playspace.querySelector(".playslot[data-x='" + slot.dataset.x + "'][data-y='" + (slot.dataset.y - -1) + "'] bl-ock"),
-        playspace.querySelector(".playslot[data-x='" + (slot.dataset.x - -1) + "'][data-y='" + slot.dataset.y + "'] bl-ock"),
-        playspace.querySelector(".playslot[data-x='" + slot.dataset.x + "'][data-y='" + (slot.dataset.y - 1) + "'] bl-ock")];
+        playfield.querySelector(`.playslot[data-x='${x - 1}'][data-y='${y}'] bl-ock`),
+        playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - -1}'] bl-ock`),
+        playfield.querySelector(`.playslot[data-x='${x - -1}'][data-y='${y}'] bl-ock`),
+        playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - 1}'] bl-ock`)
+      ];
 
       console.log(naboer);
 
       let nabber = [];
       for (let n = 0; n < 4; n++) {
         if (!naboer[n]) continue;
-        console.log(n, naboer[n].flower);
+        // console.log(n, naboer[n].flower);
         nabber[n] = naboer[n].flower[(2 + n) % 4].split("").reverse().join(""); // this is the edge matchup
       }
       // console.log(this.flower, nabber);
 
       this.correct = true;
       for (let p = 0; p < 4; p++) {
-        if (nabber[p] && this.flower[p] != nabber[p]) {
+        if (nabber[p] && flower[p] != nabber[p]) {
           this.correct = false; break;//no points
         }
       }
