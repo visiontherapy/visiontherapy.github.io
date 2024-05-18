@@ -27,7 +27,7 @@
       margin: calc(var(--blocksize) /3);
       transform: rotate(var(--rot));
       transition: all 0.5s;
-      border: solid 1px blue;
+      border: solid 1px var(--tranared);
 
       div {
         position: absolute;
@@ -150,7 +150,6 @@
   <div id="tileholder"></div>
   <div id="playfield"></div>
   <script>
-    let block = document.querySelector("bl-ock");
 
     let blocks = `
 1368
@@ -192,7 +191,7 @@
     //36
 
     let tileholder = document.querySelector("#tileholder");
-
+    tileholder.innerHTML = "";
     for (let b of blocks) {
       let tile = document.createElement("bl-ock");
       tile.value = b;
@@ -207,7 +206,7 @@
         // e.preventDefault();
         // console.log(e.target.parentElement.dataset);
         // e.target.checker(e.target.parentElement.dataset.x,e.target.parentElement.dataset.y);
-        e.dataTransfer.setData("movefrom", [e.target.parentElement.dataset.x,e.target.parentElement.dataset.y]);
+        e.dataTransfer.setData("movefrom", [e.target.parentElement.dataset.x, e.target.parentElement.dataset.y]);
 
 
       });
@@ -249,7 +248,7 @@
         thisblock.checker();
         let movefrom = e.dataTransfer.getData("movefrom").split(",");
         // console.log(movefrom);
-        if (movefrom[0]) thisblock.checker(movefrom[0],movefrom[1]);
+        if (movefrom[0]) thisblock.checker(movefrom[0], movefrom[1]);
         // let fromspot = playfield.querySelector(`.playslot[data-x='${movefrom[0]}'][data-y='${movefrom[1]}'] bl-ock`);
         // if (fromspot) fromspot.checker();
 
