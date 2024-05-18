@@ -205,7 +205,7 @@
         // console.log(e.target);
         e.dataTransfer.setData("blockid", e.target.id);
         // e.preventDefault();
-        console.log(e.target.parentElement.dataset);
+        // console.log(e.target.parentElement.dataset);
         // e.target.checker(e.target.parentElement.dataset.x,e.target.parentElement.dataset.y);
         e.dataTransfer.setData("movefrom", [e.target.parentElement.dataset.x,e.target.parentElement.dataset.y]);
 
@@ -248,8 +248,8 @@
 
         thisblock.checker();
         let movefrom = e.dataTransfer.getData("movefrom").split(",");
-        console.log(movefrom);
-        // if (movefrom[0]) thisblock.checker(movefrom[0],movefrom[1]);
+        // console.log(movefrom);
+        if (movefrom[0]) thisblock.checker(movefrom[0],movefrom[1]);
         // let fromspot = playfield.querySelector(`.playslot[data-x='${movefrom[0]}'][data-y='${movefrom[1]}'] bl-ock`);
         // if (fromspot) fromspot.checker();
 

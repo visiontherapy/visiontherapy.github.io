@@ -34,11 +34,18 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     };
 
     this.checker = function (x, y) {
-      let slot = x ? document.querySelector(`.playslot[data-x='${x}'][data-y='${y}']`) : this.parentElement;
-      let flower = x? [,,,]: this.flower;
+      let moveaway = x && y;
+      // if coordinates are given (moving away) grab that box
+      // or else get parentelement
+      let slot = moveaway ? document.querySelector(`.playslot[data-x='${x}'][data-y='${y}']`) : this.parentElement;
+
+      // if this is a move away, set flower to null
+      let flower = moveaway ? [, , ,] : this.flower;
       let playfield = slot.parentElement;
       x ??= slot.dataset.x;
       y ??= slot.dataset.y;
+
+      // get neighbors of index box
       let naboer = [
         playfield.querySelector(`.playslot[data-x='${x - 1}'][data-y='${y}'] bl-ock`),
         playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - -1}'] bl-ock`),
@@ -46,7 +53,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - 1}'] bl-ock`)
       ];
 
-      console.log(naboer);
+      // console.log(x, y, naboer);
 
       let nabber = [];
       for (let n = 0; n < 4; n++) {
@@ -56,26 +63,33 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       }
       // console.log(this.flower, nabber);
 
-      this.correct = true;
-      for (let p = 0; p < 4; p++) {
-        if (nabber[p] && flower[p] != nabber[p]) {
-          this.correct = false; break;//no points
-        }
-      }
-
-      // console.log(this.correct? "ALl good!" : "fail " + this.correct + " out of 4");
-
-      if (this.correct) {
-        this.classList.remove("fail");
-        // here check neighbors
-        for (const nabo of naboer) {
-          if (!nabo || nabo.correct) continue;
-          nabo.checker();
+      if (moveaway) {
+        for (const nab of naboer) {
+          console.log("nab",nab);
+          if (nab && nab !=this) nab.checker();
         }
       } else {
-        this.classList.add("fail");
-      }
+        this.correct = true;
+        for (let p = 0; p < 4; p++) {
+          if (nabber[p] && flower[p] != nabber[p]) {
+            this.correct = false; break;//no points
+          }
+        }
 
+        // console.log(this.correct? "ALl good!" : "fail " + this.correct + " out of 4");
+
+        if (this.correct) {
+          this.classList.remove("fail");
+          // here check neighbors
+          for (const nabo of naboer) {
+            if (!nabo || nabo.correct) continue;
+            nabo.checker();
+          }
+        } else {
+          this.classList.add("fail");
+        }
+
+      }
 
 
     };
