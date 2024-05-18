@@ -19,12 +19,12 @@
     bl-ock {
       position: relative;
       --half: calc(var(--blocksize) / 2);
-      --margins: -0.5em;
+      --margins: calc(var(--blocksize) /9);
       --rot: 0deg;
       width: var(--blocksize);
       height: var(--blocksize);
       display: inline-block;
-      margin: calc(var(--blocksize) /3);
+      margin: var(--margins);
       transform: rotate(var(--rot));
       transition: all 0.5s;
       border: solid 1px var(--tranared);
@@ -98,7 +98,11 @@
 
     #tileholder,
     #playfield {
+      padding:1em;
       user-select: none;
+      left: 50%;
+      position: relative;
+      transform: translate(-50%);
     }
 
     #playfield {
@@ -107,10 +111,7 @@
       width: calc(var(--gridsize)* var(--blocksize));
       height: calc(var(--gridsize) * var(--blocksize));
       border: solid 1px gray;
-      position: relative;
-      left: 50%;
       line-height: 0;
-      transform: translate(-50%);
 
       .playslot {
         width: var(--blocksize);
@@ -145,10 +146,13 @@
     <div><a href="index.html"><img id="homeicon" src="home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+    <button id="reload">New Chart</button>
   </div>
 
   <div id="tileholder"></div>
   <div id="playfield"></div>
+
+
   <script>
 
     let blocks = `
@@ -190,8 +194,13 @@
 157`.trim().split("\n");
     //36
 
+    showchart();
+
+    function showchart() {
     let tileholder = document.querySelector("#tileholder");
-    tileholder.innerHTML = "";
+    let playfield = document.querySelector("#playfield");
+    tileholder.innerHTML = playfield.innerHTML = "";
+
     for (let b of blocks) {
       let tile = document.createElement("bl-ock");
       tile.value = b;
@@ -214,7 +223,6 @@
 
     }
 
-    let playfield = document.querySelector("#playfield");
     let gridsize = getComputedStyle(playfield).getPropertyValue("--gridsize");
     for (let x = 0; x < gridsize; x++) {
       for (let y = 0; y < gridsize; y++) {
@@ -265,6 +273,13 @@
       }
 
     }
+  }
+
+  
+  document.querySelector("#reload").onclick = function (e) {
+      showchart();
+      window.location.hash = "";
+    };
 
 
   </script>
@@ -272,13 +287,14 @@
 DONE:
 - error checking
 - rotate tiles
-- error check neighbors when rotated - DONE
+- error check neighbors when rotated
+- error check *FORMER* neighbors when moved away - partial
+- swap places
+- reset button
 
 TODO:
-- place back to tileholder? or swap places?
-- error check *FORMER* neighbors when moved away
-- reset button
 - resizable grid setting
+- multi-move?
 </pre>
 </body>
 
