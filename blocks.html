@@ -98,7 +98,7 @@
 
     #tileholder,
     #playfield {
-      padding:1em;
+      padding: 1em;
       user-select: none;
       left: 50%;
       position: relative;
@@ -197,86 +197,125 @@
     showchart();
 
     function showchart() {
-    let tileholder = document.querySelector("#tileholder");
-    let playfield = document.querySelector("#playfield");
-    tileholder.innerHTML = playfield.innerHTML = "";
+      let tileholder = document.querySelector("#tileholder");
+      let playfield = document.querySelector("#playfield");
+      tileholder.innerHTML = playfield.innerHTML = "";
 
-    for (let b of blocks) {
-      let tile = document.createElement("bl-ock");
-      tile.value = b;
-      tileholder.append(tile);
-      tile.setAttribute("draggable", true);
-      tile.addEventListener("dragstart", function (e) {
-        // console.log(e);
-        e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setDragImage(this, e.target.clientHeight / 2, e.target.clientWidth / 2);
-        // console.log(e.target);
-        e.dataTransfer.setData("blockid", e.target.id);
-        // e.preventDefault();
-        // console.log(e.target.parentElement.dataset);
-        // e.target.checker(e.target.parentElement.dataset.x,e.target.parentElement.dataset.y);
-        e.dataTransfer.setData("movefrom", [e.target.parentElement.dataset.x, e.target.parentElement.dataset.y]);
+      for (let b of blocks) {
+        let tile = document.createElement("bl-ock");
+        tile.value = b;
+        tileholder.append(tile);
+        tile.setAttribute("draggable", true);
+        tile.addEventListener("dragstart", function (e) {
+          // console.log(e);
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setDragImage(this, e.target.clientHeight / 2, e.target.clientWidth / 2);
+          // console.log(e.target);
+          e.dataTransfer.setData("blockid", e.target.id);
+          // e.preventDefault();
+          // console.log(e.target.parentElement.dataset);
+          // e.target.checker(e.target.parentElement.dataset.x,e.target.parentElement.dataset.y);
+          e.dataTransfer.setData("movefrom", [e.target.parentElement.dataset.x, e.target.parentElement.dataset.y]);
+
+        });
+
+        let sourcetile, clone;
+        tile.addEventListener("touchstart", function (e) {
+          e.preventDefault();
+          sourcetile = e.target;
+          clone = e.target.cloneNode(true);
+          document.body.append(clone);
+          clone.style.position = "fixed";
+          clone.style.transition = "none";
+          tile.ontouchmove = function (e) {
+            // console.log(e.touches[0].clientX,e.touches[0].clientY);
+            clone.style.left = (e.touches[0].clientX - clone.clientWidth / 2) + "px";
+            clone.style.top = (e.touches[0].clientY - clone.clientHeight / 2) + "px";
+          };
+
+          tile.ontouchend = function (e) {
+            // console.log(e);
+            for (const el of document.elementsFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY)) {
+              if (el.classList.contains("playslot")) {
+
+                let existingtile = el.querySelector("bl-ock");
+                if (existingtile && existingtile != sourcetile) {
+                  el.append(sourcetile);
+                  tileholder.append(existingtile);
+                  clone.remove();
+                  break;
+                } else {
+
+                  console.log(el, sourcetile);
+                  el.append(sourcetile);
+                  clone.remove();
+                  break;
+                }
+              }
+            }
+
+          };
 
 
-      });
+        }, { passive: false });
 
 
-    }
-
-    let gridsize = getComputedStyle(playfield).getPropertyValue("--gridsize");
-    for (let x = 0; x < gridsize; x++) {
-      for (let y = 0; y < gridsize; y++) {
-        let box = document.createElement("div");
-        box.className = "playslot";
-        box.dataset.x = x;
-        box.dataset.y = y;
-        playfield.append(box);
-      }
-    }
-
-
-    playfield.ondragover = playfield.ondragenter = function (e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = "move";
-      // console.log("dragging",e.target);
-    };
-
-    playfield.ondrop = function (e) {
-      e.preventDefault();
-      let thisblock = document.getElementById(e.dataTransfer.getData("blockid"));
-      // console.log("target,parent,thisblock", e.target, e.target.parentElement, thisblock);
-      // console.log("block inside", e.target);
-      if (thisblock
-        && e.target.tagName != "BL-OCK"
-        && e.target != thisblock
-      ) {
-        e.target.append(thisblock);
-        //find neighbors:
-
-        thisblock.checker();
-        let movefrom = e.dataTransfer.getData("movefrom").split(",");
-        // console.log(movefrom);
-        if (movefrom[0]) thisblock.checker(movefrom[0], movefrom[1]);
-        // let fromspot = playfield.querySelector(`.playslot[data-x='${movefrom[0]}'][data-y='${movefrom[1]}'] bl-ock`);
-        // if (fromspot) fromspot.checker();
-
-        // thisblock.checker(movefrom);
-
-      } else if (e.target.tagName == "BL-OCK"
-        && e.target != thisblock
-      ) {
-        let targetbox = e.target.parentElement;
-        targetbox.append(thisblock);
-        tileholder.append(e.target);
-
-        // console.log("swap it", thisblock, e.target);
       }
 
-    }
-  }
+      let gridsize = getComputedStyle(playfield).getPropertyValue("--gridsize");
+      for (let x = 0; x < gridsize; x++) {
+        for (let y = 0; y < gridsize; y++) {
+          let box = document.createElement("div");
+          box.className = "playslot";
+          box.dataset.x = x;
+          box.dataset.y = y;
+          playfield.append(box);
+        }
+      }
 
-  
-  document.querySelector("#reload").onclick = function (e) {
+
+      playfield.ondragover = playfield.ondragenter = function (e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        // console.log("dragging",e.target);
+      };
+
+      playfield.ondrop = function (e) {
+        e.preventDefault();
+        let thisblock = document.getElementById(e.dataTransfer.getData("blockid"));
+        // console.log("target,parent,thisblock", e.target, e.target.parentElement, thisblock);
+        // console.log("block inside", e.target);
+        if (thisblock
+          && e.target.tagName != "BL-OCK"
+          && e.target != thisblock
+        ) {
+          e.target.append(thisblock);
+          //find neighbors:
+
+          thisblock.checker();
+          let movefrom = e.dataTransfer.getData("movefrom").split(",");
+          // console.log(movefrom);
+          if (movefrom[0]) thisblock.checker(movefrom[0], movefrom[1]);
+          // let fromspot = playfield.querySelector(`.playslot[data-x='${movefrom[0]}'][data-y='${movefrom[1]}'] bl-ock`);
+          // if (fromspot) fromspot.checker();
+
+          // thisblock.checker(movefrom);
+
+        } else if (e.target.tagName == "BL-OCK"
+          && e.target != thisblock
+        ) {
+          let targetbox = e.target.parentElement;
+          targetbox.append(thisblock);
+          tileholder.append(e.target);
+
+          // console.log("swap it", thisblock, e.target);
+        }
+
+      };
+    }
+
+
+    document.querySelector("#reload").onclick = function (e) {
       showchart();
       window.location.hash = "";
     };
