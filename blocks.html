@@ -221,7 +221,6 @@
 
         let sourcetile, clone;
         tile.addEventListener("touchstart", function (e) {
-          e.preventDefault();
           sourcetile = e.target;
           clone = e.target.cloneNode(true);
           document.body.append(clone);
