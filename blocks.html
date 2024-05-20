@@ -231,7 +231,7 @@
             // console.log(e.touches[0].clientX,e.touches[0].clientY);
             clone.style.left = (e.touches[0].clientX - clone.clientWidth / 2) + "px";
             clone.style.top = (e.touches[0].clientY - clone.clientHeight / 2) + "px";
-          } ); //, { passive: false } );
+          }, { passive: false } );
 
           tile.ontouchend = function (e) {
             // console.log(e);
