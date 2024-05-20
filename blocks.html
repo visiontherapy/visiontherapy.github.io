@@ -243,16 +243,15 @@
                 if (existingtile && existingtile != sourcetile) {
                   el.append(sourcetile);
                   tileholder.append(existingtile);
-                  clone.remove();
                   break;
                 } else {
 
                   console.log(el, sourcetile);
                   el.append(sourcetile);
-                  clone.remove();
                   break;
                 }
               }
+              clone.remove();
             }
 
           };
