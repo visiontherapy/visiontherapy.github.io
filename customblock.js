@@ -100,9 +100,9 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
   }
 
-  // static observedAttributes = "state".split(" ");
+  // static observedAttributes = "initstate".split(" ");
   // attributeChangedCallback(name, oldValue, newValue) {
-  //   if (name == "state") {
+  //   if (name == "initstate" && this.rotatestate) {
   //     this.state = newValue;
   //     this.rotatestate();
   //   }
