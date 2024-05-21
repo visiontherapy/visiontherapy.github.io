@@ -155,7 +155,6 @@
   </div>
 
   <div id="tileholder"></div>
-  <div id="counter"></div>
   <div id="playfield"></div>
 
 
@@ -171,7 +170,6 @@
     document.addEventListener("touchstart", function (e) {
 
       sourcetile = e.target;
-      document.querySelector("#counter").innerText = e.touches.length;
       if (e.touches.length == 1 && sourcetile.tagName == "BL-OCK") {
         e.preventDefault();
         if (clone) return;
