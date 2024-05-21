@@ -128,11 +128,6 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     this.flower ??= this.burst(this.value);
     // console.log("flowr",this.flower);
 
-    this.onclick = function (e) {
-      this.state = ++this.state % 4;
-      this.rotatestate();
-    };
-
     this.rotatestate = function (state) {
       if (state) this.state = state;
       this.style.setProperty("--rot", this.rotations[this.state]);
@@ -141,6 +136,13 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       this.checker();
     };
 
+
+    this.onclick = function (e) {
+      this.state = ++this.state % 4;
+      this.rotatestate();
+    };
+
+    
 
   }
 
