@@ -8,7 +8,8 @@
   <meta name="darkreader-lock" />
 
   <link rel="stylesheet" href="vision.css" />
-  <script src="settings.js"></script>
+  <script src="commonfn.js"></script>
+  <script defer src="settings.js"></script>
   <script src="customblock.js"></script>
 
   <style>
@@ -230,6 +231,8 @@
 
 
     function showchart() {
+      blocks = ashuffle(blocks);
+
       tileholder.innerHTML = playfield.innerHTML = "";
 
       for (let b of blocks) {

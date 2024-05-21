@@ -7,6 +7,7 @@
   <title>CP saccades exercise</title>
   <meta name="darkreader-lock">
   <link rel="stylesheet" href="vision.css" />
+  <script src="commonfn.js"></script>
   <script defer src="settings.js"></script>
 <style>
 
@@ -309,12 +310,6 @@ thing.style.setProperty("--colorfg", colors[Math.floor(Math.random() * colors.le
     }
 
 
-    function ashuffle(array) {
-      return array.map(value => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value);
-
-    }
 
     // direct cutoutfrom helpvideo.js
     // improved - use this for basicutilities
