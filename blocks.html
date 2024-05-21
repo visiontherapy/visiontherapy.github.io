@@ -106,11 +106,16 @@
     }
 
     #playfield {
-      --blocksize: 4em;
+
+      /* --blocksize: 4em; */
       --gridsize: 8;
-      width: calc(var(--gridsize)* var(--blocksize));
-      height: calc(var(--gridsize) * var(--blocksize));
-      border: solid 1px gray;
+
+      --playsize: min(calc(var(--gridsize)* 4em), min(95vw, 95vh));
+
+      --blocksize: calc(var(--playsize) / var(--gridsize));
+
+      width: var(--playsize);
+      height: var(--playsize);
       line-height: 0;
 
       .playslot {
@@ -150,48 +155,13 @@
   </div>
 
   <div id="tileholder"></div>
+  <div id="counter"></div>
   <div id="playfield"></div>
 
 
   <script>
 
-    let blocks = `
-1368
-13457
-26
-23
-34578
-138
-12368
-367
-1
-1358
-23467
-13458
-23578
-2568
-123456
-124568
-12578
-245678
-12568
-12
-234567
-1257
-246
-13
-234
-1236
-1267
-467
-1234
-1567
-8
-27
-123
-134
-12348
-157`.trim().split("\n");
+    let blocks = "1368, 13457, 26, 23, 34578, 138, 12368, 367, 1, 1358, 23467, 13458, 23578, 2568, 123456, 124568, 12578, 245678, 12568, 12, 234567, 1257, 246, 13, 234, 1236, 1267, 467, 1234, 1567, 8, 27, 123, 134, 12348, 157".split(", ");
     //36
     let tileholder = document.querySelector("#tileholder");
     let playfield = document.querySelector("#playfield");
@@ -201,19 +171,21 @@
     document.addEventListener("touchstart", function (e) {
 
       sourcetile = e.target;
+      document.querySelector("#counter").innerText = e.touches.length;
       if (e.touches.length == 1 && sourcetile.tagName == "BL-OCK") {
         e.preventDefault();
+        if (clone) return;
         let movefrom = sourcetile.parentElement;
-        clone = e.target.cloneNode(true);
+        clone = e.target.cloneNode();
         document.body.append(clone);
         clone.style.position = "fixed";
         clone.style.transition = "none";
         let firsttouch = e.touches[0];
         sourcetile.addEventListener("touchmove", function (e) {
-          e.preventDefault();
+          // e.preventDefault();
           // console.log(e.touches[0].clientX,e.touches[0].clientY);
-          clone.style.left = (e.touches[0].clientX - clone.clientWidth / 2) + "px";
-          clone.style.top = (e.touches[0].clientY - clone.clientHeight / 2) + "px";
+          clone.style.left = (e.touches[0].clientX - clone.clientWidth) + "px";
+          clone.style.top = (e.touches[0].clientY - clone.clientHeight) + "px";
         }, { passive: false });
 
         sourcetile.ontouchend = function (e) {
@@ -222,14 +194,14 @@
           let firsty = firsttouch.clientY;
           let endx = e.changedTouches[0].clientX;
           let endy = e.changedTouches[0].clientY;
-          console.log(firsttouch, e.changedTouches[0], firsttouch == e.changedTouches[0]);
-          console.log(Math.trunc(firstx / 10), Math.trunc(endx / 10));
-          console.log(firsty, endy);
+          // console.log(firsttouch, e.changedTouches[0], firsttouch == e.changedTouches[0]);
+          // console.log(Math.trunc(firstx / 10), Math.trunc(endx / 10));
+          // console.log(firsty, endy);
           if (Math.trunc(firstx / 10) == Math.trunc(endx / 10)
             && Math.trunc(firsty / 10) == Math.trunc(endy / 10)) {
             sourcetile.click();
           } else {
-            for (const el of document.elementsFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY)) {
+            for (const el of document.elementsFromPoint(e.changedTouches[0].clientX - clone.clientWidth / 2, e.changedTouches[0].clientY - clone.clientHeight / 2)) {
               if (el.classList.contains("playslot")) {
 
                 let existingtile = el.querySelector("bl-ock");
@@ -249,7 +221,11 @@
             }
           }
           clone.remove();
+          clone = null;
         };
+      } else if (clone) {
+        clone.remove();
+        clone = null;
       }
     }, { passive: false });
 
@@ -262,6 +238,7 @@
         let tile = document.createElement("bl-ock");
         tile.value = b;
         tileholder.append(tile);
+        tile.rotatestate(Math.floor(Math.random() *4));
         tile.setAttribute("draggable", true);
         tile.addEventListener("dragstart", function (e) {
           // console.log(e);
@@ -339,7 +316,8 @@ DONE:
 - error checking
 - rotate tiles
 - error check neighbors when rotated
-- error check *FORMER* neighbors when moved away - partial
+- error check *FORMER* 
+  neighbors when moved away - partial
 - swap places
 - reset button
 - touch enabled
