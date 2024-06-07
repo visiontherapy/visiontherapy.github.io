@@ -54,11 +54,11 @@
       --tranared: var(--fg);
       --tranagreen: var(--fg);
 
-      #red,
+      /* #red,
       #green {
         left: calc(50% + var(--scale) * 1.2 * var(--units));
         transform: translate(calc(-50% + var(--scale) * 1.2 * var(--units)));
-      }
+      } */
 
       .marker {
         border-width: calc(var(--bsize)/1.5);
@@ -237,9 +237,9 @@
     }
 
     #ctrlbar:has(#fusion:checked) {
-      ~#slider {
+      /* ~#slider {
         display: none;
-      }
+      } */
 
       ~#rangeout {
         display: none;
@@ -308,6 +308,11 @@
 
     function fusiontoggle() {
       if (fusion.checked) {
+
+        // set thing
+        slider.value = 11;
+        movecircles();
+
         document.documentElement.style.setProperty("--glyphscale", "0.33");
         // document.documentElement.style.setProperty("--saturate", "0");
         circles.classList.add("fusion");
