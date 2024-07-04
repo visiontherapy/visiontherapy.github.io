@@ -1,17 +1,6 @@
 :root {
   --basefont: 7;
   --fontsize: var(--basefont);
-  --bg: #000;
-  --fg: #fff;
-  --ctrlbg: #222;
-  --highlight: #0ff;
-/*  --tranared: #f00;
-  --tranagreen: #03f;*/
---tranared: #03f;
-    --tranagreen: #f00;
-  --trackred: var(--fg);
-  --trackredbg: #ff0000;
-  --homefilter: saturate(0) brightness(100);
 }
 
 /* @media (prefers-color-scheme: light) {
@@ -27,16 +16,27 @@
   }
 } */
 [data-theme="light"] {
-  /* https://stackoverflow.com/questions/56300132/how-to-override-css-prefers-color-scheme-setting */
   --bg: #fff;
   --fg: #000;
   --ctrlbg: #ddf;
   --highlight: #099;
-  /*--tranared: #0ff;
-  --tranagreen: #f00;*/
+  --tranared: #03f;
+  --tranagreen: #f00;
   --trackred: #f00;
   --trackredbg: var(--bg);
   --homefilter: brightness(0);
+}
+
+[data-theme="dark"] {
+  --bg: #000;
+  --fg: #fff;
+  --ctrlbg: #222;
+  --highlight: #0ff;
+  --tranared: #03f;
+  --tranagreen: #f00;
+  --trackred: var(--fg);
+  --trackredbg: #ff0000;
+  --homefilter: saturate(0) brightness(100);
 }
 
 body {
@@ -77,8 +77,8 @@ a {
 }
 
 #main.midspace .dot:not(#centerpoint) {
-  background:var(--fg);
-  color:var(--fg);
+  background: var(--fg);
+  color: var(--fg);
 }
 
 /* centerpoint is also a dot */
@@ -257,8 +257,6 @@ input[type="checkbox"].slider {
     background-color: var(--onslider);
   }
 }
-
-
 
 input[type="checkbox"].threestate {
   --offborder: #888;
