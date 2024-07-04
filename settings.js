@@ -1,9 +1,8 @@
 
 document.addEventListener("DOMContentLoaded", (e) => {
-  if ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    || document.documentElement.getAttribute("data-theme") == "dark") {
+  if ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) && typeof defaultlight === "undefined") {
     // dark mode
-    if (typeof defaultlight === "undefined") document.querySelector("#darkmode").checked = true;
+    document.querySelector("#darkmode").checked = true;
     document.documentElement.setAttribute("data-theme", "dark");
   } else { // if (document.documentElement.getAttribute("data-theme") == "light")
     document.querySelector("#darkmode").checked = false;

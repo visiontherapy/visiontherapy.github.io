@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spot the Match</title>
+  <meta name="darkreader-lock">
+  <link rel="stylesheet" href="vision.css" />
+  <script src="commonfn.js"></script>
+  <script defer src="settings.js"></script>
+
+</head>
+
+<body>
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+   
+    <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
+
+    <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+
+  <style>
+    .spotit {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      position: relative;
+      margin-top:2em;
+      justify-content: space-around;
+
+      /* margin:4vw; */
+      .spotbox {
+        margin: 1em;
+        position: relative;
+        --imgsize: calc(min(35em, 50vw) / 3 - 2em);
+        --boxsize: calc(var(--imgsize) *3);
+        display: inline-grid;
+        grid-template-areas: "1fr 1fr 1fr";
+        vertical-align: middle;
+        padding: 0.5em;
+        grid-gap: 1em;
+
+        .spot {
+          background: var(--tranared);
+          height: var(--imgsize);
+          width: var(--imgsize);
+          mask-size: contain;
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mix-blend-mode:difference;
+
+          &.null {
+            background: transparent;
+          }
+        }
+      }
+
+      .match:hover {
+        background-color: var(--highlight);
+      }
+
+
+      
+
+
+    }
+
+
+  </style>
+
+
+  <div class="spotit"></div>
+  <script>
+    let images = [...new Array(74).keys()];
+    images.shift();// start from 1
+
+    let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
+
+
+
+    let scale = document.querySelector("#scale");
+    let rotate = document.querySelector("#rotate");
+    let posi = 15;
+
+    let spotit = document.querySelector(".spotit");
+
+    showchart(spotit);
+
+
+    function showchart(anchor) {
+      anchor.innerText = "";
+      let [spotcard, cardimg] = makecard({ imgbank: [...images] });
+
+      anchor.append(spotcard);
+
+      let remaining = images.filter(x => !cardimg.includes(x));
+
+      let usespot = cardimg[Math.floor(Math.random() * (cardimg.length - 1))];
+
+      anchor.append(makecard({ imgbank: remaining, usespot: usespot })[0]);
+
+      for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
+        match.classList.add("match");
+        match.onclick = ()=> {
+          showchart(anchor);
+        }
+      }
+
+      function makecard({ imgbank, usespot = null } = {}) {
+
+        let imgselection = [];
+        for (let i = 1; i <= 8; i++) {
+          imgselection.push(imgbank.splice(Math.floor(Math.random() * (imgbank.length - 1)), 1)[0]);
+        }
+
+        if (usespot) {
+          imgselection.splice(
+            Math.floor(Math.random() * (imgselection.length - 1)),
+            1,
+            usespot);
+        }
+
+        console.log(imgselection);
+
+        imgselection.splice(4, 0, "null");
+        let spotbox = document.createElement("div");
+        spotbox.className = "spotbox";
+        for (let n of imgselection) {
+          let box = document.createElement("div");
+          box.className = "spot";
+          box.dataset.spot = n;
+          if (n == "null") box.classList.add("null");
+          if (n != "null") box.style.maskImage = 'url("img/shapes/shape_' + n.toString().padStart(2, "0") + '.png")';
+
+          let transform = "";
+          if (scale.checked) {
+            transform += " scale(" + (0.6 + Math.random() / 2) + ")";
+          }
+          if (rotate.checked) {
+            transform += " rotate(" + Math.random() * 180 + "deg)";
+          }
+          if (posi) {
+            transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
+          }
+
+          if (transform) box.style.transform = transform;
+          spotbox.append(box);
+        }
+        imgselection.splice(4, 1);
+
+        return [spotbox, imgselection];
+      }
+
+    }
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart(spotit);
+    };
+
+
+
+
+  </script>
+
+</body>
+
+</html>
