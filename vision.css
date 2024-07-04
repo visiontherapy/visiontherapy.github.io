@@ -14,7 +14,7 @@
   --homefilter: saturate(0) brightness(100);
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     --bg: #fff;
     --fg: #000;
@@ -25,7 +25,7 @@
     --trackredbg: var(--bg);
     --homefilter: brightness(0);
   }
-}
+} */
 [data-theme="light"] {
   /* https://stackoverflow.com/questions/56300132/how-to-override-css-prefers-color-scheme-setting */
   --bg: #fff;

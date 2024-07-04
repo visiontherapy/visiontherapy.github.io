@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     || document.documentElement.getAttribute("data-theme") == "dark") {
     // dark mode
     if (typeof defaultlight === "undefined") document.querySelector("#darkmode").checked = true;
-  } else if (document.documentElement.getAttribute("data-theme") == "light") {
+  } else { // if (document.documentElement.getAttribute("data-theme") == "light")
     document.querySelector("#darkmode").checked = false;
   }
 
