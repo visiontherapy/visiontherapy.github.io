@@ -16,10 +16,12 @@
 
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
-   
+
     <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
 
     <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
+
+    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">blue</label></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
@@ -30,12 +32,20 @@
 
 
   <style>
+    #ctrlbar:has(#blue:checked)~.spotit .spot {
+      background: var(--spotbg);
+    }
+
+    #ctrlbar:has(#blue:not(:checked))~.spotit .spot {
+      background: var(--fg);
+    }
+
     .spotit {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       position: relative;
-      margin-top:2em;
+      margin-top: 2em;
       justify-content: space-around;
 
       /* margin:4vw; */
@@ -51,16 +61,15 @@
         grid-gap: 1em;
 
         .spot {
-          background: var(--spotbg);
           height: var(--imgsize);
           width: var(--imgsize);
           mask-size: contain;
           mask-repeat: no-repeat;
           mask-position: center;
-          mix-blend-mode:difference;
+          mix-blend-mode: difference;
 
           &.null {
-            background: transparent;
+            visibility: hidden;;
           }
         }
       }
@@ -70,7 +79,6 @@
       }
 
     }
-
   </style>
 
 
@@ -79,12 +87,16 @@
     let images = [...new Array(74).keys()];
     images.shift();// start from 1
 
-    let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
+    // let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
 
 
 
     let scale = document.querySelector("#scale");
     let rotate = document.querySelector("#rotate");
+    let blue = document.querySelector("#blue");
+
+
+
     let posi = 15;
 
     let spotit = document.querySelector(".spotit");
@@ -106,9 +118,9 @@
 
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
-        match.onclick = ()=> {
+        match.onclick = () => {
           showchart(anchor);
-        }
+        };
       }
 
       function makecard({ imgbank, usespot = null } = {}) {
