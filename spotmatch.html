@@ -226,13 +226,13 @@
 
           let transform = "";
           if (scale.checked) {
-            transform += " scale(" + (0.6 + rng() / 2) + ")";
+            transform += " scale(" + (0.45 + Math.random()*0.6) + ")";
           }
           if (rotate.checked) {
-            transform += " rotate(" + rng() * 180 + "deg)";
+            transform += " rotate(" + Math.random() * 180 + "deg)";
           }
           if (posi) {
-            transform += " translate(" + (rng() * posi * 2 - posi) + "%," + (rng() * posi * 2 - posi) + "%)";
+            transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
           }
 
           if (transform) box.style.transform = transform;
