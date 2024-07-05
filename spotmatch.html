@@ -16,7 +16,7 @@
     }
 
     #ctrlbar:has(#blue:not(:checked))~.spotit .spot {
-      background: var(--fg);
+      background: var(--spotbgbw);
     }
 
     .spotit {
@@ -31,7 +31,7 @@
       .spotbox {
         margin: 1em;
         position: relative;
-        --imgsize: calc(min(35em, 50vw,70vh) / 3 - 2em);
+        --imgsize: calc(min(35em, 50vw, 70vh) / 3 - 2em);
         --boxsize: calc(var(--imgsize) *3);
         display: inline-grid;
         grid-template-areas: "1fr 1fr 1fr";
@@ -59,10 +59,9 @@
       }
     }
 
-    .spotit.single .spotbox{
-      --imgsize: calc(min(100vw,70vh) / 3 - 2em);
+    .spotit.single .spotbox {
+      --imgsize: calc(min(100vw, 70vh) / 3 - 2em);
     }
-
   </style>
 </head>
 
@@ -71,7 +70,7 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Blue</label></div>
+    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Filtered</label></div>
 
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
@@ -166,10 +165,10 @@
           spotit.classList.add("single");
           break;
       }
-      showchart(spotit,null,rngseed)
+      showchart(spotit, null, rngseed);
     };
 
-    
+
 
 
     showchart(spotit);
@@ -180,8 +179,8 @@
       rng ??= random(rngseed ?? (Math.random() * 10000));
       anchor.innerText = "";
       let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
-      
-      if (matched.dataset.state !=2) anchor.append(leftcard);
+
+      if (matched.dataset.state != 2) anchor.append(leftcard);
 
       let remaining = images.filter(x => !cardimgs.includes(x));
 
@@ -189,7 +188,7 @@
 
       let rightcard = makecard({ imgbank: remaining, usespot: usespot })[0];
 
-      if (matched.dataset.state !=1) anchor.append(rightcard);
+      if (matched.dataset.state != 1) anchor.append(rightcard);
 
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
@@ -226,13 +225,14 @@
 
           let transform = "";
           if (scale.checked) {
-            transform += " scale(" + (0.45 + Math.random()*0.6) + ")";
+            transform += " scale(" + (0.45 + Math.random() * 0.6) + ")";
+            if (posi) {
+              // only translate if scaled
+              transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
+            }
           }
           if (rotate.checked) {
             transform += " rotate(" + Math.random() * 180 + "deg)";
-          }
-          if (posi) {
-            transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
           }
 
           if (transform) box.style.transform = transform;

@@ -38,7 +38,8 @@
   --highlight: #099;
   --tranared: #03f;
   --tranagreen: #f00;
-  --spotbg: var(--tranagreen);
+  --spotbg: var(--tranared);
+  --spotbgbw: var(--bg); /* because of mid-blend-mode:difference */
   --trackred: #f00;
   --trackredbg: var(--bg);
   --homefilter: brightness(0);
@@ -51,6 +52,7 @@
   --highlight: #0ff;
   --tranared: #03f;
   --spotbg: var(--tranared);
+  --spotbgbw: var(--fg);
   --tranagreen: #f00;
   --trackred: var(--fg);
   --trackredbg: #ff0000;
