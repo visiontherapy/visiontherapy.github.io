@@ -170,15 +170,17 @@
     function showchart(anchor, rng = null, rngseed = null) {
       rng ??= random(rngseed ?? (Math.random() * 10000));
       anchor.innerText = "";
-      let [spotcard, cardimg] = makecard({ imgbank: [...images] });
+      let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
+      
+      if (matched.dataset.state !=2) anchor.append(leftcard);
 
-      if (matched.dataset.state !=2) anchor.append(spotcard);
+      let remaining = images.filter(x => !cardimgs.includes(x));
 
-      let remaining = images.filter(x => !cardimg.includes(x));
+      let usespot = cardimgs[Math.floor(rng() * (cardimgs.length - 1))];
 
-      let usespot = cardimg[Math.floor(rng() * (cardimg.length - 1))];
+      let rightcard = makecard({ imgbank: remaining, usespot: usespot })[0];
 
-      if (matched.dataset.state !=1) anchor.append(makecard({ imgbank: remaining, usespot: usespot })[0]);
+      if (matched.dataset.state !=1) anchor.append(rightcard);
 
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
