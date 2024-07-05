@@ -31,7 +31,7 @@
       .spotbox {
         margin: 1em;
         position: relative;
-        --imgsize: calc(min(35em, 50vw) / 3 - 2em);
+        --imgsize: calc(min(35em, 50vw,70vh) / 3 - 2em);
         --boxsize: calc(var(--imgsize) *3);
         display: inline-grid;
         grid-template-areas: "1fr 1fr 1fr";
@@ -57,8 +57,12 @@
       .match:hover {
         background-color: var(--highlight) !important;
       }
-
     }
+
+    .spotit.single .spotbox{
+      --imgsize: calc(min(100vw,70vh) / 3 - 2em);
+    }
+
   </style>
 </head>
 
@@ -149,12 +153,15 @@
       switch (matched.dataset.state) {
         case "0":
           mlabel.innerText = "Dual";
+          spotit.classList.remove("single");
           break;
         case "1":
           mlabel.innerText = "Left side";
+          spotit.classList.add("single");
           break;
         case "2":
           mlabel.innerText = "Right side";
+          spotit.classList.add("single");
           break;
       }
       showchart(spotit,null,rngseed)
