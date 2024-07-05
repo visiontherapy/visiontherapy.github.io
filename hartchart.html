@@ -8,6 +8,7 @@
   <meta name="darkreader-lock">
   <link rel="stylesheet" href="vision.css" />
   <link rel="stylesheet" href="metronome.css" />
+  <script src="commonfn.js"></script>
   <script src="settings.js"></script>
   <script defer src="metronome.js"></script>
   <script src="quotes.js"></script>
@@ -18,7 +19,7 @@
       /* clamp(2.5rem, 2.5em, 10vh); */
       /* --slotsize: calc(var(--boxsize) / 10); */
       --codegap: 2.5em;
-      --boxsize: min(calc(95vh - var(--topgap) - var(--codegap)), calc(95vw - var(--topgap) -  var(--codegap)));
+      --boxsize: min(calc(95vh - var(--topgap) - var(--codegap)), calc(95vw - var(--topgap) - var(--codegap)));
       --basefont: calc(var(--boxsize) / 13);
     }
 
@@ -214,6 +215,13 @@
       </label>
     </div>
 
+    <!-- <div id="controls">
+      <div id="settings">*SETTINGS*</div>
+      <div class="ctrlbox">
+        <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div>
+      </div>
+    </div> -->
+
 
     <div id="qrplace"></div>
 
@@ -240,10 +248,12 @@
     let qrplace = document.querySelector("#qrplace");
     let querypattern = window.location.hash.replace(/^#/, "");
 
-    querypattern = querypattern.toUpperCase().replace(/[^A-Z]/g, "");
+    // querypattern = querypattern.toUpperCase().replace(/[^A-Z]/g, "");
+    querypattern = querypattern.replace(/[^\d]/g, "");
+
     if (querypattern) {
       // querypattern = 
-      showchart(querypattern.split(""));
+      showchart(querypattern);//.split(""));
     } else {
       showchart();
     }
@@ -255,6 +265,9 @@
 
 
     function showchart(pattern) {
+      let rngseed = pattern ?? Math.floor(Math.random() * 100000);
+      let rng = random(rngseed);
+
       let txferstring = "";
       main.innerHTML = "";
       let lastchar = "";
@@ -268,7 +281,8 @@
           slot.dataset.row = x;
           slot.dataset.col = y;
           let breakcount;
-          slot.dataset.char = slot.innerText = lastchar = pattern ? pattern.shift() : nextletter(lastchar);
+          slot.dataset.char = slot.innerText = lastchar = nextletter(lastchar);
+          //pattern ? pattern.shift() : 
           txferstring += lastchar;
           main.append(slot);
         }
@@ -278,15 +292,17 @@
       // if (!pattern) {
       let url = window.location.toString();
       url.replace(/[\?#&].*$/, "");
-      let qrstring = url + "#" + txferstring;
+      // let qrstring = url + "#" + txferstring;
+      let qrstring = url + "#" + rngseed;
       // console.log(qrstring);
       getqr(qrstring);
       // }
 
       hartcode();
-    }
 
 
+
+      
 
     function hartcode(text) {
       // let qq = quotes.filter((q) => { return q.length < 50; });
@@ -304,6 +320,7 @@
           lettercode = document.createElement("input");
           lettercode.type = "text";
 
+          // pick one
           let coords = found[Math.floor(Math.random() * found.length)];
 
           lettercode.placeholder = "[" + coords.dataset.slot + "]";
@@ -382,12 +399,16 @@
       let loopcount = 0;
       let nextchar;
       do {
-        nextchar = alpha[Math.floor(Math.random() * alpha.length)];
+        // nextchar = alpha[Math.floor(Math.random() * alpha.length)];
+        nextchar = alpha[Math.floor(rng() * alpha.length)];
         // console.log("checking mark",loopcount,nextmark,centerpoint.dataset.mark);
         if (++loopcount > 5) break; // prevent infinite loop when only one mark is available
       } while (nextchar && nextchar == lastchar);
       return nextchar;
     }
+
+    }
+
 
 
     document.querySelector("#reload").onclick = function (e) {
