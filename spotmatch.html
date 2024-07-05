@@ -120,7 +120,9 @@
 
 
 
-    let images = [...new Array(74).keys()];
+    let imagecount = 107;
+
+    let images = [...new Array(imagecount).keys()];
     images.shift();// start from 1
 
     // let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
@@ -220,7 +222,7 @@
           box.className = "spot";
           box.dataset.spot = n;
           if (n == "null") box.classList.add("null");
-          if (n != "null") box.style.maskImage = 'url("img/shapes/shape_' + n.toString().padStart(2, "0") + '.png")';
+          if (n != "null") box.style.maskImage = 'url("img/pdshapes/pdshape_' + n.toString().padStart(3, "0") + '.png")';
 
           let transform = "";
           if (scale.checked) {
