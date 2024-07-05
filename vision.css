@@ -183,7 +183,7 @@ input#help {
 
 input#help + label {
   position: absolute;
-  top: 4em;
+  top: 3em;
   right: 1em;
   border: solid 1px var(--fg);
   padding: 0.25em 0.4em;
@@ -211,6 +211,7 @@ input:checked + label + #helptext {
   top: 20%;
   line-height: 1.25em;
   padding: 0 0.5em 0.5em;
+  z-index:100;
 }
 /*
 input[type="checkbox"] {

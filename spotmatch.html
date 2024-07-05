@@ -10,27 +10,6 @@
   <script src="commonfn.js"></script>
   <script defer src="settings.js"></script>
 
-</head>
-
-<body>
-
-  <div id="ctrlbar">
-    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
-
-    <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
-
-    <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
-
-    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">blue</label></div>
-
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
-
-
-    <button id="reload">Reload</button>
-
-  </div>
-
-
   <style>
     #ctrlbar:has(#blue:checked)~.spotit .spot {
       background: var(--spotbg);
@@ -69,21 +48,74 @@
           mix-blend-mode: difference;
 
           &.null {
-            visibility: hidden;;
+            visibility: hidden;
+            ;
           }
         }
       }
 
       .match:hover {
-        background-color: var(--highlight);
+        background-color: var(--highlight) !important;
       }
 
     }
   </style>
+</head>
+
+<body>
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Blue</label></div>
+
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+    <div class="ctrlbox">
+      <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div>
+
+      <div>Matched: <input type="checkbox" class="threestate" id="matched" /> <label class="button" for="matched">Dual</label></div>
+
+      <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
+
+      <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
+
+    </div>
+  </div>
+
+
+  <input type="checkbox" id="help" />
+  <label for="help">Help</label>
+  <label id="helptext" for="help">
+    <h2>How to use this:</h2>
+    Identify the shape that appears in both clusters, and click either one to proceed to the next matched pair.
+    <h3>Settings</h3>
+    <ul>
+      <li>Use the corresponding sliders to toggle on/off shape rotation and size randomization.</li>
+      <li>Enter a number in the <b>seed</b> input box to designate a seed for the randomization function.</li>
+      <li>Toggle the "Matched" slider to display a single cluster. Use this with the "seed" input for simultaneous interaction on a mobile device and computer.</li>
+    </ul>
+    Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
+    <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
+    <h3>Usage</h3>
+    Press the spacebar on the keyboard to display a new target marker in the central area.
+  </label>
+
 
 
   <div class="spotit"></div>
   <script>
+
+
+
     let images = [...new Array(74).keys()];
     images.shift();// start from 1
 
@@ -95,31 +127,63 @@
     let rotate = document.querySelector("#rotate");
     let blue = document.querySelector("#blue");
 
-
+    let seed = document.querySelector("#seed");
+    let rngseed = null;
 
     let posi = 15;
 
     let spotit = document.querySelector(".spotit");
 
+    let matched = document.querySelector("#matched");
+    let mlabel = document.querySelector("label[for='matched']");
+
+
+    seed.onchange = function () {
+      rngseed = parseInt(this.value);
+      showchart(spotit, null, rngseed);
+    };
+
+
+    matched.onclick = function (e) {
+      threestate(this);
+      switch (matched.dataset.state) {
+        case "0":
+          mlabel.innerText = "Dual";
+          break;
+        case "1":
+          mlabel.innerText = "Left side";
+          break;
+        case "2":
+          mlabel.innerText = "Right side";
+          break;
+      }
+      showchart(spotit,null,rngseed)
+    };
+
+    
+
+
     showchart(spotit);
 
 
-    function showchart(anchor) {
+
+    function showchart(anchor, rng = null, rngseed = null) {
+      rng ??= random(rngseed ?? (Math.random() * 10000));
       anchor.innerText = "";
       let [spotcard, cardimg] = makecard({ imgbank: [...images] });
 
-      anchor.append(spotcard);
+      if (matched.dataset.state !=2) anchor.append(spotcard);
 
       let remaining = images.filter(x => !cardimg.includes(x));
 
-      let usespot = cardimg[Math.floor(Math.random() * (cardimg.length - 1))];
+      let usespot = cardimg[Math.floor(rng() * (cardimg.length - 1))];
 
-      anchor.append(makecard({ imgbank: remaining, usespot: usespot })[0]);
+      if (matched.dataset.state !=1) anchor.append(makecard({ imgbank: remaining, usespot: usespot })[0]);
 
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
         match.onclick = () => {
-          showchart(anchor);
+          showchart(anchor, rng);
         };
       }
 
@@ -127,17 +191,17 @@
 
         let imgselection = [];
         for (let i = 1; i <= 8; i++) {
-          imgselection.push(imgbank.splice(Math.floor(Math.random() * (imgbank.length - 1)), 1)[0]);
+          imgselection.push(imgbank.splice(Math.floor(rng() * (imgbank.length - 1)), 1)[0]);
         }
 
         if (usespot) {
           imgselection.splice(
-            Math.floor(Math.random() * (imgselection.length - 1)),
+            Math.floor(rng() * (imgselection.length - 1)),
             1,
             usespot);
         }
 
-        console.log(imgselection);
+        // console.log(imgselection);
 
         imgselection.splice(4, 0, "null");
         let spotbox = document.createElement("div");
@@ -151,13 +215,13 @@
 
           let transform = "";
           if (scale.checked) {
-            transform += " scale(" + (0.6 + Math.random() / 2) + ")";
+            transform += " scale(" + (0.6 + rng() / 2) + ")";
           }
           if (rotate.checked) {
-            transform += " rotate(" + Math.random() * 180 + "deg)";
+            transform += " rotate(" + rng() * 180 + "deg)";
           }
           if (posi) {
-            transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
+            transform += " translate(" + (rng() * posi * 2 - posi) + "%," + (rng() * posi * 2 - posi) + "%)";
           }
 
           if (transform) box.style.transform = transform;
@@ -172,8 +236,18 @@
 
     document.querySelector("#reload").onclick = function (e) {
       showchart(spotit);
+      seed.value = "";
     };
 
+
+    function random(seed) {
+      let m = 2 ** 35 - 31;
+      let a = 185852;
+      let s = seed % m;
+      return function () {
+        return (s = (s * a) % m) / m;
+      };
+    }
 
 
 
