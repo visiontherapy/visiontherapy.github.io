@@ -265,7 +265,7 @@
 
 
     function showchart(pattern) {
-      let rngseed = pattern ?? Math.floor(Math.random() * 100000);
+      let rngseed = pattern ?? Math.floor(Math.random() * 100000000);
       let rng = random(rngseed);
 
       let txferstring = "";
@@ -302,110 +302,110 @@
 
 
 
-      
 
-    function hartcode(text) {
-      // let qq = quotes.filter((q) => { return q.length < 50; });
-      // text ??= qq[Math.floor(Math.random() * qq.length)];
-      text ??= getquote();
-      codeout.innerHTML = "Hart Code:<br/>";
-      codeout.title = text;
-      codeout.className = "";
-      let count = 0;
-      for (const c of text.toUpperCase().split("")) {
 
-        let found = main.querySelectorAll(`div[data-char="${c}"]`);
-        let lettercode;
-        if (found.length > 0) {
-          lettercode = document.createElement("input");
-          lettercode.type = "text";
+      function hartcode(text) {
+        // let qq = quotes.filter((q) => { return q.length < 50; });
+        // text ??= qq[Math.floor(Math.random() * qq.length)];
+        text ??= getquote();
+        codeout.innerHTML = "Hart Code:<br/>";
+        codeout.title = text;
+        codeout.className = "";
+        let count = 0;
+        for (const c of text.toUpperCase().split("")) {
 
-          // pick one
-          let coords = found[Math.floor(Math.random() * found.length)];
+          let found = main.querySelectorAll(`div[data-char="${c}"]`);
+          let lettercode;
+          if (found.length > 0) {
+            lettercode = document.createElement("input");
+            lettercode.type = "text";
 
-          lettercode.placeholder = "[" + coords.dataset.slot + "]";
-          lettercode.dataset.row = coords.dataset.row;
-          lettercode.dataset.col = coords.dataset.col;
+            // pick one
+            let coords = found[Math.floor(Math.random() * found.length)];
 
-          lettercode.oninput = function (e) {
-            if (this.value.toUpperCase() == this.dataset.char) {
-              this.value = this.value.toUpperCase();
-              this.classList.add("correct");
-              // console.log(this.nextElementSibling);
-              // this.nextElementSibling.click();
-              let nextbox = document.querySelector("#" + this.id + "~ input:not(.correct)");
-              if (nextbox) {
-                nextbox.focus();
+            lettercode.placeholder = "[" + coords.dataset.slot + "]";
+            lettercode.dataset.row = coords.dataset.row;
+            lettercode.dataset.col = coords.dataset.col;
+
+            lettercode.oninput = function (e) {
+              if (this.value.toUpperCase() == this.dataset.char) {
+                this.value = this.value.toUpperCase();
+                this.classList.add("correct");
+                // console.log(this.nextElementSibling);
+                // this.nextElementSibling.click();
+                let nextbox = document.querySelector("#" + this.id + "~ input:not(.correct)");
+                if (nextbox) {
+                  nextbox.focus();
+                } else {
+                  this.blur();
+                }
+                if (codeout.querySelectorAll("input.lettercode.correct").length == codeout.querySelectorAll("input.lettercode").length) {
+                  console.log("FINISHED", text);
+                  codeout.className = "finished";
+                }
               } else {
-                this.blur();
+                this.classList.remove("correct");
+                codeout.classList.remove("finished");
+
               }
-              if (codeout.querySelectorAll("input.lettercode.correct").length == codeout.querySelectorAll("input.lettercode").length) {
-                console.log("FINISHED", text);
-                codeout.className = "finished";
-              }
-            } else {
-              this.classList.remove("correct");
-              codeout.classList.remove("finished");
+            };
 
-            }
-          };
+          } else {
+            lettercode = document.createElement("div");
 
-        } else {
-          lettercode = document.createElement("div");
+            // console.log("NOTFOUND", c);
+            lettercode.innerText = c;
+            lettercode.setAttribute("disabled", true);
+          }
+          lettercode.id = "lettercode" + count++;
+          lettercode.dataset.char = c;
+          lettercode.className = "lettercode";
+          codeout.append(lettercode);
 
-          // console.log("NOTFOUND", c);
-          lettercode.innerText = c;
-          lettercode.setAttribute("disabled", true);
+
         }
-        lettercode.id = "lettercode" + count++;
-        lettercode.dataset.char = c;
-        lettercode.className = "lettercode";
-        codeout.append(lettercode);
-
 
       }
 
-    }
+
+      function getqr(data) {
+        let [w, h] = [250, 250];
+        let qrcode = document.createElement("a");
+        qrcode.className = "qrcode";
+        qrcode.href = data;
+        // qrcode.style = `padding:10px;background:#fff;position:absolute;left:50;top:1em;`;
+        // let theqrcode = 
+        new QRCode(qrcode, {
+          text: data,
+          width: w,
+          height: h,
+          colorDark: "#000",
+          colorLight: "#fff",
+          correctionLovel: QRCode.CorrectLevel.L,
+        });
+        // console.log(qrcode);
 
 
-    function getqr(data) {
-      let [w, h] = [250, 250];
-      let qrcode = document.createElement("a");
-      qrcode.className = "qrcode";
-      qrcode.href = data;
-      // qrcode.style = `padding:10px;background:#fff;position:absolute;left:50;top:1em;`;
-      // let theqrcode = 
-      new QRCode(qrcode, {
-        text: data,
-        width: w,
-        height: h,
-        colorDark: "#000",
-        colorLight: "#fff",
-        correctionLovel: QRCode.CorrectLevel.L,
-      });
-      // console.log(qrcode);
-
-
-      // input type="checkbox" class="slider" id="darkmode" checked="checked" /><label for="darkmode">Dark mode</label>
-      qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
-      qrplace.append(qrcode);
-    }
+        // input type="checkbox" class="slider" id="darkmode" checked="checked" /><label for="darkmode">Dark mode</label>
+        qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
+        qrplace.append(qrcode);
+      }
 
 
 
 
-    function nextletter(lastchar) {
-      let alpha = "ABCDEFGHKLMNOPQRSTUVWXYZ".split("");
-      let loopcount = 0;
-      let nextchar;
-      do {
-        // nextchar = alpha[Math.floor(Math.random() * alpha.length)];
-        nextchar = alpha[Math.floor(rng() * alpha.length)];
-        // console.log("checking mark",loopcount,nextmark,centerpoint.dataset.mark);
-        if (++loopcount > 5) break; // prevent infinite loop when only one mark is available
-      } while (nextchar && nextchar == lastchar);
-      return nextchar;
-    }
+      function nextletter(lastchar) {
+        let alpha = "ABCDEFGHKLMNOPQRSTUVWXYZ".split("");
+        let loopcount = 0;
+        let nextchar;
+        do {
+          // nextchar = alpha[Math.floor(Math.random() * alpha.length)];
+          nextchar = alpha[Math.floor(rng() * alpha.length)];
+          // console.log("checking mark",loopcount,nextmark,centerpoint.dataset.mark);
+          if (++loopcount > 5) break; // prevent infinite loop when only one mark is available
+        } while (nextchar && nextchar == lastchar);
+        return nextchar;
+      }
 
     }
 
