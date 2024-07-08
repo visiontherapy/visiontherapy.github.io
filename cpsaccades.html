@@ -9,43 +9,39 @@
   <link rel="stylesheet" href="vision.css" />
   <script src="commonfn.js"></script>
   <script defer src="settings.js"></script>
-<style>
+  <style>
+    #ctrlbar:has([value="redgreen"]:checked)~#main {
 
-#ctrlbar:has([value="redgreen"]:checked) ~ #main {
+      .red {
+        color: var(--tranared);
+      }
 
-.red {
-color: var(--tranared);
-}
+      .green {
+        color: var(--tranagreen);
+      }
 
-.green {
-color: var(--tranagreen);
-}
+    }
 
-}
+    #ctrlbar:has([value="hybrid"]:checked)~#main {
 
-#ctrlbar:has([value="hybrid"]:checked) ~ #main {
+      .red {
+        background: linear-gradient(90deg, var(--tranagreen) 49%, var(--tranared) 50%);
+        color: transparent;
+        background-clip: text;
+      }
 
-.red {
-background: linear-gradient(90deg, var(--tranagreen) 49%, var(--tranared) 50%);
-color: transparent;
-background-clip:text;
-}
+      .green {
+        background: linear-gradient(90deg, var(--tranared) 49%, var(--tranagreen) 50%);
+        color: transparent;
+        background-clip: text;
+      }
 
-.green {
-background: linear-gradient(90deg, var(--tranared) 49%, var(--tranagreen) 50%);
-color: transparent;
-background-clip:text;
-}
+    }
 
-}
-
-#ctrlbar:has([value="colorful"]:checked) ~ #main .dot {
-color: var(--colorfg);
-}
-
-
-
-</style>
+    #ctrlbar:has([value="colorful"]:checked)~#main .dot {
+      color: var(--colorfg);
+    }
+  </style>
 </head>
 
 <body>
@@ -58,15 +54,15 @@ color: var(--colorfg);
     <div><input type="checkbox" class="threestate" id="spacefix" /><label class="button" for="spacefix">Space Fixator</label></div>
 
 
-<div>
-Color mode:
-<select id="colormode">
-<option value="default">Default</option>
-<option value="colorful">Colorful</option>
-<option value="redgreen">Red/green</option>
-<option value="hybrid">Red+green</option>
-</select>
-</div>
+    <div>
+      Color mode:
+      <select id="colormode">
+        <option value="default">Default</option>
+        <option value="colorful">Colorful</option>
+        <option value="redgreen">Red/green</option>
+        <option value="hybrid">Red+green</option>
+      </select>
+    </div>
 
     <!-- div><input type="checkbox" class="slider" id="colormode_x" /><label class="button" for="colormode_x">Colorful markers</label></div>
 
@@ -120,24 +116,24 @@ Color mode:
 
     let spacefix = document.querySelector("#spacefix");
 
-	let colormode =  document.querySelector("#colormode");
+    let colormode = document.querySelector("#colormode");
 
-let redgreen = 0;
+    let redgreen = 0;
 
     document.querySelector("#markers").value = origmarkers.join("");
 
 
-    spacefix.onclick = function(e) {
+    spacefix.onclick = function (e) {
       threestate(this);
-			colormode.value="default";
-      if (spacefix.dataset.state ==1) {
+      colormode.value = "default";
+      if (spacefix.dataset.state == 1) {
         box.classList.add("midspace");
       } else {
         box.classList.remove("midspace");
       }
-      showchart(); 
-    }
-    
+      showchart();
+    };
+
     document.querySelector("#reload").onclick = function (e) {
       showchart();
     };
@@ -154,12 +150,12 @@ let redgreen = 0;
       showchart();
     };
 
-/*
-    let colormode = false;
-    document.querySelector("#colormode").onchange = function (e) {
-      colormode = this.checked;
-      showchart();
-    };*/
+    /*
+        let colormode = false;
+        document.querySelector("#colormode").onchange = function (e) {
+          colormode = this.checked;
+          showchart();
+        };*/
 
 
 
@@ -191,16 +187,16 @@ let redgreen = 0;
 
     function showchart() {
 
-redgreen =0;
+      redgreen = 0;
 
       let fontsize = getComputedStyle(document.body).getPropertyValue('--fontsize');
       let marksize = fontsize * 3 * markscale;
 
       let rinterval = fontsize * 3 * spacescale;
 
-      let markers = ashuffle(spacefix.dataset.state>0 ? "1,2,3,4,5,6,7,8,9,10,11,12".split(",") : origmarkers);
+      let markers = ashuffle(spacefix.dataset.state > 0 ? "1,2,3,4,5,6,7,8,9,10,11,12".split(",") : origmarkers);
 
-			let origmarkers_copy = [...origmarkers];
+      let origmarkers_copy = [...origmarkers];
 
       let dot = document.createElement("div");
       dot.className = "dot";
@@ -228,9 +224,9 @@ redgreen =0;
       }
 
 
-      let maxlevels = spacefix.dataset.state>0 ? 2 : 4;
+      let maxlevels = spacefix.dataset.state > 0 ? 2 : 4;
       for (let i = 1; i <= maxlevels; i++) {
-        if (spacefix.dataset.state>0 && i==1) continue;
+        if (spacefix.dataset.state > 0 && i == 1) continue;
         if (markers.length == 0) break;
         let marksforlevel = marksperlevel(i);
         let angleforlevel = anglepermark(i);
@@ -263,7 +259,7 @@ redgreen =0;
 
 
       function marksperlevel(lev) {
-        return spacefix.dataset.state>0? 12: Math.floor(2 * Math.PI * (marksize + rinterval * lev) / (marksize * buffer));
+        return spacefix.dataset.state > 0 ? 12 : Math.floor(2 * Math.PI * (marksize + rinterval * lev) / (marksize * buffer));
       }
 
       function anglepermark(lev) {
@@ -277,11 +273,11 @@ redgreen =0;
         thing.style.top = `calc(${point[1]}% - 0.5em)`;
         if (!center) {
           thing.onclick = function (e) {
-// TODO colormode hybrid / redgreen
-if ((colormode.value == "redgreen"|| colormode.value =="hybrid") && this.innerText == origmarkers_copy[0]) {
-origmarkers_copy.shift();
-this.remove();
-} else if (this.innerText == centerpoint.dataset.mark) {
+            // TODO colormode hybrid / redgreen
+            if ((colormode.value == "redgreen" || colormode.value == "hybrid") && this.innerText == origmarkers_copy[0]) {
+              origmarkers_copy.shift();
+              this.remove();
+            } else if (this.innerText == centerpoint.dataset.mark) {
               console.log("YAY");
               spark("50%", "50%", { anchor: box }).then(() => {
 
@@ -295,9 +291,9 @@ this.remove();
             }
           };
           //if (colormode) thing.style.color = colors[Math.floor(Math.random() * colors.length)];
-thing.style.setProperty("--colorfg", colors[Math.floor(Math.random() * colors.length)]);
+          thing.style.setProperty("--colorfg", colors[Math.floor(Math.random() * colors.length)]);
 
-			thing.classList.add(redgreen++ % 2 ? "red": "green");
+          thing.classList.add(redgreen++ % 2 ? "red" : "green");
         }
       }
 
