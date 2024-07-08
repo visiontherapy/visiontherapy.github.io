@@ -8,6 +8,7 @@
   <meta name="darkreader-lock">
   <link rel="stylesheet" href="vision.css" />
   <script src="commonfn.js"></script>
+  <script src="qrcode.min.js"></script>
   <script defer src="settings.js"></script>
 
   <style>
@@ -62,6 +63,40 @@
     .spotit.single .spotbox {
       --imgsize: calc(min(100vw, 70vh) / 3 - 2em);
     }
+
+
+    div:has(#matched:not(:checked))+#qrplace {
+      display: none;
+    }
+
+    div:has(#matched:checked)+#qrplace {
+      display: inline-block;
+    }
+
+
+    #qrplace {
+      display: none;
+      position: relative;
+      text-align: center;
+      /* left: 50%;
+      transform: translate(-50%);
+      top: 0.5em; */
+
+      .qrcode {
+        display: none;
+        padding: 10px;
+        background: #fff;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%);
+        top: 1.5em;
+        z-index: 1000;
+      }
+
+      #qrtoggle:checked~.qrcode {
+        display: block;
+      }
+    }
   </style>
 </head>
 
@@ -76,6 +111,7 @@
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
 
+
     <button id="reload">Reload</button>
 
   </div>
@@ -83,9 +119,12 @@
   <div id="controls">
     <div id="settings">*SETTINGS*</div>
     <div class="ctrlbox">
-      <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div>
+      <!-- <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div> -->
 
-      <div>Matched: <input type="checkbox" class="threestate" id="matched" /> <label class="button" for="matched">Dual</label></div>
+      <div><input type="checkbox" class="slider" id="matched" /> <label class="button" for="matched">Matched</label></div>
+
+      <div id="qrplace"></div>
+
 
       <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
 
@@ -114,69 +153,63 @@
   <script>
 
 
-
     let imagecount = 100;
-
+    let posi = 15;
     let images = [...new Array(imagecount).keys()];
     images.shift();// start from 1
-
-    // let colors = "red green orange brown #f96 purple #888 blue var(--fg)".split(" ");
-
-
+    let anchor = document.querySelector(".spotit");
 
     let scale = document.querySelector("#scale");
     let rotate = document.querySelector("#rotate");
     let blue = document.querySelector("#blue");
-
-    let seed = document.querySelector("#seed");
-    let rngseed = null;
-
-    let posi = 15;
-
-    let spotit = document.querySelector(".spotit");
-
     let matched = document.querySelector("#matched");
     let mlabel = document.querySelector("label[for='matched']");
 
 
-    seed.onchange = function () {
-      rngseed = parseInt(this.value);
-      showchart(spotit, null, rngseed);
-    };
+
+    let querypattern = window.location.hash.replace(/^#/, "");
+    querypattern = querypattern.replace(/[^\d]/g, "");
+
+    if (querypattern) {
+      // querypattern = 
+      console.log("queryp",querypattern);
+      showchart({rngseed: querypattern});//.split(""));
+    } else {
+      showchart();
+    }
+
+
 
 
     matched.onclick = function (e) {
-      threestate(this);
-      switch (matched.dataset.state) {
-        case "0":
-          mlabel.innerText = "Dual";
-          spotit.classList.remove("single");
-          break;
-        case "1":
-          mlabel.innerText = "Left side";
-          spotit.classList.add("single");
-          break;
-        case "2":
-          mlabel.innerText = "Right side";
-          spotit.classList.add("single");
-          break;
-      }
-      showchart(spotit, null, rngseed);
+      showchart();
     };
 
 
+    function showchart({rng = null, rngseed = null}={}) {
+
+      if (rngseed) {
+        matched
+      }
+
+      thisseed = rngseed ?? Math.floor((Math.random() * 100000000));
+
+      let url = window.location.toString();
+      url.replace(/[\?#&].*$/, "");
+      // let qrstring = url + "#" + txferstring;
+      let qrstring = url + "#" + thisseed;
+      // console.log(qrstring);
+      getqr(qrstring);
 
 
-    showchart(spotit);
-
-
-
-    function showchart(anchor, rng = null, rngseed = null) {
-      rng ??= random(rngseed ?? (Math.random() * 10000));
+      rng ??= random(thisseed);
       anchor.innerText = "";
       let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
 
-      if (matched.dataset.state != 2) anchor.append(leftcard);
+      // if (matched.dataset.state != 2) anchor.append(leftcard);
+      // if not from QR code //
+      console.log(rngseed);
+      if (!rngseed) anchor.append(leftcard);
 
       let remaining = images.filter(x => !cardimgs.includes(x));
 
@@ -184,12 +217,13 @@
 
       let rightcard = makecard({ imgbank: remaining, usespot: usespot })[0];
 
-      if (matched.dataset.state != 1) anchor.append(rightcard);
+      // if (matched.dataset.state != 1) 
+      if (!matched.checked) anchor.append(rightcard);
 
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
         match.onclick = () => {
-          showchart(anchor, rng);
+          showchart({rng: rng, rngseed:rngseed});
         };
       }
 
@@ -239,11 +273,32 @@
         return [spotbox, imgselection];
       }
 
+
+      function getqr(data) {
+        let [w, h] = [250, 250];
+        let qrcode = document.createElement("a");
+        qrcode.className = "qrcode";
+        qrcode.href = data;
+        new QRCode(qrcode, {
+          text: data,
+          width: w,
+          height: h,
+          colorDark: "#000",
+          colorLight: "#fff",
+          correctionLovel: QRCode.CorrectLevel.L,
+        });
+        let qrplace = document.querySelector("#qrplace");
+        qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
+        qrplace.append(qrcode);
+      }
+
     }
 
     document.querySelector("#reload").onclick = function (e) {
-      showchart(spotit);
-      seed.value = "";
+      // seed.value = "";
+      matched.checked = false;
+      window.location.hash = "";
+      showchart();
     };
 
 
