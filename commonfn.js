@@ -6,8 +6,8 @@ function ashuffle(array) {
     .map(({ value }) => value);
 }
 
-
 function random(seed) {
+  seed ??= Math.random() * 10**9;
   let m = 2 ** 35 - 31;
   let a = 185852;
   let s = seed % m;
@@ -16,3 +16,22 @@ function random(seed) {
   };
 }
 
+
+
+
+function minmax(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+
+function minmaxexcept(min, max, except) {
+    let num = min + Math.floor(Math.random() * (max - min + 1));
+    return num == except ? minmaxexcept(min, max, except) : num;
+  }
+
+
+
+  function randarray(arr,except) {
+    let num = arr[Math.floor(Math.random() * (arr.length))];
+    return (except && except.includes(num)) ? randarray(arr,except) : num;
+  }
