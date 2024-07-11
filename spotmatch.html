@@ -70,7 +70,7 @@
     }
 
     div:has(#matched:checked)+#qrplace {
-      display: inline-block;
+      display: inline;
     }
 
 
@@ -83,7 +83,7 @@
       top: 0.5em; */
 
       .qrcode {
-        display: none;
+        display: block;
         padding: 10px;
         background: #fff;
         position: fixed;
@@ -92,10 +92,9 @@
         top: 1.5em;
         z-index: 1000;
       }
-
-      #qrtoggle:checked~.qrcode {
+      /* #qrtoggle:checked~.qrcode {
         display: block;
-      }
+      } */
     }
   </style>
 </head>
@@ -193,9 +192,9 @@
 
     function showchart({rng = null, rngseed = null}={}) {
 
-      if (rngseed) {
-        matched
-      }
+      // if (rngseed) {
+      //   matched
+      // }
 
       thisseed = rngseed ?? Math.floor((Math.random() * 100000000));
 
@@ -293,7 +292,7 @@
           correctionLovel: QRCode.CorrectLevel.L,
         });
         let qrplace = document.querySelector("#qrplace");
-        qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
+        // qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
         qrplace.append(qrcode);
       }
 
