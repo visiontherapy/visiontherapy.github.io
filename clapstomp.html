@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clap it Stomp it</title>
+  <meta name="darkreader-lock">
+  <link rel="stylesheet" href="vision.css" />
+  <script src="commonfn.js"></script>
+  <script src="settings.js"></script>
+
+  <style>
+    #slapthing {
+      margin: 2.5em 2em;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-gap: 2.75em 0;
+    }
+
+    /* For smaller screens */
+    @media only screen and (max-width: 900px) {
+      #slapthing {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 2.75em 1.5em;
+      }
+    }
+
+    .entity {
+      position: relative;
+      display: block;
+      --entheight: 5em;
+      --entwidth: 3em;
+      height: var(--entheight);
+      width: var(--entwidth);
+      /* border: solid 1px blue; */
+      --line: 0.3em;
+
+      .line {
+        border: solid var(--line) var(--fg);
+        border-right-width: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+      }
+
+      :not(.line) {
+        height: calc(var(--entwidth)/2);
+        width: calc(var(--entwidth)/2 - var(--line));
+        position: absolute;
+      }
+
+      &[data-set*="1"] .lh,
+      &[data-set*="2"] .rh,
+      &[data-set*="3"] .lf,
+      &[data-set*="4"] .rf {
+        border: solid var(--line) var(--fg);
+      }
+
+      &[data-set="0"] .line {
+        height: 1.5em;
+        width: 1.5em;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        border-width: var(--line);
+      }
+
+      .lh,
+      .lf {
+        border-radius: 50% 0 0 50%;
+        border-right-width: 0 !important;
+      }
+
+      .rh,
+      .rf {
+        border-left-width: 0 !important;
+        border-radius: 0 50% 50% 0;
+      }
+
+      .lh {
+        top: 0;
+        left: 0;
+      }
+
+      .rh {
+        top: 0;
+        right: 0;
+      }
+
+      .lf {
+        left: 0;
+        bottom: 0;
+      }
+
+      .rf {
+        right: 0;
+        bottom: 0;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+    <div><select id="level" name="level">
+        <option selected value="1">Level 1</option>
+        <option value="2">Level 2</option>
+        <option value="3">Level 3</option>
+        <option value="4">Level 4</option>
+        <option value="5">Level 5</option>
+      </select>
+    </div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="slapthing"></div>
+
+  <script>
+    let entities = {};
+    entities[1] = [1, 2, 3, 4];
+    entities[2] = entities[1].concat([12, 34]);
+    entities[3] = entities[2].concat([13, 24, 1234, 0]);
+    entities[4] = entities[3].concat([14, 23]);
+    entities[5] = entities[4].concat([234, 134, 124, 123]);
+
+    let main = document.querySelector("#slapthing");
+    let level = document.querySelector("#level");
+
+    level.onchange = () => {
+      showchart();
+    };
+
+    showchart();
+
+    function showchart() {
+      main.innerHTML = "";
+      for (let n = 0; n < 50; n++) {
+        let clap = randarray(entities[level.value]);
+        main.append(makething(clap));
+      }
+    }
+
+    function makething(value) {
+      let entity = document.createElement("div");
+      entity.dataset.set = value;
+      entity.className = "entity";
+      let line = document.createElement("div");
+      line.className = "line";
+      let lh = document.createElement("div");
+      lh.className = "lh";
+      let rh = document.createElement("div");
+      rh.className = "rh";
+      let lf = document.createElement("div");
+      lf.className = "lf";
+      let rf = document.createElement("div");
+      rf.className = "rf";
+      entity.append(line, lh, rh, lf, rf);
+      return entity;
+    }
+
+
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart();
+      window.location.hash = "";
+    };
+
+
+  </script>
+
+
+</body>
+
+</html>
