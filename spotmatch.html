@@ -92,10 +92,20 @@
         top: 1.5em;
         z-index: 1000;
       }
+
       /* #qrtoggle:checked~.qrcode {
         display: block;
       } */
     }
+
+
+    /* only child single card mode 
+     make it bigger */
+    .spotbox:first-of-type:not(:has(~ .spotbox)) {
+      --imgsize: min(25vw, 25vh, 250px);
+    }
+
+
   </style>
 </head>
 
@@ -176,8 +186,8 @@
 
     if (querypattern) {
       // querypattern = 
-      console.log("queryp",querypattern);
-      showchart({rngseed: querypattern});//.split(""));
+      console.log("queryp", querypattern);
+      showchart({ rngseed: querypattern });//.split(""));
     } else {
       showchart();
     }
@@ -190,7 +200,7 @@
     };
 
 
-    function showchart({rng = null, rngseed = null}={}) {
+    function showchart({ rng = null, rngseed = null } = {}) {
 
       // if (rngseed) {
       //   matched
@@ -227,7 +237,7 @@
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
         match.onclick = () => {
-          showchart({rng: rng, rngseed:rngseed});
+          showchart({ rng: rng, rngseed: rngseed });
         };
       }
 
