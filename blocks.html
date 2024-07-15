@@ -30,7 +30,14 @@
       transition: all 0.5s;
       border: solid 1px var(--tranared);
 
-      div {
+	
+			.layer { opacity:0; transition:all 1s;}
+			&[data-state="0"] .layer[data-rot="0"],
+			&[data-state="1"] .layer[data-rot="1"],
+			&[data-state="2"] .layer[data-rot="2"],
+			&[data-state="3"] .layer[data-rot="3"] {opacity:1}
+
+      & div.wedge {
         position: absolute;
         width: 0;
         height: 0;
@@ -315,16 +322,7 @@
 
   </script>
   <pre>
-DONE:
-- error checking
-- rotate tiles
-- error check neighbors when rotated
-- error check *FORMER* 
-  neighbors when moved away - partial
-- swap places
-- reset button
-- touch enabled
-
+    
 TODO:
 - resizable grid setting
 
