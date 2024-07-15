@@ -127,7 +127,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 				let rotr = (parseInt(v)+2*r)%8;
 				return rotr == 0 ? 8 : rotr;
 			}).join("");
-			console.log(this.value,r,layervalue);
+			//console.log(this.value,r,layervalue);
 			for (let i = 1; i <= 8; i++) {
 			
       let b = document.createElement("div");
