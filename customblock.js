@@ -150,23 +150,26 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
 this.checker();
 
-    this.rotatestate = function (state) {
+   /* this.rotatestate = function (state) {
       if (state) this.dataset.state = state;
       //this.style.setProperty("--rot", this.rotations[this.state]);
       this.flower.unshift(this.flower.pop());
       // console.log(this.flower);
       this.checker();
-    };
+    };*/
 
 
     this.onclick = this.oncontextmenu = function (e) {
 			if (e.type == "click") {
       	this.dataset.state = ++this.dataset.state % 4;
+			this.flower.unshift(this.flower.pop());
 			} else if (e.type == "contextmenu") {
 				e.preventDefault();
 				this.dataset.state = (4 + --this.dataset.state) % 4;
+			this.flower.push(this.flower.shift());
 			}
-      this.rotatestate();
+      //this.rotatestate();
+	this.checker();
     };
     
 
