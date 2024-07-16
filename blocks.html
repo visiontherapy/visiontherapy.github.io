@@ -316,7 +316,7 @@
 
     document.querySelector("#reload").onclick = function (e) {
 	if (document.querySelector("#playfield").querySelector("bl-ock")) {
-	  if (prompt("Tiles are in play. Are you sure you want to restart?")) {
+	  if (confirm("Tiles are in play. Are you sure you want to restart?")) {
       showchart();
       window.location.hash = "";
 	  }
