@@ -319,6 +319,11 @@
       window.location.hash = "";
     };
 
+window.addEventListener("beforeunload", (e) => {
+	if (document.querySelector("#playfield").querySelector("bl-ock")) {
+	  e.preventDefault();
+	}
+});
 
   </script>
   <pre>
