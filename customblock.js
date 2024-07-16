@@ -159,11 +159,15 @@ this.checker();
     };
 
 
-    this.onclick = function (e) {
-      this.dataset.state = ++this.dataset.state % 4;
+    this.onclick = this.oncontextmenu = function (e) {
+			if (e.type == "click") {
+      	this.dataset.state = ++this.dataset.state % 4;
+			} else if (e.type == "contextmenu") {
+				e.preventDefault();
+				this.dataset.state = (4 + --this.dataset.state) % 4;
+			}
       this.rotatestate();
     };
-
     
 
   }
