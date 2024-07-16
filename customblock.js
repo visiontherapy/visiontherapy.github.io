@@ -113,65 +113,65 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
   connectedCallback() {
     this.value = this.getAttribute("value");
     this.id = "block" + this.value;
-    this.dataset.state ??=0;
-		
-		let states = [];
+    this.dataset.state ??= 0;
+
+    let states = [];
 
     for (let r = 0; r < 4; r++) {
-			states[r] = document.createElement("div");
-			states[r].dataset.rot = r;
-			states[r].classList.add("layer");
-			//if (r>0) states[r].classList.add("noshow");
-			//console.log(this.value,this.value.split("").map(v =>(v+2*r)%8));
-			let layervalue = this.value.split("").map(v => {
-				let rotr = (parseInt(v)+2*r)%8;
-				return rotr == 0 ? 8 : rotr;
-			}).join("");
-			//console.log(this.value,r,layervalue);
-			for (let i = 1; i <= 8; i++) {
-			
-      let b = document.createElement("div");
-      // b.innerText = i;
-      b.className = "wedge part_" + i;
-      if (layervalue.match(i)) {
-        b.style.setProperty("--color", "var(--ctrlbg)");
-      } else {
-        b.style.setProperty("--color", "var(--fg)");
+      states[r] = document.createElement("div");
+      states[r].dataset.rot = r;
+      states[r].classList.add("layer");
+      //if (r>0) states[r].classList.add("noshow");
+      //console.log(this.value,this.value.split("").map(v =>(v+2*r)%8));
+      let layervalue = this.value.split("").map(v => {
+        let rotr = (parseInt(v) + 2 * r) % 8;
+        return rotr == 0 ? 8 : rotr;
+      }).join("");
+      //console.log(this.value,r,layervalue);
+      for (let i = 1; i <= 8; i++) {
+
+        let b = document.createElement("div");
+        // b.innerText = i;
+        b.className = "wedge part_" + i;
+        if (layervalue.match(i)) {
+          b.style.setProperty("--color", "var(--ctrlbg)");
+        } else {
+          b.style.setProperty("--color", "var(--fg)");
+        }
+        // this.append(b);
+        states[r].append(b);
       }
-      // this.append(b);
-			states[r].append(b);
-		}
-		this.append(states[r]);
+      this.append(states[r]);
     }
 
     this.flower ??= this.burst(this.value);
     // console.log("flowr",this.flower);
 
 
-this.checker();
+    this.checker();
 
-   /* this.rotatestate = function (state) {
-      if (state) this.dataset.state = state;
-      //this.style.setProperty("--rot", this.rotations[this.state]);
-      this.flower.unshift(this.flower.pop());
-      // console.log(this.flower);
-      this.checker();
-    };*/
+    /* this.rotatestate = function (state) {
+       if (state) this.dataset.state = state;
+       //this.style.setProperty("--rot", this.rotations[this.state]);
+       this.flower.unshift(this.flower.pop());
+       // console.log(this.flower);
+       this.checker();
+     };*/
 
 
     this.onclick = this.oncontextmenu = function (e) {
-			if (e.type == "click") {
-      	this.dataset.state = ++this.dataset.state % 4;
-			this.flower.unshift(this.flower.pop());
-			} else if (e.type == "contextmenu") {
-				e.preventDefault();
-				this.dataset.state = (4 + --this.dataset.state) % 4;
-			this.flower.push(this.flower.shift());
-			}
+      if (e.type == "click") {
+        this.dataset.state = ++this.dataset.state % 4;
+        this.flower.unshift(this.flower.pop());
+      } else if (e.type == "contextmenu") {
+        e.preventDefault();
+        this.dataset.state = (4 + --this.dataset.state) % 4;
+        this.flower.push(this.flower.shift());
+      }
       //this.rotatestate();
-	this.checker();
+      this.checker();
     };
-    
+
 
   }
 

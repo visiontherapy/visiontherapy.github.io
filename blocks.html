@@ -30,12 +30,18 @@
       transition: all 0.5s;
       border: solid 1px var(--tranared);
 
-	
-			.layer { opacity:0; transition:all 1s;}
-			&[data-state="0"] .layer[data-rot="0"],
-			&[data-state="1"] .layer[data-rot="1"],
-			&[data-state="2"] .layer[data-rot="2"],
-			&[data-state="3"] .layer[data-rot="3"] {opacity:1}
+
+      .layer {
+        opacity: 0;
+        transition: all 1s;
+      }
+
+      &[data-state="0"] .layer[data-rot="0"],
+      &[data-state="1"] .layer[data-rot="1"],
+      &[data-state="2"] .layer[data-rot="2"],
+      &[data-state="3"] .layer[data-rot="3"] {
+        opacity: 1
+      }
 
       & div.wedge {
         position: absolute;
@@ -315,26 +321,26 @@
 
 
     document.querySelector("#reload").onclick = function (e) {
-	if (document.querySelector("#playfield").querySelector("bl-ock")) {
-	  if (confirm("Tiles are in play. Are you sure you want to restart?")) {
-      showchart();
-      window.location.hash = "";
-	  }
-	} else {
-      showchart();
-      window.location.hash = "";
-	}
+      if (document.querySelector("#playfield").querySelector("bl-ock")) {
+        if (confirm("Tiles are in play. Are you sure you want to restart?")) {
+          showchart();
+          window.location.hash = "";
+        }
+      } else {
+        showchart();
+        window.location.hash = "";
+      }
     };
 
-window.addEventListener("beforeunload", (e) => {
-	if (document.querySelector("#playfield").querySelector("bl-ock")) {
-	  e.preventDefault();
-	}
-});
+    window.addEventListener("beforeunload", (e) => {
+      if (document.querySelector("#playfield").querySelector("bl-ock")) {
+        e.preventDefault();
+      }
+    });
 
   </script>
   <pre>
-    
+
 TODO:
 - resizable grid setting
 

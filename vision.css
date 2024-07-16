@@ -213,7 +213,7 @@ input:checked + label + #helptext {
   top: 20%;
   line-height: 1.25em;
   padding: 0 0.5em 0.5em;
-  z-index:100;
+  z-index: 100;
 }
 /*
 input[type="checkbox"] {

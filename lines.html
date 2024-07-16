@@ -29,18 +29,18 @@
     .blank {
       background-color: #fff;
       height: 100%;
-     display: inline-block;
+      display: inline-block;
     }
 
     #answer {
       text-align: center;
-      font-size:120%;
+      font-size: 120%;
       width: 4em;
       padding: 0.25em;
     }
 
     #content {
-    text-align: center;
+      text-align: center;
     }
   </style>
 </head>
@@ -58,8 +58,8 @@
     <div id="barcode"></div>
     <br />
     <input type="text" id="answer"> <button style="font-size:18pt">&#10550;</button>
-<br/><br/>
-Count the lines and enter your answer.
+    <br /><br />
+    Count the lines and enter your answer.
   </div>
   <script>
     let linecount;
@@ -84,13 +84,13 @@ Count the lines and enter your answer.
     };
 
 
-    answer.onkeydown = function(e) {
+    answer.onkeydown = function (e) {
       if (e.key == "Enter") {
         this.blur();
 
       }
       console.log(e);
-    }
+    };
 
 
     function showchart() {

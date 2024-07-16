@@ -1,48 +1,46 @@
+#tapp {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.1em;
+  border: solid 1px green;
+  user-select: none;
+}
 
-    #tapp {
-      cursor: pointer;
-      display: inline-block;
-      padding: 0.1em;
-      border: solid 1px green;
-      user-select: none;
-    }
+#tapp:active {
+  border-color: red;
+}
 
-    #tapp:active {
-      border-color: red;
-    }
+#bpm {
+  width: 3em;
+  margin-left: 0.5em;
+}
 
-    #bpm {
-      width: 3em;
-      margin-left: 0.5em;
-    }
+#metrocheck {
+  display: none;
+}
 
-    #metrocheck {
-      display: none;
-    }
+#metrocheck + label {
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+  display: inline-block;
+}
 
-    #metrocheck+label {
-      position: relative;
-      width: 1.5em;
-      height: 1.5em;
-      vertical-align: middle;
-      display:inline-block;
-    }
+#metrocheck + label svg {
+  fill: var(--fg);
+  stroke: var(--fg);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
 
-    #metrocheck+label svg {
-      fill: var(--fg);
-      stroke: var(--fg);
-      width: 100%;
-      height: 100%;
-      position: absolute;
-    }
+#metrocheck:checked + label #metro_off {
+  visibility: hidden;
+  /* display: none; */
+}
 
-
-    #metrocheck:checked+label #metro_off {
-      visibility: hidden;
-      /* display: none; */
-    }
-
-    #metrocheck:not(:checked)+label #metro_on {
-      visibility: hidden;
-      /* display: none; */
-    }
+#metrocheck:not(:checked) + label #metro_on {
+  visibility: hidden;
+  /* display: none; */
+}

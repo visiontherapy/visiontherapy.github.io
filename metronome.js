@@ -40,7 +40,7 @@ document.querySelector("#tapp").onmousedown = function (e) {
 
   console.log(tappinterval);
   clearbeeps();
-  beep({dobeep:false});
+  beep({ dobeep: false });
   let interbeat = actx.currentTime - lasttime;
   lasttime = actx.currentTime;
   if (interbeat > beatsavg * 3) {
@@ -77,7 +77,7 @@ function clearbeeps() {
 }
 
 
-function beep({dobeep = true} = {}) {
+function beep({ dobeep = true } = {}) {
 
 
   if (!actx) actx = new AudioContext();
@@ -139,7 +139,7 @@ metrocheck.onchange = function (e) {
 function dometronome(firstbeep = true) {
   metrocheck.checked = true;
   console.log("do metroneme", metronome);
-  beep({dobeep:firstbeep});
+  beep({ dobeep: firstbeep });
   //https://loophole-letters.vercel.app/web-audio-scheduling#built-in-web-audio-scheduling-methods
   let phase = actx.currentTime;
   // bpm = 
@@ -172,7 +172,7 @@ function dometronome(firstbeep = true) {
 
 function newjitterydometronome() {
 
-  beep({dobeep:false});
+  beep({ dobeep: false });
   function metro(currentTime) {
     console.log(currentTime);
     // play some sound at `currentTime`
