@@ -6,11 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slap Tap</title>
   <meta name="darkreader-lock">
-  <link rel="stylesheet" href="vision.css" />
-  <script src="commonfn.js?v=cs"></script>
-  <script src="settings.js"></script>
+  <link rel="stylesheet" href="vision.css?v=01" />
+  <script src="commonfn.js?v=01"></script>
+  <script src="settings.js?v=01"></script>
 
   <style>
+    [data-theme="light"] {
+      /* https://coolors.co/palettes/popular/game */
+      --fc1: #ff0000;
+      --fc2: #8ac926;
+      --fc3: #00f;
+      --fc4: #ffbc03;
+      --fc5: #2caeff;
+      --fc6: #ff73db;
+      --fc7: var(--fg);
+    }
+
+    [data-theme="dark"] {
+      --fc1: #f00;
+      --fc2: #0f0;
+      --fc3: #35f;
+      --fc4: #f90;
+      --fc5: #00e7ff;
+      --fc6: #e7e;
+      --fc7: var(--fg);
+    }
+
+
     #slapthing {
       margin: 2.5em 2em;
       display: grid;
@@ -38,6 +60,7 @@
       width: var(--entwidth);
       /* border: solid 1px blue; */
       --line: 0.3em;
+      --entitybg: transparent;
 
       .line {
         border: solid var(--line) var(--fg);
@@ -61,6 +84,7 @@
       &[data-set*="3"] .lf,
       &[data-set*="4"] .rf {
         border: solid var(--line) var(--fg);
+        background-color: var(--entitybg);
       }
 
       &[data-set="0"] .line {
@@ -70,6 +94,7 @@
         transform: translate(-50%, -50%);
         border-radius: 50%;
         border-width: var(--line);
+        background-color: var(--entitybg);
       }
 
       .lh,
@@ -124,6 +149,9 @@
       </select>
     </div>
 
+    <div><input type="checkbox" class="slider" id="colormode" /><label for="colormode">Color mode</label></div>
+
+
     <button id="reload">Reload</button>
 
   </div>
@@ -141,7 +169,9 @@
     let main = document.querySelector("#slapthing");
     let level = document.querySelector("#level");
 
-    level.onchange = () => {
+    let colormode = document.querySelector("#colormode");
+    
+    level.onchange = colormode.onclick = () => {
       showchart();
     };
 
@@ -153,26 +183,28 @@
         let clap = randarray(entities[level.value]);
         main.append(makething(clap));
       }
-    }
 
-    function makething(value) {
-      let entity = document.createElement("div");
-      entity.dataset.set = value;
-      entity.className = "entity";
-      let line = document.createElement("div");
-      line.className = "line";
-      let lh = document.createElement("div");
-      lh.className = "lh";
-      let rh = document.createElement("div");
-      rh.className = "rh";
-      let lf = document.createElement("div");
-      lf.className = "lf";
-      let rf = document.createElement("div");
-      rf.className = "rf";
-      entity.append(line, lh, rh, lf, rf);
-      return entity;
+      function makething(value) {
+        let entity = document.createElement("div");
+        entity.dataset.set = value;
+        entity.className = "entity";
+        if (colormode.checked) {
+          entity.style.setProperty("--entitybg", "var(--fc" + minmax(1, 7) + ")");
+        }
+        let lh = document.createElement("div");
+        lh.className = "lh";
+        let rh = document.createElement("div");
+        rh.className = "rh";
+        let lf = document.createElement("div");
+        lf.className = "lf";
+        let rf = document.createElement("div");
+        rf.className = "rf";
+        let line = document.createElement("div");
+        line.className = "line";
+        entity.append(lh, rh, lf, rf, line);
+        return entity;
+      }
     }
-
 
 
     document.querySelector("#reload").onclick = function (e) {
