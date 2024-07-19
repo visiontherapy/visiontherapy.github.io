@@ -35,3 +35,29 @@ function randarray(arr, except) {
   let num = arr[Math.floor(Math.random() * (arr.length))];
   return (except && except.includes(num)) ? randarray(arr, except) : num;
 }
+
+
+function localCookie(name, value) {
+  // if only name, retrieve item value
+  // if name & value, set item
+  // if value === null , remove item
+  // value can be set to false or 0
+  try {
+    var storage = window.localStorage;
+  } catch {
+    console.warn("LocalStorage not available");
+    return undefined;
+  }
+  if (!name) {
+    return undefined;
+  } else if (value === undefined) {
+    return storage.getItem(name);
+  } else if (value === null) {
+    storage.removeItem(name);
+    return true;
+  } else if (value) {
+    storage.setItem(name, value);
+    return value.toString();
+  }
+}
+
