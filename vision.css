@@ -300,3 +300,5 @@ label h3 {
   border-radius: 50%;
   transition: all 1.5s cubic-bezier(0, 0.91, 0.2, 0.97);
 }
+
+.circlemenu .togglediv img {filter:invert(0.5)}
