@@ -20,13 +20,24 @@
   <script src="qrcode.min.js"></script>
 
   <style>
+    #ctrlbar:has(#blue:checked)~.spotit .spot {
+      background: var(--spotbg);
+    }
+
+    #ctrlbar:has(#blue:not(:checked))~.spotit .spot {
+      background: var(--spotbgbw);
+    }
+
+
+    /* 
+    for reversed-state arrangement
     .spotit:has(~#ctrlbar #blue:checked) .spot {
       background: var(--spotbg);
     }
 
     .spotit:has(~#ctrlbar #blue:not(:checked)) .spot {
       background: var(--spotbgbw);
-    }
+    } */
 
     .spotit {
       display: flex;
