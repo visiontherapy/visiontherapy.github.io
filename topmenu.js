@@ -66,7 +66,7 @@ let data = [ //first two items comprise the menu opener (open / close)
     "link": "blocks.html"
   }, {
     "id": "id9",
-    "src": "img/logo.svg",
+    "src": "img/icon_spotit.svg",
     "alt": "Spot the Match",
     "link": "spotmatch.html"
   }, {
