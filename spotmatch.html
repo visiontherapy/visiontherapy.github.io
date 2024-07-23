@@ -6,18 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spot the Match</title>
   <meta name="darkreader-lock">
-  <link rel="stylesheet" href="vision.css" />
-  <script src="commonfn.js"></script>
-  <script src="qrcode.min.js"></script>
+
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
+  <link rel="stylesheet" href="vision.css?v=01" />
   <script src="darkmode.js"></script>
-  <script defer src="settings.js"></script>
+  <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
+
+  <script src="qrcode.min.js"></script>
 
   <style>
-    #ctrlbar:has(#blue:checked)~.spotit .spot {
+    .spotit:has(~#ctrlbar #blue:checked) .spot {
       background: var(--spotbg);
     }
 
-    #ctrlbar:has(#blue:not(:checked))~.spotit .spot {
+    .spotit:has(~#ctrlbar #blue:not(:checked)) .spot {
       background: var(--spotbgbw);
     }
 
@@ -110,15 +117,13 @@
 
 <body>
 
+
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Filtered</label></div>
 
-
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
-
-
 
     <button id="reload">Reload</button>
 
@@ -126,6 +131,25 @@
 
   <div id="controls">
     <div id="settings">*SETTINGS*</div>
+
+    <input type="checkbox" id="help" />
+    <label for="help">Help</label>
+    <label id="helptext" for="help">
+      <h2>How to use this:</h2>
+      Identify the shape that appears in both clusters, and click either one to proceed to the next matched pair.
+      <h3>Settings</h3>
+      <ul>
+        <li>Use the corresponding sliders to toggle on/off shape rotation and size randomization.</li>
+        <li>Matched mode:
+          <ul>
+            <li>One cluster will display on this device.</li>
+            <li>Scan the QR code (or open the link) with a second device to display the matched cluster.</li>
+            <li>Identify and click the matching shape on both devices to proceed in parallel</li>
+          </ul>
+        </li>
+      </ul>
+    </label>
+
     <div class="ctrlbox">
       <!-- <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div> -->
 
@@ -142,27 +166,9 @@
   </div>
 
 
-  <input type="checkbox" id="help" />
-  <label for="help">Help</label>
-  <label id="helptext" for="help">
-    <h2>How to use this:</h2>
-    Identify the shape that appears in both clusters, and click either one to proceed to the next matched pair.
-    <h3>Settings</h3>
-    <ul>
-      <li>Use the corresponding sliders to toggle on/off shape rotation and size randomization.</li>
-      <li>Matched mode:
-        <ul>
-          <li>One cluster will display on this device.</li>
-          <li>Scan the QR code (or open the link) with a second device to display the matched cluster.</li>
-          <li>Identify and click the matching shape on both devices to proceed in parallel</li>
-        </ul>
-      </li>
-    </ul>
-  </label>
-
-
 
   <div class="spotit"></div>
+
   <script>
 
 
@@ -313,49 +319,49 @@
       window.location.hash = "";
       showchart();
     };
-/*
-TODO
-- tile collection options
-
-Simple set:
-.square
-.triangle
-.circle
-.star
-.crescent moon
-.cloud
-.tree
-.raindrop
-.flower
-.leaf
-.hexagon
-monkey/dog/cat
-toy boat
-car
-bicycle
-shoe
-.X
-.spiral
-heart
-smiley
-dog paw
-wavy lines
-house
-sun
-arrow
-soccer/basket ball
-cherries
-strawberry
-fish
-person figure (gingerbread man) / bear
-umbrella
-hand
-
-
-
-
-
-*/
+    /*
+    TODO
+    - tile collection options
+    
+    Simple set:
+    .square
+    .triangle
+    .circle
+    .star
+    .crescent moon
+    .cloud
+    .tree
+    .raindrop
+    .flower
+    .leaf
+    .hexagon
+    monkey/dog/cat
+    toy boat
+    car
+    bicycle
+    shoe
+    .X
+    .spiral
+    heart
+    smiley
+    dog paw
+    wavy lines
+    house
+    sun
+    arrow
+    soccer/basket ball
+    cherries
+    strawberry
+    fish
+    person figure (gingerbread man) / bear
+    umbrella
+    hand
+    
+    
+    
+    
+    
+    */
 
 
   </script>

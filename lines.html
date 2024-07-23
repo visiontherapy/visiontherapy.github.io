@@ -7,10 +7,14 @@
   <title>Line Counting</title>
   <meta name="darkreader-lock" />
 
-  <link rel="stylesheet" href="vision.css" />
-  <script src="commonfn.js?v=01"></script>
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
+  <link rel="stylesheet" href="vision.css?v=01" />
   <script src="darkmode.js"></script>
-  <script defer src="settings.js"></script>
+  <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
 
   <style>
     #barcode {
@@ -48,21 +52,24 @@
 </head>
 
 <body>
+
+
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
 
-    <button id="reload">New Chart</button>
+    <button id="reload">Reload</button>
   </div>
 
-  <div id="content">
 
+  <div id="content">
     <div id="barcode"></div>
     <br />
     <input type="text" id="answer"> <button style="font-size:18pt">&#10550;</button>
     <br /><br />
     Count the lines and enter your answer.
   </div>
+  
   <script>
     let linecount;
     let barcode = document.querySelector("#barcode");

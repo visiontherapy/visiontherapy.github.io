@@ -6,12 +6,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CP saccades exercise</title>
   <meta name="darkreader-lock">
-  <link rel="stylesheet" href="vision.css" />
-  <script src="commonfn.js"></script>
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
+  <link rel="stylesheet" href="vision.css?v=01" />
   <script src="darkmode.js"></script>
-  <script defer src="settings.js"></script>
+  <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
+
   <style>
-    #ctrlbar:has([value="redgreen"]:checked)~#main {
+    #saccades {
+      position: relative;
+      height: min(98vh, 98vw);
+      width: min(98vh, 98vw);
+      margin: 0;
+      left: 50%;
+      transform: translate(-50%);
+      cursor: default;
+      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+      user-select: none;
+
+      &.midspace .dot:not(#centerpoint) {
+        background: var(--fg);
+        color: var(--fg);
+      }
+
+    }
+
+
+    .dot {
+      position: absolute;
+      background: transparent;
+      text-align: center;
+      height: 1em;
+      width: 1em;
+      border-radius: 1em;
+    }
+
+    /* centerpoint is also a dot */
+    #centerpoint {
+      /* top: calc(50% - 0.5em);
+  left: calc(50% - 0.5em);
+  transform: translate(calc(-50% + 0.5em));
+  width: 1em;
+  height: 1em; */
+      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+
+      &::after {
+        content: attr(data-mark);
+        position: absolute;
+        display: block;
+        width: 1em;
+        height: 1em;
+        text-align: center;
+        border-radius: 1em;
+        border: solid 1px #888;
+      }
+    }
+
+
+
+    #ctrlbar:has([value="redgreen"]:checked)~#saccades {
 
       .red {
         color: var(--tranared);
@@ -23,7 +80,7 @@
 
     }
 
-    #ctrlbar:has([value="hybrid"]:checked)~#main {
+    #ctrlbar:has([value="hybrid"]:checked)~#saccades {
 
       .red {
         background: linear-gradient(90deg, var(--tranagreen) 49%, var(--tranared) 50%);
@@ -39,13 +96,14 @@
 
     }
 
-    #ctrlbar:has([value="colorful"]:checked)~#main .dot {
+    #ctrlbar:has([value="colorful"]:checked)~#saccades .dot {
       color: var(--colorfg);
     }
   </style>
 </head>
 
 <body>
+
 
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
@@ -73,9 +131,18 @@
 
   </div>
 
-
   <div id="controls">
     <div id="settings">*SETTINGS*</div>
+    <input type="checkbox" id="help" />
+    <label for="help">Help</label>
+    <label id="helptext" for="help">
+      <h2>How to use this:</h2>
+      <h3>Customize Markers</h3>
+      Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
+      <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
+      <h3>Usage</h3>
+      Press the spacebar on the keyboard to display a new target marker in the central area.
+    </label>
     <div class="ctrlbox">
       <div>Markers <input type="text" id="markers" /></div>
 
@@ -87,20 +154,8 @@
     </div>
   </div>
 
+  <div id="saccades" data-mark=""></div>
 
-  <div id="main" data-mark=""></div>
-
-
-  <input type="checkbox" id="help" />
-  <label for="help">Help</label>
-  <label id="helptext" for="help">
-    <h2>How to use this:</h2>
-    <h3>Customize Markers</h3>
-    Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
-    <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
-    <h3>Usage</h3>
-    Press the spacebar on the keyboard to display a new target marker in the central area.
-  </label>
 
 
   <script>
@@ -111,7 +166,7 @@
 
     let spots = [];
 
-    let box = document.querySelector("#main");
+    let box = document.querySelector("#saccades");
 
     let origmarkers = "ABCDEFGHIJKLMNOPQ".split("");
 

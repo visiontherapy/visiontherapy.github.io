@@ -2,34 +2,6 @@
   --basefont: 7;
   --fontsize: var(--basefont);
 }
-/* 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #fff;
-    --fg: #000;
-    --ctrlbg: #ddf;
-    --highlight: #099;
-    --tranared: #03f;
-    --tranagreen: #f00;
-    --trackred: #f00;
-    --trackredbg: var(--bg);
-    --homefilter: brightness(0);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000;
-    --fg: #fff;
-    --ctrlbg: #222;
-    --highlight: #0ff;
-    --tranared: #03f;
-    --tranagreen: #f00;
-    --trackred: var(--fg);
-    --trackredbg: #ff0000;
-    --homefilter: saturate(0) brightness(100);
-  }
-} */
 
 [data-theme="light"] {
   --bg: #fff;
@@ -60,6 +32,9 @@
 }
 
 body {
+  /* display:flex; */
+  /* flex-direction:column-reverse; */
+  /* justify-content: end; */
   background: var(--bg);
   color: var(--fg);
   margin: 0;
@@ -75,58 +50,15 @@ a {
   color: #6495ed;
 }
 
-#main {
-  position: relative;
-  height: min(98vh, 98vw);
-  width: min(98vh, 98vw);
-  margin: 0;
-  left: 50%;
-  transform: translate(-50%);
-  cursor: default;
-  font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
-  user-select: none;
-}
-
-.dot {
-  position: absolute;
-  background: transparent;
-  text-align: center;
-  height: 1em;
-  width: 1em;
-  border-radius: 1em;
-}
-
-#main.midspace .dot:not(#centerpoint) {
-  background: var(--fg);
-  color: var(--fg);
-}
-
-/* centerpoint is also a dot */
-#centerpoint {
-  /* top: calc(50% - 0.5em);
-  left: calc(50% - 0.5em);
-  transform: translate(calc(-50% + 0.5em));
-  width: 1em;
-  height: 1em; */
-  font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
-}
-
-#centerpoint::after {
-  content: attr(data-mark);
-  position: absolute;
-  display: block;
-  width: 1em;
-  height: 1em;
-  text-align: center;
-  border-radius: 1em;
-  border: solid 1px #888;
-}
 
 #ctrlbar {
+  font-size: 16pt;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 0.5em 0.5em;
+  position: relative;
+  z-index: 50;
 }
 
 #controls {
@@ -136,8 +68,10 @@ a {
   overflow: visible;
 }
 
+
 #settings {
   cursor: default;
+  display: inline-block;
 }
 
 .ctrlbox {
@@ -184,11 +118,11 @@ input#help {
 }
 
 input#help + label {
-  position: absolute;
+  margin-left: 1em;
   top: 3em;
   right: 1em;
   border: solid 1px var(--fg);
-  padding: 0.25em 0.4em;
+  padding: 0 0.4em;
   border-radius: 0.5em;
   display: inline-block;
   cursor: pointer;

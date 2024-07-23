@@ -7,10 +7,14 @@
   <title>Tranaglyphs</title>
   <meta name="darkreader-lock" />
 
-  <link rel="stylesheet" href="vision.css" />
-  <script src="commonfn.js?v=01"></script>
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
+  <link rel="stylesheet" href="vision.css?v=01" />
   <script src="darkmode.js"></script>
-  <script defer src="settings.js"></script>
+  <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
 
   <style>
     :root {
@@ -238,15 +242,15 @@
       text-align: center;
     }
 
-    #ctrlbar:has(#fusion:checked) {
+    /* #ctrlbar:has(#fusion:checked) {
       /* ~#slider {
         display: none;
-      } */
+      } * /
 
       ~#rangeout {
         display: none;
       }
-    }
+    } */
   </style>
 </head>
 
@@ -258,14 +262,18 @@
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
   </div>
 
-  Calibrator: <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
-  <div id="calibrate" data-value="1.65"></div>
+  <div class="auxz">
+    Calibrator: <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
+    <div id="calibrate" data-value="1.65"></div>
 
-  <br />
-  <input type="range" id="slider" min="-24" max="24" />
-  <div id="rangeout">0</div>
+    <br />
+    <input type="range" id="slider" min="-24" max="24" />
+    <div id="rangeout">0</div>
+  </div>
 
-  <div id="circles">
+  
+
+  <div id="circles" class="contents">
     <div id="red" class="circle">
       <div class="inner circle"></div>
       <div class="center"></div>
@@ -283,6 +291,8 @@
       <div class="points"></div>
     </div>
   </div>
+
+
   <script>
 
     // document.querySelector("#calibrate");

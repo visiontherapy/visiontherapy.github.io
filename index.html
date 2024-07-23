@@ -7,24 +7,17 @@
   <title>Vision therapy tools</title>
   <meta name="darkreader-lock">
 
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+   <link rel="stylesheet" href="allcss.css" />
   <link rel="stylesheet" href="vision.css?v=01" />
-  <script src="commonfn.js?v=01"></script>
   <script src="darkmode.js"></script>
   <script defer src="settings.js?v=01"></script>
-<!--
-                
-                 .d8888b. 88888888888 .d88888b.  8888888b.  
-                d88P  Y88b    888    d88P" "Y88b 888   Y88b 
-                Y88b.         888    888     888 888    888 
-                 "Y888b.      888    888     888 888   d88P 
-                    "Y88b.    888    888     888 8888888P"  
-                      "888    888    888     888 888        
-                Y88b  d88P    888    Y88b. .d88P 888        
-                 "Y8888P"     888     "Y88888P"  888  
-  
-  -->
+  <script defer src="topmenu.js"></script>
+
   <style>
-    body {
+    #abouttext {
       font-size: 18pt;
       margin: 0 1em;
     }
@@ -52,212 +45,251 @@
     ul {
       margin-top: 0;
     }
+
+    #totop {
+      position: fixed;
+      display:block;
+      right: 2rem;
+      bottom: 2rem;
+      width: 1em;
+      height: 1em;
+      border-radius: 2rem;
+      background:var(--ctrlbg);
+      line-height:1.5em;
+      font-size:50pt;
+      text-align: center;
+      color: var(--fg);
+      opacity: 0;
+      transition: all 0.5s linear;
+      pointer-events:none;
+    }
+
+    #ctrlbar[data-scroll="x"] ~ #totop {
+      opacity: 1;
+      pointer-events: all;;
+    }
   </style>
 </head>
 
 <body>
-
   <div id="ctrlbar">
     <div id="homelogo"><img src="img/logo.svg" /></div>
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
 
   </div>
 
-  <h2>Vision Therapy exercises</h2>
-  <div class="plain">
-    This open-source project is a work in progress.<br />
-    To view the code, contribute, or provide feedback, visit:<br />
-    <a href="https://github.com/visiontherapy/visiontherapy.github.io">https://github.com/visiontherapy/visiontherapy.github.io</a>.
-  </div>
-  <hr />
+  <div id="abouttext">
+    <h2>Vision Therapy exercises</h2>
+    <div class="plain">
+      This open-source project is a work in progress.<br />
+      To view the code, contribute, or provide feedback, visit:<br />
+      <a href="https://github.com/visiontherapy/visiontherapy.github.io">https://github.com/visiontherapy/visiontherapy.github.io</a>.
+    </div>
+    <hr />
 
-  <ul>
-    <li><a href="#cp">CP Saccades / Space Fixator / Red-Green delete</a></li>
-    <li><a href="#hart">Hart Chart / Decoding</a></li>
-    <li><a href="#tracking">Letter Tracking</a></li>
-    <li><a href="#glyphs">Tranaglyphs / Fusion cards</a></li>
-    <li><a href="#lines">Line counting</a></li>
-    <li><a href="#blocks">Pattern Blocks</a></li>
-    <li><a href="#spotmatch">Spot the Match</a></li>
-    <li><a href="#slaptap">Slap Tap</a></li>
-    <li><a href="#fistbump">Closed, Open, Flat</a></li>
-  </ul>
-
-  <hr />
-
-  <h3 id="cp"><a href="cpsaccades.html">CP Saccades / Space Fixator / Red-Green delete</a></h3>
-  <div>
     <ul>
-      <li>CP saccades:
-        <ul>
-          <li>Keep your eyes focused on the middle circle. Click the circle, or press the spacebar to display a the target marker/letter. Using your peripheral vision, locate the corresponding marker in one of the outer circles. Try to click the target marker without moving your eyes away from the central circle. A correct click will result in a green flash, and the central circle will advance to the next target marker. The central circle will flash red if the wrong target marker is clicked. </li>
-          <li>Instead of clicking the targets, you may use other means of identifying the target marker (eg, by placing a stick or physical pointer and verifying the correct target by looking there). In this case, press the space bar to advance the central marker to the next target.</li>
-          <li>Switch to Multicolor markers by selecting "Colorful" in the Color Mode dropdown menu</li>
-        </ul>
-      </li>
-      <li>Space Fixator (Look, Ready, Touch, Back):
-        <ul>
-          <li>Normal CP saccade display</li>
-          <li>Space Fixator with blank dots</li>
-          <li>Space Fixator with numeric labels</li>
-        </ul>
-      </li>
-      <li>Red/Green delete
-        <ul>
-          <li>Use Red/Green glasses</li>
-          <li>Select Red/Green in the Color Mode dropdown menu</li>
-          <li>Advanced Red+Green option for two-tone letter colors</li>
-        </ul>
-
-      </li>
-
-    </ul>
-  </div>
-
-  <h3 id="hart"><a href="hartchart.html">Hart Chart / Decoding</a></h3>
-  <div>
-    <ul>
-      <li>Read each letter at a steady pace.</li>
-      <li>Use metronome if needed, to maintain the pace.
-        <ul>
-          <li>Built in metronome may stutter occasionally as it is not 100% accurate</li>
-        </ul>
-      </li>
-      <li>Scan the QR code with a mobile device to mirror the chart to do the near/far accommodation exercise.</li>
-      <li>Decoding exercise
-        <ul>
-          <li>Click the code coordinates to enable typing</li>
-          <li>Full answer is displayed when hovering over the code for a couple seconds.</li>
-          <li>If hints are enabled then the corresponding row/column is highlighted when hovering over each code item.</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-
-  <h3 id="tracking"><a href="lettertracking.html">Letter Tracking</a></h3>
-  <div>
-    <ul>
-      <li>Find each letter of the alphabet in order.</li>
-      <li>Timer will start automatically on first click, and stop when all letters have been accounted for.</li>
-      <li>Target word count of 70
-        <ul>
-          <li>If all letters are not shown within target word count, the script will continue generating words until all letters are accounted for.</li>
-        </ul>
-      </li>
-
-      <li>Allowable letter combinations taken from "wordbank".
-        <ul>
-          <li>This can be customized by entering any text into the wordbank input box.</li>
-          <li>If all letters are not present in the text, the script will show an error.</li>
-        </ul>
-      </li>
-      <li>"Level 2" option mixes capital and lowercase letters.</li>
-      <li>Use red/green glasses with "Red" mode.</li>
-    </ul>
-  </div>
-
-
-  <h3 id="glyphs"><a href="tranaglyphs.html">Tranaglyphs / Fusion cards</a></h3>
-  <div>
-    <ul>
-      <li>Tranaglyphs:
-        <ul>
-          <li>Requires the use of red/green glasses. Red lens over right eye.</li>
-          <li>(Glyph images created using pure CSS.)</li>
-          <li>Adjust glyph separation distance with arrow keys or Page up/Page down keys keys. (PageDown/Left/Down toward convergence, PageUp/Up/Right toward divergence).</li>
-          <li>Use the calibration slider to adjust the distance between the two vertical lines so they are about 4 inches (10 cm) apart.</li>
-        </ul>
-      </li>
-      <li>Fusion Mode:
-        <ul>
-          <li>Simulate Fusion cards exercise. Glyphs will appear as black/white, separate to a fixed distance apart.</li>
-          <li>Use the calibrator to adjust the scale.</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-
-  <h3 id="lines"><a href="lines.html">Line counting</a></h3>
-  <div>
-    <ul>
-      <li>Line counting exercise.</li>
-      <li>Count the number of black bars and enter it in the box.</li>
-    </ul>
-  </div>
-
-  <h3 id="blocks"><a href="blocks.html">Pattern Blocks</a></h3>
-  <div>
-    <ul>
-      <li>Drag tiles into the play area</li>
-      <li>Click to rotate clockwise, Right click to rotate counter-clockwise
-        <ul>
-          <!-- li><strike>Works best with Firefox. On Chrome based browsers, the tile rotation does not get applied to the dragged image.</strike></li-->
-          <li>Fixed drag image rotation issue with certain browsers. Animation for rotation event is now based on layer opacity.</li>
-        </ul>
-      </li>
-      <li>Incorrectly placed tile will be tinted red.</li>
-      <li>Drag tile over existing tiles to swap places (swapped tile gets bumped back to the tray)</li>
-      <li>Confirmation will display before reloading the game or navigating away if tiles are in play.</li>
-    </ul>
-  </div>
-
-  <h3 id="spotmatch"><a href="spotmatch.html">Spot the Match</a></h3>
-  <div>
-    <ul>
-      <li>Spot the matching figure. Each generated pair has one matching image. Click it to generate a new pair of cards.</li>
-      <li>Randomized scale &amp; rotation of the shapes can be toggled in the Settings.</li>
-      <li>Dual device feature:
-        <ul>
-          <li>Toggle Matched mode to display one shape cluster on the device.</li>
-          <li>Scan the QR code on the second device to display the matched cluster.</li>
-          <li>Identify and click the matching shape on both devices to proceed in parallel.</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-
-
-  <h3 id="slaptap"><a href="slaptap.html">Slap Tap</a></h3>
-  <div>
-    <ul>
-      <li>Tap your hand or foot according to the figures
-        <ul>
-          <li>Top left: left hand</li>
-          <li>Top right: right hand</li>
-          <li>Bottom left: left foot</li>
-          <li>Bottom right: right foot</li>
-          <li>Circle: rest</li>
-        </ul>
-      </li>
-      <li>Adjust complexity by setting the Level via the dropdown menu.</li>
-      <li>Works best on a desktop browser (wide screen)</li>
-      <li>Toggle Color mode for added complexity (say the color name as you slap/tap).</li>
+      <li><a href="#cp">CP Saccades / Space Fixator / Red-Green delete</a></li>
+      <li><a href="#hart">Hart Chart / Decoding</a></li>
+      <li><a href="#tracking">Letter Tracking</a></li>
+      <li><a href="#glyphs">Tranaglyphs / Fusion cards</a></li>
+      <li><a href="#lines">Line counting</a></li>
+      <li><a href="#blocks">Pattern Blocks</a></li>
+      <li><a href="#spotmatch">Spot the Match</a></li>
+      <li><a href="#slaptap">Slap Tap</a></li>
+      <li><a href="#fistbump">Closed, Open, Flat</a></li>
     </ul>
 
+    <hr />
+
+    <h3 id="cp"><a href="cpsaccades.html">CP Saccades / Space Fixator / Red-Green delete</a></h3>
+    <div>
+      <ul>
+        <li>CP saccades:
+          <ul>
+            <li>Keep your eyes focused on the middle circle. Click the circle, or press the spacebar to display a the target marker/letter. Using your peripheral vision, locate the corresponding marker in one of the outer circles. Try to click the target marker without moving your eyes away from the central circle. A correct click will result in a green flash, and the central circle will advance to the next target marker. The central circle will flash red if the wrong target marker is clicked. </li>
+            <li>Instead of clicking the targets, you may use other means of identifying the target marker (eg, by placing a stick or physical pointer and verifying the correct target by looking there). In this case, press the space bar to advance the central marker to the next target.</li>
+            <li>Switch to Multicolor markers by selecting "Colorful" in the Color Mode dropdown menu</li>
+          </ul>
+        </li>
+        <li>Space Fixator (Look, Ready, Touch, Back):
+          <ul>
+            <li>Normal CP saccade display</li>
+            <li>Space Fixator with blank dots</li>
+            <li>Space Fixator with numeric labels</li>
+          </ul>
+        </li>
+        <li>Red/Green delete
+          <ul>
+            <li>Use Red/Green glasses</li>
+            <li>Select Red/Green in the Color Mode dropdown menu</li>
+            <li>Advanced Red+Green option for two-tone letter colors</li>
+          </ul>
+
+        </li>
+
+      </ul>
+    </div>
+
+    <h3 id="hart"><a href="hartchart.html">Hart Chart / Decoding</a></h3>
+    <div>
+      <ul>
+        <li>Read each letter at a steady pace.</li>
+        <li>Use metronome if needed, to maintain the pace.
+          <ul>
+            <li>Built in metronome may stutter occasionally as it is not 100% accurate</li>
+          </ul>
+        </li>
+        <li>Scan the QR code with a mobile device to mirror the chart to do the near/far accommodation exercise.</li>
+        <li>Decoding exercise
+          <ul>
+            <li>Click the code coordinates to enable typing</li>
+            <li>Full answer is displayed when hovering over the code for a couple seconds.</li>
+            <li>If hints are enabled then the corresponding row/column is highlighted when hovering over each code item.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <h3 id="tracking"><a href="lettertracking.html">Letter Tracking</a></h3>
+    <div>
+      <ul>
+        <li>Find each letter of the alphabet in order.</li>
+        <li>Timer will start automatically on first click, and stop when all letters have been accounted for.</li>
+        <li>Target word count of 70
+          <ul>
+            <li>If all letters are not shown within target word count, the script will continue generating words until all letters are accounted for.</li>
+          </ul>
+        </li>
+
+        <li>Allowable letter combinations taken from "wordbank".
+          <ul>
+            <li>This can be customized by entering any text into the wordbank input box.</li>
+            <li>If all letters are not present in the text, the script will show an error.</li>
+          </ul>
+        </li>
+        <li>"Level 2" option mixes capital and lowercase letters.</li>
+        <li>Use red/green glasses with "Red" mode.</li>
+      </ul>
+    </div>
+
+
+    <h3 id="glyphs"><a href="tranaglyphs.html">Tranaglyphs / Fusion cards</a></h3>
+    <div>
+      <ul>
+        <li>Tranaglyphs:
+          <ul>
+            <li>Requires the use of red/green glasses. Red lens over right eye.</li>
+            <li>(Glyph images created using pure CSS.)</li>
+            <li>Adjust glyph separation distance with arrow keys or Page up/Page down keys keys. (PageDown/Left/Down toward convergence, PageUp/Up/Right toward divergence).</li>
+            <li>Use the calibration slider to adjust the distance between the two vertical lines so they are about 4 inches (10 cm) apart.</li>
+          </ul>
+        </li>
+        <li>Fusion Mode:
+          <ul>
+            <li>Simulate Fusion cards exercise. Glyphs will appear as black/white, separate to a fixed distance apart.</li>
+            <li>Use the calibrator to adjust the scale.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <h3 id="lines"><a href="lines.html">Line counting</a></h3>
+    <div>
+      <ul>
+        <li>Line counting exercise.</li>
+        <li>Count the number of black bars and enter it in the box.</li>
+      </ul>
+    </div>
+
+    <h3 id="blocks"><a href="blocks.html">Pattern Blocks</a></h3>
+    <div>
+      <ul>
+        <li>Drag tiles into the play area</li>
+        <li>Click to rotate clockwise, Right click to rotate counter-clockwise
+          <ul>
+            <!-- li><strike>Works best with Firefox. On Chrome based browsers, the tile rotation does not get applied to the dragged image.</strike></li-->
+            <li>Fixed drag image rotation issue with certain browsers. Animation for rotation event is now based on layer opacity.</li>
+          </ul>
+        </li>
+        <li>Incorrectly placed tile will be tinted red.</li>
+        <li>Drag tile over existing tiles to swap places (swapped tile gets bumped back to the tray)</li>
+        <li>Confirmation will display before reloading the game or navigating away if tiles are in play.</li>
+      </ul>
+    </div>
+
+    <h3 id="spotmatch"><a href="spotmatch.html">Spot the Match</a></h3>
+    <div>
+      <ul>
+        <li>Spot the matching figure. Each generated pair has one matching image. Click it to generate a new pair of cards.</li>
+        <li>Randomized scale &amp; rotation of the shapes can be toggled in the Settings.</li>
+        <li>Dual device feature:
+          <ul>
+            <li>Toggle Matched mode to display one shape cluster on the device.</li>
+            <li>Scan the QR code on the second device to display the matched cluster.</li>
+            <li>Identify and click the matching shape on both devices to proceed in parallel.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    <h3 id="slaptap"><a href="slaptap.html">Slap Tap</a></h3>
+    <div>
+      <ul>
+        <li>Tap your hand or foot according to the figures
+          <ul>
+            <li>Top left: left hand</li>
+            <li>Top right: right hand</li>
+            <li>Bottom left: left foot</li>
+            <li>Bottom right: right foot</li>
+            <li>Circle: rest</li>
+          </ul>
+        </li>
+        <li>Adjust complexity by setting the Level via the dropdown menu.</li>
+        <li>Works best on a desktop browser (wide screen)</li>
+        <li>Toggle Color mode for added complexity (say the color name as you slap/tap).</li>
+      </ul>
+
+    </div>
+
+
+
+    <h3 id="fistbump"><a href="fistbump.html">Closed, Open, Flat</a></h3>
+    <div>
+      <ul>
+        <li>Tap/bump your hands according to the figures
+          <ul>
+            <li>Circle: Closed fists bump the table</li>
+            <li>Vertical line: Open hands with palms facing each other strikes the table.</li>
+            <li>Horizontal line: Flat hands tap the table.</li>
+          </ul>
+        </li>
+        <li>Toggle Color mode for added complexity (say the color name as you go).</li>
+      </ul>
+
+    </div>
+
+
+    <hr />
+    <br />
+    <br />
+    <br />
+
   </div>
 
+  <a id="totop" href="#">^</a>
+  <script>
+    let ctrlbar = document.querySelector("#ctrlbar");
+    document.addEventListener("scroll", function (e) {
+      if (ctrlbar.getBoundingClientRect().y == 0) {
+        ctrlbar.dataset.scroll=0;
+      } else {
+        ctrlbar.dataset.scroll="x";
+      }
+    })
+  </script>
 
 
-  <h3 id="fistbump"><a href="fistbump.html">Closed, Open, Flat</a></h3>
-  <div>
-    <ul>
-      <li>Tap/bump your hands according to the figures
-        <ul>
-          <li>Circle: Closed fists bump the table</li>
-          <li>Vertical line: Open hands with palms facing each other strikes the table.</li>
-          <li>Horizontal line: Flat hands tap the table.</li>
-        </ul>
-      </li>
-      <li>Toggle Color mode for added complexity (say the color name as you go).</li>
-    </ul>
-
-  </div>
-
-
-  <hr />
-  <br />
-  <br />
-  <br />
 </body>
 
 </html>

@@ -7,10 +7,14 @@
   <title>Letter Tracking</title>
   <meta name="darkreader-lock" />
 
-  <link rel="stylesheet" href="vision.css" />
-  <script src="commonfn.js?v=01"></script>
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
+  <link rel="stylesheet" href="vision.css?v=01" />
   <script src="darkmode.js"></script>
-  <script defer src="settings.js"></script>
+  <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
 
   <style>
     #output,
@@ -132,10 +136,15 @@
         display: none
       }
     }
+
+    #stopwatch {
+      display: none;
+    }
   </style>
 </head>
 
 <body>
+
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
@@ -154,12 +163,10 @@
       <label class="button" for="red">Red</label>
     </div>
 
-
-
-
-    <button id="reload">New Chart</button>
+    <button id="reload">Reload</button>
 
   </div>
+
 
 
   <div id="controls">
@@ -173,12 +180,16 @@
     </div>
   </div>
 
-  <div id="alphabits"></div>
 
-  <input type="checkbox" data-state="0" class="threestate" id="stopwatch" /><label class="button" id="timer" for="stopwatch">start</label>
+  <div>
+    <div id="alphabits"></div>
 
-  <div id="output"></div>
+    <input type="checkbox" data-state="0" class="threestate" id="stopwatch" /><label class="button" id="timer" for="stopwatch">start</label>
 
+    <div id="output"></div>
+  </div>
+  
+  
   <script>
     let digraphs = {};
     let alphabet = "abcdefghijklmnopqrstuvwxyz";

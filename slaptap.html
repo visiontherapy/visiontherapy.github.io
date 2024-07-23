@@ -6,10 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slap Tap</title>
   <meta name="darkreader-lock">
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
   <link rel="stylesheet" href="vision.css?v=01" />
-  <script src="commonfn.js?v=01"></script>
   <script src="darkmode.js"></script>
   <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
 
   <style>
     [data-theme="light"] {
@@ -136,6 +141,7 @@
 
 <body>
 
+
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
@@ -159,6 +165,7 @@
 
   <div id="slapthing"></div>
 
+  
   <script>
     let entities = {};
     entities[1] = [1, 2, 3, 4];
@@ -171,7 +178,7 @@
     let level = document.querySelector("#level");
 
     let colormode = document.querySelector("#colormode");
-    
+
     level.onchange = colormode.onclick = () => {
       showchart();
     };

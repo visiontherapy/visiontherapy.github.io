@@ -6,13 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hart Chart exercise</title>
   <meta name="darkreader-lock">
-  <link rel="stylesheet" href="vision.css" />
-  <link rel="stylesheet" href="metronome.css" />
-  <script src="commonfn.js"></script>
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="allcss.css" />
+  <link rel="stylesheet" href="vision.css?v=01" />
   <script src="darkmode.js"></script>
-  <script defer src="settings.js"></script>
+  <script defer src="settings.js?v=01"></script>
+  <script defer src="topmenu.js"></script>
+
+  <link rel="stylesheet" href="metronome.css" />
   <script defer src="metronome.js"></script>
   <script src="quotes.js"></script>
+  <script src="qrcode.min.js"></script>
+
   <style>
     body {
       --scale: 1;
@@ -24,7 +32,7 @@
       --basefont: calc(var(--boxsize) / 13);
     }
 
-    #main {
+    #hartmain {
       position: relative;
       font-family: 'Times New Roman', Times, serif;
       height: var(--boxsize);
@@ -79,7 +87,11 @@
       top: 1em;
       left: 50%;
       transform: translate(-50%);
-      display: table;
+      width: 40%;
+
+      & input {
+        width: 100%;
+      }
     }
 
     #boxscale::before,
@@ -108,7 +120,7 @@
       flex-direction: column;
 
 
-      #main {
+      #hartmain {
         order: 1;
       }
 
@@ -163,26 +175,26 @@
 
       #codehints:has(input:checked)~#codeout {
 
-        &:has([data-row="1"]:hover)~#main [data-row="1"],
-        &:has([data-row="2"]:hover)~#main [data-row="2"],
-        &:has([data-row="3"]:hover)~#main [data-row="3"],
-        &:has([data-row="4"]:hover)~#main [data-row="4"],
-        &:has([data-row="5"]:hover)~#main [data-row="5"],
-        &:has([data-row="6"]:hover)~#main [data-row="6"],
-        &:has([data-row="7"]:hover)~#main [data-row="7"],
-        &:has([data-row="8"]:hover)~#main [data-row="8"],
-        &:has([data-row="9"]:hover)~#main [data-row="9"],
-        &:has([data-row="10"]:hover)~#main [data-row="10"],
-        &:has([data-col="1"]:hover)~#main [data-col="1"],
-        &:has([data-col="2"]:hover)~#main [data-col="2"],
-        &:has([data-col="3"]:hover)~#main [data-col="3"],
-        &:has([data-col="4"]:hover)~#main [data-col="4"],
-        &:has([data-col="5"]:hover)~#main [data-col="5"],
-        &:has([data-col="6"]:hover)~#main [data-col="6"],
-        &:has([data-col="7"]:hover)~#main [data-col="7"],
-        &:has([data-col="8"]:hover)~#main [data-col="8"],
-        &:has([data-col="9"]:hover)~#main [data-col="9"],
-        &:has([data-col="10"]:hover)~#main [data-col="10"] {
+        &:has([data-row="1"]:hover)~#hartmain [data-row="1"],
+        &:has([data-row="2"]:hover)~#hartmain [data-row="2"],
+        &:has([data-row="3"]:hover)~#hartmain [data-row="3"],
+        &:has([data-row="4"]:hover)~#hartmain [data-row="4"],
+        &:has([data-row="5"]:hover)~#hartmain [data-row="5"],
+        &:has([data-row="6"]:hover)~#hartmain [data-row="6"],
+        &:has([data-row="7"]:hover)~#hartmain [data-row="7"],
+        &:has([data-row="8"]:hover)~#hartmain [data-row="8"],
+        &:has([data-row="9"]:hover)~#hartmain [data-row="9"],
+        &:has([data-row="10"]:hover)~#hartmain [data-row="10"],
+        &:has([data-col="1"]:hover)~#hartmain [data-col="1"],
+        &:has([data-col="2"]:hover)~#hartmain [data-col="2"],
+        &:has([data-col="3"]:hover)~#hartmain [data-col="3"],
+        &:has([data-col="4"]:hover)~#hartmain [data-col="4"],
+        &:has([data-col="5"]:hover)~#hartmain [data-col="5"],
+        &:has([data-col="6"]:hover)~#hartmain [data-col="6"],
+        &:has([data-col="7"]:hover)~#hartmain [data-col="7"],
+        &:has([data-col="8"]:hover)~#hartmain [data-col="8"],
+        &:has([data-col="9"]:hover)~#hartmain [data-col="9"],
+        &:has([data-col="10"]:hover)~#hartmain [data-col="10"] {
           color: var(--highlight);
         }
       }
@@ -190,16 +202,16 @@
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
   <!-- https://dev.to/murtuzaalisurti/how-to-make-a-qr-code-generator-using-vanilla-javascript-3cla -->
-  <script src="qrcode.min.js"></script>
 </head>
 
 <body>
 
-  <div id="ctrlbar">
+
+
+  <div id="ctrlbar" class="z1">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
-
 
     <div>
       <div id="tapp">TAP</div><input type="text" id="bpm" value="60" />
@@ -231,20 +243,18 @@
 
   </div>
 
-  <div id="boxscale"><input type="range" id="scale" max="1" min="0.3" value="1" step="0.01" /></div>
-
-  <div id="hartchart">
+  
+  <div id="hartchart" class="contents">
+    <div id="boxscale"><input type="range" id="scale" max="1" min="0.3" value="1" step="0.01" /></div>
     <div id="codehints"><input type="checkbox" class="slider" id="cheatcode" /><label for="cheatcode">Show Hints</label></div>
     <div id="codeout"></div>
-    <div id="main" data-mark=""></div>
-
-
+    <div id="hartmain" data-mark=""></div>
   </div>
 
   <script>
 
 
-    let main = document.querySelector("#main");
+    let main = document.querySelector("#hartmain");
     let codeout = document.querySelector("#codeout");
     let qrplace = document.querySelector("#qrplace");
     let querypattern = window.location.hash.replace(/^#/, "");

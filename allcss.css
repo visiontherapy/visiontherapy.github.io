@@ -1,0 +1,161 @@
+
+/*circlemenu-new.css*/
+/*
+* {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+*/
+
+/* .circlemenu, .linearmenu {
+/*	z-index: 100;* /
+} */
+
+@layer mycirclemenu {
+  .circlemenu {
+    /* --menuspeed: 0.5; */
+    --btnsize: 3em;
+    --imgsize: 3em;
+    --menuwidth: 8em;
+    --bordercolor: #77a;
+    --menuimgmargins: 0.4em;
+    --lineheight: var(--btnsize);
+    /* --menufg: #fff; */
+    /* --linearbg:red; */
+
+    --borderradius: var(--btnsize);
+    position: relative;
+    & input {
+      position: absolute;
+      display: none;
+    }
+
+    & label {
+      user-select: none;
+    }
+
+    & img {
+      height: var(--imgsize);
+      width: var(--imgsize);
+      /* 	height: 100%; TODO FIXME  make this so that --imgsize variable will work here. for some reason shows up cut off
+		width: 100%;*/
+      vertical-align: middle;
+    }
+
+    .btn {
+      width: var(--imgsize);
+      height: var(--imgsize);
+      border-radius: var(--borderradius);
+      position: absolute;
+      overflow: hidden;
+      cursor: pointer;
+
+      & span {
+        color: var(--menufg);
+      }
+
+      display: flex;
+      align-items: flex-start;
+      flex-direction: row;
+
+      /* comment this out if you don't want box shadow * /
+      background: #eceff1;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      /* */
+
+      transition-property: opacity, top, right, left, bottom;
+      transition-duration: calc(0.5 * var(--menuspeed) * 1s);
+      transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    & input[type="checkbox"] ~ label .btn:not(.togglediv) {
+      /*:first-child) {*/
+      pointer-events: none;
+    }
+
+    & input[type="checkbox"]:checked ~ label .btn:not(.togglediv) {
+      /*:first-child) {*/
+      pointer-events: auto;
+    }
+  }
+
+  .btn.togglediv img {
+    /*:first-child img {*/
+    height: var(--btnsize);
+    width: var(--btnsize);
+    margin: auto;
+  }
+
+  /*.btn a { color: #03A9F4; background: red;}*/
+
+  /* .linearmenu .show-menu {
+/*	position:absolute; removed bc this was causing menu to appear shifted to the left* / 
+} */
+
+  .linearmenu {
+    .btn {
+      position: absolute;
+      overflow: visible;
+      height: var(--lineheight);
+      line-height: var(--lineheight);
+      width: var(--menuwidth);
+      border-radius: var(--borderradius);
+      align-items: stretch;
+      /* border:solid 1px var(--bordercolor); */
+      background: var(--linearbg);
+      white-space: nowrap;
+
+      & * {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      &:hover {
+        background: var(--hovercolor);
+      }
+    }
+
+    & img {
+      height: var(--imgsize);
+      width: var(--imgsize);
+      margin-left: var(--menuimgmargins);
+      margin-right: var(--menuimgmargins);
+    }
+  }
+  .btn.togglediv {
+    /*:first-child {*/
+    overflow: hidden;
+    width: var(--btnsize);
+    height: var(--btnsize);
+    border: none;
+    background: transparent;
+  }
+
+  .btn span {
+    margin-top: auto;
+    margin-bottom: auto;
+    display: inline-block;
+  }
+
+  .btn:not(.togglediv) {
+    opacity: 0;
+    /* transition-property: opacity, top, right, left, bottom; */
+    transition-duration: calc(0.5 * var(--menuspeed) * 1s);
+    transition-timing-function: cubic-bezier(0.87, -0.41, 0.19, 1.44);
+  }
+
+  .menuBtn,
+  .closeBtn {
+    position: absolute;
+    transition-duration: calc(0.5 * var(--menuspeed) * 1s);
+    transition-timing-function: ease;
+  }
+
+  .closeBtn {
+    /*transform: translateY(50px);*/
+    opacity: 0;
+  }
+}
