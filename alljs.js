@@ -239,7 +239,6 @@ function floatmenu({ styles = {}, config = {}, menuitems, anchor } = {}) {
 
     let widths = [];
     let bannerwidths = [];
-    console.log(btns);
     for (i = 0; i < btns.length; i++) {
       // last item (first item, but reversed) is toggler button
       // this will be smaller than the other items so doesn't matter that we take it into account or not
@@ -668,3 +667,29 @@ function randarray(arr,except) {
 function toradians(degrees) {
   return degrees * Math.PI / 180;
 };
+
+
+
+
+
+
+function getqr(data) {
+  let [w, h] = [250, 250];
+  let qrcode = document.createElement("a");
+  qrcode.className = "qrcode";
+  qrcode.href = data;
+  new QRCode(qrcode, {
+    text: data,
+    width: w,
+    height: h,
+    colorDark: "#000",
+    colorLight: "#fff",
+    correctionLovel: QRCode.CorrectLevel.L,
+  });
+  let qrplace = document.querySelector("#qrplace");
+  // qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
+  qrplace.innerHTML ="";
+  qrplace.append(qrcode);
+  // qrplace.innerHTML += data;
+}
+
