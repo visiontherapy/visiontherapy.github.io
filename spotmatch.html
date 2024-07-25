@@ -18,6 +18,8 @@
   <script defer src="js/topmenu.js"></script>
 
   <script src="js/qrcode.min.js"></script>
+  <script src="js/getqr.js"></script>
+  <script src="js/peerjs.min.js"></script>
 
   <style>
     #ctrlbar:has(#blue:checked)~.spotit .spot {
@@ -84,44 +86,67 @@
     }
 
 
+    #qrplace {
+      display: none;
+      padding: 10px;
+      background: #fff;
+      color: #000;
+      position: absolute;
+      left: 2em;
+      top: calc(100% - 0.5em);
+      z-index: 1000;
+      overflow: visible;
+    }
+
+
     div:has(#matched:not(:checked))+#qrplace {
       display: none;
     }
 
     div:has(#matched:checked)+#qrplace {
-      display: inline;
+      display: block;
     }
 
-
-    #qrplace {
-      display: none;
-      position: relative;
-      text-align: center;
-      /* left: 50%;
-      transform: translate(-50%);
-      top: 0.5em; */
-
-      .qrcode {
-        display: block;
-        padding: 10px;
-        background: #fff;
-        position: fixed;
-        left: 50%;
-        transform: translate(-50%);
-        top: 1.5em;
-        z-index: 1000;
-      }
-
-      /* #qrtoggle:checked~.qrcode {
-        display: block;
-      } */
-    }
 
 
     /* only child single card mode 
      make it bigger */
     .spotbox:only-child {
       --imgsize: min(25vw, calc(25vh - 2em), 250px);
+    }
+
+
+    #controls:has(#rotate:not(:checked))~.spotit .spot {
+      /* have to use !important to override inline style */
+      transform: none !important;
+
+    }
+
+    .ctrlbox {
+      & div:has(#autoflip) {
+        margin-left: 1em;
+        filter: brightness(0.75);
+      }
+
+      & div:has(#matched:checked)~div:has(#autoflip) {
+        filter: none;
+      }
+
+    }
+
+
+    #gamenumber {
+      margin: 1em;
+      text-align: center;
+      opacity: 0.25;
+
+      &[data-id]::before {
+        content: "Game ID: ";
+      }
+
+      &:hover {
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -168,20 +193,25 @@
 
       <div id="qrplace"></div>
 
-
-      <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
+      <div><input type="checkbox" class="slider" id="autoflip" checked /> <label class="button" for="autoflip">Auto-advance</label></div>
 
       <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
 
     </div>
   </div>
 
-
-
   <div class="spotit"></div>
+
+  <div id="gamenumber"></div>
+
 
   <script>
 
+    let peer, conn, gameuuid, globalmatchedmode, gamerng;
+
+    let spotitdebug = false;
+
+    if (!spotitdebug) console.log("Set `spotitdebug = true` to see debug logs");
 
     let imagecount = 100;
     let posi = 15;
@@ -189,63 +219,260 @@
     images.shift();// start from 1
     let anchor = document.querySelector(".spotit");
 
-    let scale = document.querySelector("#scale");
+    // let scale = document.querySelector("#scale");
     let rotate = document.querySelector("#rotate");
     let blue = document.querySelector("#blue");
     let matched = document.querySelector("#matched");
-    let mlabel = document.querySelector("label[for='matched']");
+    // let mlabel = document.querySelector("label[for='matched']");
+
+    let autoflip = document.querySelector("#autoflip");
+
+    let qrplace = document.querySelector("#qrplace");
+
+    let gamenumber = document.querySelector("#gamenumber");
+
+    queryparser();
+
+    window.addEventListener("hashchange", queryparser);
+
+    function queryparser() {
+      let querypattern = window.location.hash.replace(/^#/, "");
+      if (spotitdebug) console.log("hashchange", querypattern);
+      if (querypattern) {
+        // received from origin
+        // peerstatus("LOADING...");
+
+        // set manual mode if given
+        autoflip.checked = !querypattern.match(/^MANUAL-/);
+
+        conn = null;
+        peerconnect_showchart(querypattern);
+      } else {
+        // raw start
+        showchart();
+      }
+    }
 
 
 
-    let querypattern = window.location.hash.replace(/^#/, "");
-    querypattern = querypattern.replace(/[^\d]/g, "");
-
-    if (querypattern) {
-      // querypattern = 
-      console.log("queryp", querypattern);
-      showchart({ rngseed: querypattern });//.split(""));
-    } else {
+    document.querySelector("#reload").onclick = function (e) {
+      window.location.hash = "";
+      // don't uncheck matched; reload as matched
       showchart();
+      if (spotitdebug) console.log("sending reload signal");
+      if (conn && conn.open) conn.send({ id: gameuuid, action: "reload" });
+    };
+
+    autoflip.onchange = () => {
+      closeifconn();
+      if (peer) peer.disconnect();
+      if (matched.checked) {
+        // showchart();
+        qrplace.innerHTML = "Loading<br/>QR CODE";
+        peerconnect_showchart();
+        // putqrcode(gameuuid);
+      }
+    };
+
+
+    window.addEventListener("beforeunload", (e) => {
+      closeifconn();
+      if (peer) peer.disconnect();
+    });
+
+
+    function closeifconn() {
+      if (conn && conn.open) {
+        if (spotitdebug) console.log("sending close signal and closing connection");
+        conn.send({ action: "close" });
+        conn.close();
+        conn = null;
+      }
+    }
+
+
+
+    matched.onclick = function (e) {
+      gameuuid = null;
+      if (matched.checked) {
+        qrplace.innerHTML = "Loading<br/>QR CODE";
+        peerconnect_showchart();
+      } else {
+        window.location.hash = "";
+        globalmatchedmode = null;
+        closeifconn();
+        if (peer) peer.disconnect();
+        showchart();
+      }
+
+    };
+
+
+    function peerstatus(text) {
+      anchor.innerText += text + "\n";
+    }
+
+
+    function peerconnect_showchart(originID) {
+      if (autoflip.checked == true) {
+        try {
+          // `try` will catch errors in the main block, but not in the promise-y sub-blocks
+
+          peer = new Peer(); /*
+            { debug: 2, port: 9999, host: "/" });
+          /* local testing peerjs*/
+          if (spotitdebug) console.log("opening peer connection");
+          peerstatus("Setting up matched mode...");
+          peer.on("open", (selfID) => {
+            if (spotitdebug) console.log("--we have selfID:", selfID);
+            peerstatus("SelfID received: " + selfID);
+
+            if (originID) {
+              // we are the PARTNER
+              if (spotitdebug) console.log("connecting to origin", originID);
+              peerstatus("Establishing connection to origin...");
+              conn = peer.connect(originID);
+              conn.on('open', function () {
+                if (spotitdebug) console.log("--ORIGIN connection open--");
+                peerstatus("Connected to origin.");
+              });
+            } else {
+              // we are the ORIGIN
+              if (spotitdebug) console.log("origin QR CODE");
+              putqrcode(selfID);
+              showchart({ matchedmode: "ORIGIN" });
+
+            }
+
+            peer.on('connection', function (selfconn) {
+              if (spotitdebug) console.log("Incoming connection");
+
+              // code.value = peerconn.peer; 
+              // this is the peer id, for making return connection
+
+              if (!conn) {
+                // we are the ORIGIN (partner already generated `conn` above
+                if (spotitdebug) console.log("connecting back to PARTNER", selfconn.peer);
+                conn = peer.connect(selfconn.peer);
+                conn.on('open', function () {
+                  // Connected, ready to send messages
+                  if (spotitdebug) console.log("--PARTNER connection open--");
+                  conn.send({ action: "id", id: gameuuid });
+                });
+              }
+
+              selfconn.on('data', function (data) {
+                if (spotitdebug) console.log('--received--', data);
+                switch (data.action) {
+                  case "id":
+                    // ORIGIN is sending gameID
+                    peerstatus("Received originID.");
+                    peerstatus("Displaying matched chart.");
+                    matched.checked = true;
+                    showchart({ uuid: data.id, matchedmode: "PARTNER" });
+                    break;
+                  case "next":
+                    if (spotitdebug) console.log("INCOMING transmission");
+                    showchart({ rng: gamerng, uuid: gameuuid, matchedmode: globalmatchedmode });
+                    break;
+                  case "close":
+                    if (spotitdebug) console.log("closing connection");
+                    conn.close();
+                    conn = null;
+                    // peer.destroy();
+                    break;
+                  case "reload":
+                    // reload signal received
+                    if (spotitdebug) console.log("Reload signal received");
+                    showchart({ uuid: data.id, matchedmode: globalmatchedmode });
+                    break;
+                }
+              });
+            });
+          });
+        } catch (e) {
+          console.log("Error with Peer", e);
+          if (originID) {
+            matched.checked = true;
+            showchart({ uuid: originID, matchedmode: "PARTNER", qrid: gameuuid });
+          } else {
+            showchart({ matchedmode: matched.checked ? "ORIGIN" : undefined });
+            putqrcode(gameuuid);
+          }
+        }
+      } else {
+        if (spotitdebug) console.log("Manual advance");
+        if (originID) {
+          matched.checked = true;
+          showchart({ uuid: originID, matchedmode: "PARTNER", qrid: gameuuid });
+        } else {
+          showchart({ matchedmode: matched.checked ? "ORIGIN" : undefined });
+          putqrcode(gameuuid);
+        }
+      }
+    }
+
+
+
+    function putqrcode(gameid) {
+      let url = window.location.toString().replace(/[\?#&]*.*$/, "");
+      // console.log("showing QR CODE:", gameid);
+      let qrstring = url + "#" + gameid;
+      qrplace.innerHTML = "";
+      qrplace.append(getqr(qrstring, "_partner"));
     }
 
 
 
 
-    matched.onclick = function (e) {
-      showchart();
-    };
+    function showchart({ rng, uuid, matchedmode, qrid } = {}) {
+
+      gameuuid = uuid ?? self.crypto.randomUUID();
+
+      if (!autoflip.checked && !gameuuid.match(/^MANUAL/)) gameuuid = "MANUAL-" + gameuuid;
+
+      globalmatchedmode = matchedmode ?? globalmatchedmode;
 
 
-    function showchart({ rng = null, rngseed = null } = {}) {
+      if (globalmatchedmode) {
+        uuid = gameuuid;
+        gamenumber.dataset.id = gamenumber.innerText = gameuuid;
+      } else {
+        gamenumber.innerText = "";
+        gamenumber.removeAttribute("data-id");
+      }
 
-      // if (rngseed) {
-      //   matched
-      // }
-
-      thisseed = rngseed ?? Math.floor((Math.random() * 100000000));
-
-      let url = window.location.toString();
-      url.replace(/[\?#&].*$/, "");
-      // let qrstring = url + "#" + txferstring;
-      let qrstring = url + "#" + thisseed;
-      // console.log(qrstring);
-      getqr(qrstring);
-
+      let thisseed = gameuuid.replace(/[^\d]/g, "");
 
       rng ??= random(thisseed);
+      gamerng = rng;
       anchor.innerText = "";
       let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
 
       // if (matched.dataset.state != 2) anchor.append(leftcard);
       // if not from QR code //
-      console.log(rngseed);
-      if (!rngseed) anchor.append(leftcard);
 
       let remaining = images.filter(x => !cardimgs.includes(x));
 
       let usespot = cardimgs[Math.floor(rng() * (cardimgs.length - 1))];
 
       let rightcard = makecard({ imgbank: remaining, usespot: usespot })[0];
+      rightcard.id = "rightcard";
+
+      // if (spotitdebug) console.log(uuid, matchedmode, matched.checked);
+
+
+
+      // globalmatchedmode == ORIGIN or PARTNER
+      // if matchedmode is not given, use global
+      // if given, reset to given value
+
+      // matched.checked == toggler
+      // uuid == proceeding with active gameID
+
+      if (!matched.checked || globalmatchedmode != "ORIGIN") anchor.append(leftcard);
+
+      if ((!uuid && !globalmatchedmode) || globalmatchedmode == "ORIGIN") anchor.append(rightcard);
 
       // if (matched.dataset.state != 1) 
       if (!matched.checked) anchor.append(rightcard);
@@ -253,7 +480,8 @@
       for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
         match.classList.add("match");
         match.onclick = () => {
-          showchart({ rng: rng, rngseed: rngseed });
+          showchart({ rng: rng, uuid: gameuuid, matchedmode: globalmatchedmode });
+          if (conn) conn.send({ action: "next" });
         };
       }
 
@@ -284,15 +512,11 @@
           if (n != "null") box.style.maskImage = 'url("img/pdshapes/pdshape_' + n.toString().padStart(3, "0") + '.png")';
 
           let transform = "";
-          if (scale.checked) {
-            transform += " scale(" + (0.45 + Math.random() * 0.6) + ")";
-            if (posi) {
-              // only translate if scaled
-              transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
-            }
-          }
+          let posi = 15;
           if (rotate.checked) {
-            transform += " rotate(" + Math.random() * 180 + "deg)";
+            transform += " scale(" + (0.45 + Math.random() * 0.6) + ")"
+              + " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)"
+              + " rotate(" + Math.random() * 180 + "deg)";
           }
 
           if (transform) box.style.transform = transform;
@@ -306,12 +530,12 @@
 
     }
 
-    document.querySelector("#reload").onclick = function (e) {
-      // seed.value = "";
-      matched.checked = false;
-      window.location.hash = "";
-      showchart();
-    };
+    // document.querySelector("#reload").onclick = function (e) {
+    //   // seed.value = "";
+    //   matched.checked = false;
+    //   window.location.hash = "";
+    //   showchart();
+    // };
     /*
     TODO
     - tile collection options
