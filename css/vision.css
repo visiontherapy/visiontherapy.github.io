@@ -63,9 +63,10 @@ a {
 
 #controls {
   position: relative;
-  width: min(25em, 90%);
+  /* width: min(25em, 90%); */
   line-height: 2em;
   overflow: visible;
+  display:table;
 }
 
 
@@ -81,7 +82,7 @@ a {
   width: 100%;
   height: auto;
   /* white-space: nowrap; */
-  overflow: hidden;
+  /* overflow: hidden; */
   z-index: 1005;
   opacity: 0;
   padding: 0.75em;
