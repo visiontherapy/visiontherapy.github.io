@@ -318,7 +318,7 @@
         try {
           // `try` will catch errors in the main block, but not in the promise-y sub-blocks
 
-          peer = new Peer(); /*
+          peer = new Peer({debug:2}); /*
             { debug: 2, port: 9999, host: "/" });
           /* local testing peerjs*/
           if (spotitdebug) console.log("opening peer connection");
