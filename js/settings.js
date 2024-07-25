@@ -1,29 +1,36 @@
 
-document.addEventListener("DOMContentLoaded", (e) => {
-  if (
-    localCookie("darkmode") == "true" ||
-  ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) && 
-  typeof defaultlight === "undefined" ) ) {
-    // dark mode
-    document.querySelector("#darkmode").checked = true;
+// document.addEventListener("DOMContentLoaded", (e) => {
+//   console.log("LOADED", localCookie("darkmode"));
+
+//   if (localCookie("darkmode") == "false") {
+//     document.querySelector("#darkmode").checked = false;
+//     document.documentElement.setAttribute("data-theme", "light");
+
+//   } else if (
+//     localCookie("darkmode") == "true" ||
+//     ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) &&
+//       typeof defaultlight === "undefined")) {
+//     // dark mode
+//     document.querySelector("#darkmode").checked = true;
+//     document.documentElement.setAttribute("data-theme", "dark");
+//   } else {
+//     document.querySelector("#darkmode").checked = false;
+//     document.documentElement.setAttribute("data-theme", "light");
+//   }
+
+let darkmode = document.querySelector("#darkmode");
+darkmode.onchange = function (e) {
+  localCookie("darkmode", this.checked.toString());
+  if (this.checked) {
     document.documentElement.setAttribute("data-theme", "dark");
-  } else { 
-    document.querySelector("#darkmode").checked = false;
+  } else {
     document.documentElement.setAttribute("data-theme", "light");
-
   }
+};
 
-  let darkmode = document.querySelector("#darkmode");
-  darkmode.onchange = function (e) {
-    localCookie("darkmode",this.checked.toString());
-    if (this.checked) {
-      document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-      document.documentElement.setAttribute("data-theme", "light");
-    }
+darkmode.checked = localCookie("darkmode") == "true";
 
-  };
-});
+// });
 
 /*window.addEventListener("keydown", function (e) {
   console.log(e);
