@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spot the Match</title>
+  <meta name="darkreader-lock">
+
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="js/alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script>
+
+  <script src="js/qrcode.min.js"></script>
+
+  <style>
+    #ctrlbar:has(#blue:checked)~.spotit .spot {
+      background: var(--spotbg);
+    }
+
+    #ctrlbar:has(#blue:not(:checked))~.spotit .spot {
+      background: var(--spotbgbw);
+    }
+
+
+    /* 
+    for reversed-state arrangement
+    .spotit:has(~#ctrlbar #blue:checked) .spot {
+      background: var(--spotbg);
+    }
+
+    .spotit:has(~#ctrlbar #blue:not(:checked)) .spot {
+      background: var(--spotbgbw);
+    } */
+
+    .spotit {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      position: relative;
+      margin-top: 2em;
+      justify-content: space-around;
+
+      /* margin:4vw; */
+      .spotbox {
+        margin: 1em;
+        position: relative;
+        --imgsize: calc(min(35em, 50vw, 70vh) / 3 - 2em);
+        --boxsize: calc(var(--imgsize) *3);
+        display: inline-grid;
+        grid-template-areas: "1fr 1fr 1fr";
+        vertical-align: middle;
+        padding: 0.5em;
+        grid-gap: 1em;
+
+        .spot {
+          height: var(--imgsize);
+          width: var(--imgsize);
+          mask-size: contain;
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mix-blend-mode: difference;
+
+          &.null {
+            visibility: hidden;
+            ;
+          }
+        }
+      }
+
+      .match:hover {
+        background-color: var(--highlight) !important;
+      }
+    }
+
+    .spotit.single .spotbox {
+      --imgsize: calc(min(100vw, 70vh) / 3 - 2em);
+    }
+
+
+    div:has(#matched:not(:checked))+#qrplace {
+      display: none;
+    }
+
+    div:has(#matched:checked)+#qrplace {
+      display: inline;
+    }
+
+
+    #qrplace {
+      display: none;
+      position: relative;
+      text-align: center;
+      /* left: 50%;
+      transform: translate(-50%);
+      top: 0.5em; */
+
+      .qrcode {
+        display: block;
+        padding: 10px;
+        background: #fff;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%);
+        top: 1.5em;
+        z-index: 1000;
+      }
+
+      /* #qrtoggle:checked~.qrcode {
+        display: block;
+      } */
+    }
+
+
+    /* only child single card mode 
+     make it bigger */
+    .spotbox:only-child {
+      --imgsize: min(25vw, calc(25vh - 2em), 250px);
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Filtered</label></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+
+    <input type="checkbox" id="help" />
+    <label for="help">Help</label>
+    <label id="helptext" for="help">
+      <h2>How to use this:</h2>
+      Identify the shape that appears in both clusters, and click either one to proceed to the next matched pair.
+      <h3>Settings</h3>
+      <ul>
+        <li>Use the corresponding sliders to toggle on/off shape rotation and size randomization.</li>
+        <li>Matched mode:
+          <ul>
+            <li>One cluster will display on this device.</li>
+            <li>Scan the QR code (or open the link) with a second device to display the matched cluster.</li>
+            <li>Identify and click the matching shape on both devices to proceed in parallel</li>
+          </ul>
+        </li>
+      </ul>
+    </label>
+
+    <div class="ctrlbox">
+      <!-- <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div> -->
+
+      <div><input type="checkbox" class="slider" id="matched" /> <label class="button" for="matched">Matched</label></div>
+
+      <div id="qrplace"></div>
+
+
+      <div><input type="checkbox" class="slider" id="scale" checked /><label class="button" for="scale">+scale</label></div>
+
+      <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
+
+    </div>
+  </div>
+
+
+
+  <div class="spotit"></div>
+
+  <script>
+
+
+    let imagecount = 100;
+    let posi = 15;
+    let images = [...new Array(imagecount).keys()];
+    images.shift();// start from 1
+    let anchor = document.querySelector(".spotit");
+
+    let scale = document.querySelector("#scale");
+    let rotate = document.querySelector("#rotate");
+    let blue = document.querySelector("#blue");
+    let matched = document.querySelector("#matched");
+    let mlabel = document.querySelector("label[for='matched']");
+
+
+
+    let querypattern = window.location.hash.replace(/^#/, "");
+    querypattern = querypattern.replace(/[^\d]/g, "");
+
+    if (querypattern) {
+      // querypattern = 
+      console.log("queryp", querypattern);
+      showchart({ rngseed: querypattern });//.split(""));
+    } else {
+      showchart();
+    }
+
+
+
+
+    matched.onclick = function (e) {
+      showchart();
+    };
+
+
+    function showchart({ rng = null, rngseed = null } = {}) {
+
+      // if (rngseed) {
+      //   matched
+      // }
+
+      thisseed = rngseed ?? Math.floor((Math.random() * 100000000));
+
+      let url = window.location.toString();
+      url.replace(/[\?#&].*$/, "");
+      // let qrstring = url + "#" + txferstring;
+      let qrstring = url + "#" + thisseed;
+      // console.log(qrstring);
+      getqr(qrstring);
+
+
+      rng ??= random(thisseed);
+      anchor.innerText = "";
+      let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
+
+      // if (matched.dataset.state != 2) anchor.append(leftcard);
+      // if not from QR code //
+      console.log(rngseed);
+      if (!rngseed) anchor.append(leftcard);
+
+      let remaining = images.filter(x => !cardimgs.includes(x));
+
+      let usespot = cardimgs[Math.floor(rng() * (cardimgs.length - 1))];
+
+      let rightcard = makecard({ imgbank: remaining, usespot: usespot })[0];
+
+      // if (matched.dataset.state != 1) 
+      if (!matched.checked) anchor.append(rightcard);
+
+      for (let match of document.querySelectorAll(`[data-spot="${usespot}"]`)) {
+        match.classList.add("match");
+        match.onclick = () => {
+          showchart({ rng: rng, rngseed: rngseed });
+        };
+      }
+
+      function makecard({ imgbank, usespot = null } = {}) {
+
+        let imgselection = [];
+        for (let i = 1; i <= 8; i++) {
+          imgselection.push(imgbank.splice(Math.floor(rng() * (imgbank.length - 1)), 1)[0]);
+        }
+
+        if (usespot) {
+          imgselection.splice(
+            Math.floor(rng() * (imgselection.length - 1)),
+            1,
+            usespot);
+        }
+
+        // console.log(imgselection);
+
+        imgselection.splice(4, 0, "null");
+        let spotbox = document.createElement("div");
+        spotbox.className = "spotbox";
+        for (let n of imgselection) {
+          let box = document.createElement("div");
+          box.className = "spot";
+          box.dataset.spot = n;
+          if (n == "null") box.classList.add("null");
+          if (n != "null") box.style.maskImage = 'url("img/pdshapes/pdshape_' + n.toString().padStart(3, "0") + '.png")';
+
+          let transform = "";
+          if (scale.checked) {
+            transform += " scale(" + (0.45 + Math.random() * 0.6) + ")";
+            if (posi) {
+              // only translate if scaled
+              transform += " translate(" + (Math.random() * posi * 2 - posi) + "%," + (Math.random() * posi * 2 - posi) + "%)";
+            }
+          }
+          if (rotate.checked) {
+            transform += " rotate(" + Math.random() * 180 + "deg)";
+          }
+
+          if (transform) box.style.transform = transform;
+          spotbox.append(box);
+        }
+        imgselection.splice(4, 1);
+
+        return [spotbox, imgselection];
+      }
+
+
+    }
+
+    document.querySelector("#reload").onclick = function (e) {
+      // seed.value = "";
+      matched.checked = false;
+      window.location.hash = "";
+      showchart();
+    };
+    /*
+    TODO
+    - tile collection options
+    
+    Simple set:
+    .square
+    .triangle
+    .circle
+    .star
+    .crescent moon
+    .cloud
+    .tree
+    .raindrop
+    .flower
+    .leaf
+    .hexagon
+    monkey/dog/cat
+    toy boat
+    car
+    bicycle
+    shoe
+    .X
+    .spiral
+    heart
+    smiley
+    dog paw
+    wavy lines
+    house
+    sun
+    arrow
+    soccer/basket ball
+    cherries
+    strawberry
+    fish
+    person figure (gingerbread man) / bear
+    umbrella
+    hand
+    
+    
+    
+    
+    
+    */
+
+
+  </script>
+
+</body>
+
+</html>
