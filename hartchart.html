@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="css/metronome.css" />
   <script defer src="js/metronome.js"></script>
   <script src="js/quotes.js"></script>
+  <script src="js/getqr.js"></script>
   <script src="js/qrcode.min.js"></script>
 
   <style>
@@ -306,7 +307,8 @@
       // let qrstring = url + "#" + txferstring;
       let qrstring = url + "#" + rngseed;
       // console.log(qrstring);
-      getqr(qrstring);
+      qrplace.innerHTML = "";
+      qrplace.append(getqr(qrstring, "_partner"));
       // }
 
       hartcode();
