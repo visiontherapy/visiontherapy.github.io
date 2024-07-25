@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peer connection test</title>
+  <meta name="darkreader-lock">
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="js/alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script>
+
+  <script src="js/peerjs.min.js"></script>
+
+</head>
+
+<body>
+
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Filtered</label></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div>
+    <button id="connect">Connect</button><br />
+    <br />
+    ID: <input id="idcode" type="text"> <button id="open">open</button>
+    <br /><br />
+    data: <input id="peerdata" type="text"> <button id="send">send</button>
+    <br /><br />
+    <div id="out"></div>
+  </div>
+  <pre>
+  onclick MATCHED mode:
+  - try peerconnect
+   - display partner link
+   - on connect, send rnd seed
+  - if fail: show regular rndseed link
+  If origin peer connect failed, go with regular rnd seed as given in link
+
+  Partner connect
+  - auto peer connect based on link info
+   - display chart according to seed obtained from partner data
+   - ** Reload action also reloads remote side in matched mode - implement matched mode reload method
+
+</pre>
+
+  <script>
+    let out = document.querySelector("#out");
+    let code = document.querySelector("#idcode");
+    let peerdata = document.querySelector("#peerdata");
+    let params = new URLSearchParams(window.location.search);
+    let peer, peerid, conn;
+
+    function dorand(seed) {
+      let rng = random(seed ?? undefined);
+
+      for (let x = 0; x < 15; x++) {
+        out.innerHTML += Math.floor(rng() * 10);
+      }
+    }
+
+
+    if (params.get("id")) {
+      peerconnect(params.get("id"));
+    }
+
+    document.querySelector("#connect").onclick = function (e) {
+      if (!peer) peerconnect();
+    };
+
+
+
+    document.querySelector("#send").onclick = function (e) {
+      if (conn) {
+        conn.send("Hello! " + peerid + " says: " + peerdata.value);
+      }
+
+    };
+
+
+    function peerconnect(partnerid) {
+      peer = new Peer( //);
+      {debug: 2 , port: 9999, host: "/"});
+      peer.on("open", (id) => {
+        out.innerHTML += `peer id: ${id} <br/>
+        <a href="?id=${id}">Partner link: ${id}</a><br/>`;
+        peerid = id;
+
+
+        if (partnerid) {
+          console.log("making peer connection from params", partnerid);
+          conn = peer.connect(partnerid);
+          conn.on('open', function () {
+            // Receive messages
+            console.log("------------connection open-------");
+            // conn.on('data', function (data) {
+            //   console.log("------------connection received-------");
+            //   console.log('Received', data);
+            // });
+          });
+        }
+
+
+        peer.on('connection', function (peerconn) {
+          console.log("Connected to peer");
+          console.log(peerconn);
+
+          code.value = peerconn.peer;
+
+          if (!conn) {
+            console.log("auto connecting back", peerconn.peer);
+            conn = peer.connect(partnerid ?? peerconn.peer);
+            conn.on('open', function () {
+              // Receive messages
+              console.log("------------connection open-------");
+              // conn.on('data', function (data) {
+              //   console.log("------------connection received-------");
+              //   console.log('Received', data);
+              // });
+            });
+          }
+
+          peerconn.on('data', function (data) {
+            console.log('-------Received thourgh peer', data);
+            out.innerHTML += "<br/>" + data;
+          });
+
+        });
+      });
+
+      peer.on("close", () => {
+        console.log("Connection Closed");
+      });
+
+    }
+
+
+
+    window.addEventListener("beforeunload", (e) => {
+      if (peer) {
+        peer.destroy();
+      }
+    });
+
+
+
+
+    // document.querySelector("#open").onclick = function (e) {
+    //   if (code.value) {
+    //     conn = peer.connect(code.value);
+    //     conn.on('open', function () {
+    //       // Receive messages
+    //       console.log("------------connection open-------");
+    //       // conn.on('data', function (data) {
+    //       //   console.log("------------connection received-------");
+    //       //   console.log('Received', data);
+    //       // });
+    //     });
+    //   }
+
+    // };
+
+  </script>
+
+</body>
+
+</html>
