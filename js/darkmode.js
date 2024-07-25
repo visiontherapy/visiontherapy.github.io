@@ -9,8 +9,11 @@ if (localCookie("darkmode") == "false") {
   // dark mode
   // document.querySelector("#darkmode").checked = true;
   document.documentElement.setAttribute("data-theme", "dark");
+  localCookie("darkmode","true");
 } else {
   // document.querySelector("#darkmode").checked = false;
   document.documentElement.setAttribute("data-theme", "light");
+  localCookie("darkmode","false");
+
 
 }
