@@ -415,7 +415,7 @@
 
 
     function putqrcode(gameid) {
-      let url = window.location.toString().replace(/[\?#&]*.*$/, "");
+      let url = window.location.toString().replace(/[\?#&]+.*$/g, "");
       // console.log("showing QR CODE:", gameid);
       let qrstring = url + "#" + gameid;
       qrplace.innerHTML = "";
