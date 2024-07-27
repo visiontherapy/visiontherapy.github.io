@@ -130,7 +130,7 @@
       /* --blocksize: 4em; */
       --gridsize: 8;
 
-      --playsize: min(calc(var(--gridsize)* 4em), min(95vw, 95vh));
+      --playsize: min(calc(var(--gridsize)* 4em), min(92vw, 92vh));
 
       --blocksize: calc(var(--playsize) / var(--gridsize));
 
@@ -172,6 +172,14 @@
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+    <div><select id="alltiles">
+        <option value="default">Default tiles</option>
+        <option value="36">Random 36</option>
+        <option value="all">All tiles (68)</option>
+      </select>
+    </div>
+
     <button id="reload">New Chart</button>
   </div>
 
@@ -183,8 +191,99 @@
 
   <script>
 
-    let blocks = "1368, 13457, 26, 23, 34578, 138, 12368, 367, 1, 1358, 23467, 13458, 23578, 2568, 123456, 124568, 12578, 245678, 12568, 12, 234567, 1257, 246, 13, 234, 1236, 1267, 467, 1234, 1567, 8, 27, 123, 134, 12348, 157".split(", ");
-    //36
+
+    /* SAVE THIS CODE  * /
+    let foundblocks = [];
+    for (let n = 1; n < 256; n++) {
+      // convert to binary
+      // https://stackoverflow.com/questions/16155592/negative-numbers-to-binary-string-in-javascript
+      // don't need the "fake bitshift" >>> since not working with negative numbers...?
+      let thisblock = n.toString(2).padStart(8, "0");
+      //console.log(decflower,flower);
+      if (thisblock == "00000000" || thisblock == "11111111") continue;
+      thisblock = thisblock.replace(/(\d\d)/g, "$1 ");
+      if (!foundblocks.find(block => {
+        //console.log(pluck,flower);
+        return (block + block).match(thisblock);
+      })) {
+        // console.log("good", block, n);
+        foundblocks.push(thisblock);
+      }
+    }
+    // console.log(foundblocks);
+
+    let generatedblocks = [];
+    for (let block of foundblocks) {
+      // remove the space we inserted for rotated duplicate filtering
+      // convert to array, one wedge per item
+      let thisblock = block.replace(/ /g, "").split("");
+      // console.log(thisblock);
+      let numblock = "";
+      for (let n = 0; n < 8; n++) {
+        // convert to numeric representation
+        if (thisblock[n] == "1") numblock += n + 1;
+      }
+      generatedblocks.push(numblock);
+    }
+
+    generatedblocks = generatedblocks.map(block => {
+      let minimized = "";
+      let smallest;
+      for (let seg of block.split("")) {
+        smallest ??= (parseInt(seg) + (parseInt(seg) % 2)) - 2;
+        minimized += parseInt(seg) - smallest;
+      }
+      return minimized;
+    });
+
+    console.log(generatedblocks.sort());
+    /*  SAVE THIS CODE  */
+
+    // MAXIMIZED ALL BLOCKS
+    let allblocks = "1 12 123 1234 12345 123456 12346 1235 12356 1236 124 1245 12456 1246 1256 13 134 1345 13456 1345678 134578 1346 135 1356 135678 1357 13578 136 14 145 1456 146 15 156 2 23 234 2345 23456 234567 2345678 23457 234578 2346 234678 235 2356 23567 235678 2357 23578 236 2367 23678 24 245 2456 24567 245678 2457 24578 246 2467 24678 2468 25 256 26";
+
+    // let defaultblocks = "1368, 13457, 26, 23, 34578, 138, 12368, 367, 1, 1358, 23467, 13458, 23578, 2568, 123456, 124568, 12578, 245678, 12568, 12, 234567, 1257, 246, 13, 234, 1236, 1267, 467, 1234, 1567, 8, 27, 123, 134, 12348, 157";
+    let defaultblocks = "1 12 123 1234 123456 12348 12356 1236 12368 124568 12568 1257 12578 1267 13 134 13457 13458 1358 1368 138 145 1567 157 2 23 234 234567 23467 23578 245 245678 246 2568 26 27"; // minified default blocks
+
+
+    let blocks = defaultblocks.split(" ");
+
+    let alltiles = document.querySelector("#alltiles");
+    let chooservalue = alltiles.value;
+    document.querySelector("#alltiles").onchange = function (e) {
+      if (document.querySelector("#playfield").querySelector("bl-ock")) {
+        if (!confirm("Tiles are in play. Are you sure you want to restart?")) {
+          this.value = chooservalue;
+          return false;
+        }
+      }
+      chooservalue = this.value;
+
+      blocks = choosetiles(this.value);
+
+      if (showchart() == "NOGO") {
+        this.checked = !this.checked;
+        console.log(this.checked);
+        blocks = (this.checked ? allblocks : defaultblocks).split(" ");
+      }
+    };
+
+
+    function choosetiles(tag) {
+      switch (tag) {
+        case "default":
+          return defaultblocks.split(" ");
+        case "all":
+          return allblocks.split(" ");
+        case "36":
+          return ashuffle(allblocks.split(" ")).slice(0, 36);
+      }
+      // blocks = (this.checked ? allblocks : defaultblocks).split(" ");
+    }
+
+
+
+
     let tileholder = document.querySelector("#tileholder");
     let playfield = document.querySelector("#playfield");
 
@@ -253,7 +352,8 @@
 
 
     function showchart() {
-      blocks = ashuffle(blocks);
+
+      blocks = ashuffle(choosetiles(alltiles.value));
 
       tileholder.innerHTML = playfield.innerHTML = "";
 
@@ -333,11 +433,9 @@
       if (document.querySelector("#playfield").querySelector("bl-ock")) {
         if (confirm("Tiles are in play. Are you sure you want to restart?")) {
           showchart();
-          window.location.hash = "";
         }
       } else {
         showchart();
-        window.location.hash = "";
       }
     };
 
