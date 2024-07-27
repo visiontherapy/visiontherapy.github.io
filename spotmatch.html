@@ -195,7 +195,7 @@
 
       <div><input type="checkbox" class="slider" id="autoflip" /> <label class="button" for="autoflip">Auto-advance</label></div>
 
-      <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">+rotation</label></div>
+      <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">rotate/scale/shift</label></div>
 
     </div>
   </div>
@@ -312,14 +312,46 @@
       anchor.innerText += text + "\n";
     }
 
-
+    // added ICE servers for cross-network connections
+    // default ICE servers were not working
     function peerconnect_showchart(originID) {
       if (autoflip.checked == true) {
         try {
           // `try` will catch errors in the main block, but not in the promise-y sub-blocks
+          let options = {};
+          options.debug = 3;
+          if (window.location.hostname == "localhost") {
+            options.port = 9999;
+            options.host = "/";
+          }
+          options.config = {iceServers: [
+            {
+              urls: "stun:stun.relay.metered.ca:80",
+            },
+            {
+              urls: "turn:global.relay.metered.ca:80",
+              username: "eb1f0e6ff95cf3df5ddf2960",
+              credential: "/VLqS9m+A88cvSlR",
+            },
+            {
+              urls: "turn:global.relay.metered.ca:80?transport=tcp",
+              username: "eb1f0e6ff95cf3df5ddf2960",
+              credential: "/VLqS9m+A88cvSlR",
+            },
+            {
+              urls: "turn:global.relay.metered.ca:443",
+              username: "eb1f0e6ff95cf3df5ddf2960",
+              credential: "/VLqS9m+A88cvSlR",
+            },
+            {
+              urls: "turns:global.relay.metered.ca:443?transport=tcp",
+              username: "eb1f0e6ff95cf3df5ddf2960",
+              credential: "/VLqS9m+A88cvSlR",
+            },
+          ]};
 
-          peer = new Peer({debug:2}); /*
-            { debug: 2, port: 9999, host: "/" });
+
+          peer = new Peer(options); /*
           /* local testing peerjs*/
           if (spotitdebug) console.log("opening peer connection");
           peerstatus("Setting up matched mode...");
@@ -427,7 +459,7 @@
 
     function showchart({ rng, uuid, matchedmode, qrid } = {}) {
 
-      gameuuid = uuid ?? self.crypto.randomUUID();
+      gameuuid = uuid ?? (self.crypto.randomUUID ? self.crypto.randomUUID() : Math.floor(Math.random() * 10000000000000).toString());
 
       if (!autoflip.checked && !gameuuid.match(/^MANUAL/)) gameuuid = "MANUAL-" + gameuuid;
 
