@@ -155,7 +155,6 @@
           background:#9999;
           white-space:revert;
           padding:0.5em 1em;
-          text-indent: -0.5em;
         }
     
       }
@@ -217,7 +216,7 @@
           if (!foundblocks.includes(thisblock)) foundblocks.push(thisblock);
           counter++;
         }
-        return foundblocks.sort();
+        return foundblocks.sort(function(a, b){return a - b});
       }
     </script>
 
@@ -343,7 +342,7 @@
           }
           generatedblocks.push(numblock);
         }
-        return generatedblocks;
+        return generatedblocks.sort(function(a, b){return a - b});
       }
     </script>
 
@@ -369,11 +368,12 @@
           }
           return minimized;
         });
+        return generatedblocks.sort(function(a, b){return a - b});
       }
     </script>
 
 
-    <div>However this presents a problem when encountering even-numbered first digits, again because of the paired segments. The solution was to incorporate the modulus (remainder) operator in the calculation.</div>
+    <div>However this presents a problem when encountering even-numbered first digits, again because of the paired segments. Using the above code, the delta alwayse reduced the first number to 1. The solution was to incorporate the modulus (remainder) operator in the calculation.</div>
 
     <code class="codeblock" id="code5"></code>
     <script>
@@ -387,6 +387,7 @@
           }
           return minimized;
         });
+        return generatedblocks.sort(function(a, b){return a - b});
       }
     </script>
 
@@ -433,7 +434,7 @@
           }
           generatedblocks.push(minimized);
         }
-        return generatedblocks.sort();
+        return generatedblocks.sort(function(a, b){return a - b});
       }
     </script>
 
@@ -465,7 +466,7 @@
             codeout.innerHTML = //codeblock.id + "()<br/>" + 
             eval(codeblock.id + "()").join(", ");
           }
-          
+
           codeblock.append(runcode,codeout);
           }
         }
@@ -474,7 +475,7 @@
 
 
     <h3>Conclusion</h3>
-    <div>You're still reading??? In that case, here's an extra bit of trivia. The above named code blocks are functioning code bits. If you open up the Developer Tools panel of your browser (Ctrl+Shift+I) you can execute the functions by name to try it out for yourself. Happy coding!</div>
+    <div>You're still here??? Well, I hope you enjoyed this journey into my mind.</div>
     
     <div>Next project: Hexagon & triangle tile matching</div>
     
