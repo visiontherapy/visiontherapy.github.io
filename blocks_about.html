@@ -139,10 +139,25 @@
         border: solid 1px var(--ctrlbg);
         background: var(--ctrlbg);
         padding: 1em;
+        position:relative;
         
         & b {
           text-shadow: 0 0 0.5em var(--highlight);
         }
+        
+        & button {
+          margin:1em 0;
+          display:table;
+        }
+        
+        .codeout {
+          display:none;
+          background:#9999;
+          white-space:revert;
+          padding:0.5em 1em;
+          text-indent: -0.5em;
+        }
+    
       }
     }
   </style>
@@ -265,22 +280,20 @@
     <div>But the second problem arose when checking for duplicates.</div>
 
 
-    <code class="codeblock" id="code1"></code>
+    <code class="codeblock" id="codex1"></code>
     <script>
-      function code1() {
+      function codex1() {
         /*original: 11100100 (1236) <bl-ock value="1236"></bl-ock>
         comparison string: 1110010011100100
-        rot1: 01110010 (2347) <bl-ock value="2347"></bl-ock> -- duplicate, not added
-        rot2: 00111001 (3458) <bl-ock value="3458"></bl-ock> -- duplicate, not added
-        rot3: 10011100 (1456) <bl-ock value="1456"></bl-ock> -- duplicate, not added*/
+        rot1: 01110010 (2347) <bl-ock value="2347"></bl-ock> -- "duplicate"
+        rot2: 00111001 (3458) <bl-ock value="3458"></bl-ock> -- duplicate
+        rot3: 10011100 (1456) <bl-ock value="1456"></bl-ock> -- "duplicate"*/
       }
     </script>
     
-    <div>
-      All 3 rotations of the binary notation above can be found within the comparison string, but rot1 and rot3 are not valid rotation patterns for the pattern tile, so they should have been considered "not a duplicate" and added to the list of found patterns.
-    </div>
+    <div>All 3 rotations of the binary notation above can be found within the comparison string, but rot1 and rot3 are not valid rotation patterns for the pattern tile, so they should have been considered "not a duplicate" and added to the list of found patterns.</div>
 
-    <div>The tiles have 2 segments on each side, which meant that each rotation involved 2 segments at a time.</div>
+    <div>Because the tiles have 2 segments on each side, each rotation has to involve 2 segments at a time.</div>
 
     <h3>Solution!</h3>
     <div>By splitting the 8-character string into 2 character chunks, the rotation-checking algorithm would not identify a match on single-character rotation:</div>
@@ -302,9 +315,9 @@
       }
     </script>
     
-    <code class="codeblock" id="code2"></code>
+    <code class="codeblock" id="codex2"></code>
     <script>
-      function code2() {
+      function codex2() {
         /*
         original: 11 10 01 00 (1236) <bl-ock value="1236"></bl-ock>
         comparison string: 11 10 01 00 11 10 01 00
@@ -319,7 +332,7 @@
 
     <code class="codeblock" id="code3"></code>
     <script>
-      function code3(foundblocks) {
+      function code3(foundblocks = split_binary()) {
         let generatedblocks = [];
         for (let block of foundblocks) {
           // remove the space, convert to array
@@ -330,6 +343,7 @@
           }
           generatedblocks.push(numblock);
         }
+        return generatedblocks;
       }
     </script>
 
@@ -345,7 +359,7 @@
     Subtract 2 from each digit of 3568 &rarr; 1346</div>
     <code class="codeblock" id="code4"></code>
     <script>
-      function code4() {
+      function code4(generatedblocks = code3()) {
         generatedblocks = generatedblocks.map(block => {
           let minimized = "";
           let delta;
@@ -363,7 +377,7 @@
 
     <code class="codeblock" id="code5"></code>
     <script>
-      function code5() {
+      function code5(generatedblocks = code3()) {
         generatedblocks = generatedblocks.map(block => {
           let minimized = "";
           let delta;
@@ -427,32 +441,48 @@
     <script>
       for (let codeblock of document.querySelectorAll(".codeblock")) {
         let contents = eval(codeblock.id + '.toString()');
-				let indent = contents.match(/^function code/) ? 8 : 6;
+        let indent = contents.match(/^function code/) ? 8 : 6;
         let indentregex = new RegExp("(\n) {" + indent + "}","g");
-				console.log(codeblock.id, indent, indentregex);
         //let indents = new RegExp("(\n)? {6}(\/\/)?","");
-        
-        codeblock.innerHTML = contents
+
+        codeblock.innerHTML += contents
         .replace(/^function code.*?{\n(.*)\n*\s*}$/s, "$1")
         .replace(/(\/\*|\*\/) */g, "")
         .trim() // no need to remove first indent since it is trim()med
-				.replace(indentregex, "\n")
-				;
-      }
+        .replace(indentregex, "\n")
+        ;
+        
+        //if (indent == 6) { // this is a functioning code block
+        if (!contents.match(/^function codex/)) {
+          let runcode = document.createElement("button");
+          runcode.innerHTML = "Run";
+          
+          let codeout = document.createElement("div");
+          codeout.className = "codeout";
+    
+          runcode.onclick = function(e) {
+            codeout.style.display="block";
+            codeout.innerHTML = //codeblock.id + "()<br/>" + 
+            eval(codeblock.id + "()").join(", ");
+          }
+          
+          codeblock.append(runcode,codeout);
+          }
+        }
 
     </script>
 
 
-		<h3>Conclusion</h3>
-		<div>You're still reading??? In that case, here's an extra bit of trivia. The above named code blocks are functioning code bits. If you open up the Developer Tools panel of your browser (Ctrl+Shift+I) you can execute the functions by name to try it out for yourself. Happy coding!</div>
-		
-		<div>Next project: Hexagon & triangle tile matching</div>
-		
-		
-		<hr/>
-		<br/>
-		<br/>
-		<br/>
+    <h3>Conclusion</h3>
+    <div>You're still reading??? In that case, here's an extra bit of trivia. The above named code blocks are functioning code bits. If you open up the Developer Tools panel of your browser (Ctrl+Shift+I) you can execute the functions by name to try it out for yourself. Happy coding!</div>
+    
+    <div>Next project: Hexagon & triangle tile matching</div>
+    
+    
+    <hr/>
+    <br/>
+    <br/>
+    <br/>
 
 </body>
 
