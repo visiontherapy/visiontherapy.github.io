@@ -50,7 +50,6 @@ a {
   color: #6495ed;
 }
 
-
 #ctrlbar {
   font-size: 16pt;
   display: flex;
@@ -63,12 +62,14 @@ a {
 
 #controls {
   position: relative;
-  /* width: min(25em, 90%); */
   line-height: 2em;
   overflow: visible;
-  display:table;
-}
+  display: table;
 
+  .plain {
+    line-height:1em;
+  }
+}
 
 #settings {
   cursor: default;
@@ -79,9 +80,9 @@ a {
   position: absolute;
   background: transparent;
   transition: all 0.25s linear;
-  width: 100%;
+  /* width: 100%; */
   height: auto;
-  /* white-space: nowrap; */
+  white-space: nowrap;
   /* overflow: hidden; */
   z-index: 1005;
   opacity: 0;
@@ -302,4 +303,6 @@ label h3 {
   transition: all 1.5s cubic-bezier(0, 0.91, 0.2, 0.97);
 }
 
-.circlemenu .togglediv img {filter:invert(0.5)}
+.circlemenu .togglediv img {
+  filter: invert(0.5);
+}
