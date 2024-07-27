@@ -22,7 +22,6 @@
       --steps: 0.05;
       --glyphscale: 1;
       --basesize: calc(4in * var(--scale));
-      /* // todo - fix this so that calibrator does not change */
       --glyphsize: calc(var(--basesize) * var(--glyphscale));
     }
 
@@ -51,8 +50,8 @@
     #circles.fusion {
 
       /* filter: brightness(0) saturate(0);*/
-      margin-top: calc(50vh - 5em - var(--glyphsize));
-
+      /* margin-top: calc(40vh - 5em - var(--glyphsize)); */
+      top:0;
       * {
         mix-blend-mode: normal;
       }
@@ -251,6 +250,20 @@
         display: none;
       }
     } */
+
+    #ctrlbar:has(#fusion:checked)~#calibrators {
+      & * {
+        transition: opacity 0.5s;
+      }
+
+      &> :is(div, input) {
+        opacity: 0;
+      }
+
+      &:hover> :is(div, input) {
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 
@@ -262,8 +275,9 @@
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
   </div>
 
-  <div class="auxz">
-    Calibrator: <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
+  <div id="calibrators">
+    <label>Calibrators:</label><br />
+    <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
     <div id="calibrate" data-value="1.65"></div>
 
     <br />
@@ -271,7 +285,7 @@
     <div id="rangeout">0</div>
   </div>
 
-  
+
 
   <div id="circles" class="contents">
     <div id="red" class="circle">
@@ -347,12 +361,6 @@
 
     });
 
-
-
-
-
-    // document.documentElement.setAttribute("data-theme", "light");
-    // TODO - adjust settingsjs so checkbox does not  get checked
 
 
     slider.setAttribute("step", basestep);
