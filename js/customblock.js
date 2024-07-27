@@ -134,9 +134,9 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         // b.innerText = i;
         b.className = "wedge part_" + i;
         if (layervalue.match(i)) {
-          b.style.setProperty("--color", "var(--ctrlbg)");
-        } else {
           b.style.setProperty("--color", "var(--fg)");
+        } else {
+          b.style.setProperty("--color", "var(--ctrlbg)");
         }
         // this.append(b);
         states[r].append(b);
