@@ -135,10 +135,14 @@
         font-family: monospace;
         /* text-indent: 0; */
         margin: 1.5em 4em;
-        font-size: 90%;
+        font-size: 80%;
         border: solid 1px var(--ctrlbg);
         background: var(--ctrlbg);
         padding: 1em;
+        
+        & b {
+          text-shadow: 0 0 0.5em var(--highlight);
+        }
       }
     }
   </style>
@@ -167,91 +171,103 @@
     <h3>Problem:</h3>
     <div>How to generate the complete set of possible tiles without duplicates?</div>
 
-    <h3>Brainstorming:</h3>
-    <div>The first step in solving this was to convert the tiles into some sort of text or numeric representation. Each tile has 8 segments:
+    <h3>Background:</h3>
+    <div>Each tile has 8 segments:
       <bl-ock value="1357" class="zero"></bl-ock>
     </div>
 
     <div>By numbering each of the 8 segments, the tile can be represented by string containing the numbers of "on" segments.</div>
 
-
     <div>For example this is tile "1236": <bl-ock value="1236"></bl-ock></div>
+   
     <div>Starting clockwise from the top left: segments 1, 2, 3, and 6 are in the "on" state.</div>
 
-    <div>Next comes the task of finding possible combinations.</div>
+    <div>The tile elment is a <a href="">Custom Element</a>. I converted the original tile set into a list of numeric representations that the script uses to generate the tiles programmatically</div>
 
-    <div>First trial was to create tiles with randomly assigned values, collect them in an array, and filter out any duplicates.</div>
 
-    <code class="codeblock" id="code1"></code>
+    <h3>Brainstorming:</h3>
+    <div>In my first attempt at finding all possible combinations, I enumerated the tiles with randomly assigned values, collected them in an array, and filtered out duplicates.</div>
+
+    <code class="codeblock" id="find_all"></code>
     <script>
-      function code1() {
+      function find_all() {
         let counter = 0;
         let foundblocks = [];
-        let maxtiles = 36;
-        while (counter < 500 && foundblocks.length < maxtiles) {
+        let maxtiles = 90;
+        while (counter < 100 && foundblocks.length < maxtiles) {
           let thisblock = "";
           for (let n = 1; n <= 8; n++) {
-            /*<b>*/thisblock += (Math.floor(Math.random() * 2) == 1) ? n : "";/*</b>*/
+          /*<b>*/thisblock += Math.round(Math.random()) ? n : "";/*</b>*/
           }
           if (!foundblocks.includes(thisblock)) foundblocks.push(thisblock);
           counter++;
         }
+        return foundblocks.sort();
       }
     </script>
 
-    <div>But this does not quite work since the tiles can be rotated. In the real world, <bl-ock value="1236"></bl-ock> (1236) is the same tile as <bl-ock value="2567"></bl-ock> (2567) and <bl-ock value="1478"></bl-ock> (1478). (You can verify this yourself by clicking the tiles to rotate them until they are oriented the same way.)</div>
+    <div>Because of imperfect randomization this approach was inefficient, requiring more iterations than the `maxtiles` value. But the main problem is that this does not actually identify duplicates since the tiles can be rotated.</div>
+    
+    <div>In the real world, <bl-ock value="1236"></bl-ock> (1236) is the same tile as <bl-ock value="2567"></bl-ock> (2567) and <bl-ock value="1478"></bl-ock> (1478). (You can verify this yourself by clicking the tiles to rotate them until they are oriented the same way.)</div>
 
+    <h3>Epihpany:</h3>
     <div>We get one step closer to the solution by converting the numeric representation into a binary notation.</div>
 
     <div>So the above tile 1236 would be notated 11100100. The "1"s represent positive segments, and the "0"s represent negative segments.</div>
 
-    <div>In my first attempt at identifying possible combinations, I randomly assigned 1 or 0 to the 8 positions of a string, and collected those in an array.</div>
+    <div>In my first attempt at identifying possible binary combinations, I randomly assigned 1 or 0 to the 8 positions of a string, and collected those in an array.</div>
 
     <div>Filtering out rotational duplicates turned out to be easier than I had anticipated. With <a href="https://codereview.stackexchange.com/questions/173129/determine-if-two-arrays-are-a-rotated-version-of-each-other">help from the internet</a>, I learned that string_b is a rotated version of string_a if string_b can be found in the concatenated/duplicated (string_a + string_a).</div>
 
 
-    <code class="codeblock" id="code2"></code>
+    <code class="codeblock" id="find_all_binary"></code>
     <script>
-      function code2() {
+      function find_all_binary() {
+        let counter = 0;
+        let foundblocks = [];
+        let maxtiles = 50;
         while (counter < 500 && foundblocks.length < maxtiles) {
           let thisblock = "";
-          /*<b>*/for (let n = 1; n <= 8; n++) {
-            thisblock += Math.floor(Math.random() * 2);
-          }/*</b>*/
+          for (let n = 1; n <= 8; n++) {
+          /*<b>*/thisblock += Math.floor(Math.random() * 2);/*</b>*/
+          }
           if (!foundblocks.find(block => {
-            return (block + block).match(thisblock);
+          /*<b>*/return (block + block).match(thisblock);/*</b>*/
           })) {
             foundblocks.push(thisblock);
           }
           counter++;
         }
+        return foundblocks.sort();
       }
     </script>
 
-    <div>But there were 2 problems. First, I realized that I didn't have to randomly search for value combinations. In the randomized search method, the loop had to run at least a few hundred times because straight duplicates were frequently generated. I was now essentially dealing with binary numbers. The tiles have 8 segments, each with a binary value. So 2^8 = 256 meant that I would only need to evaluate the loop 256 times max, in order to identify all possible combinations.</div>
+    <h3>Hold it...</h3>
+    <div>But there were 2 problems. First, I realized that I didn't have to randomly search for value combinations. It turned out to be even more inefficient than the numeric randomization, taking 400-500 iterations to get all the values. Plus, I was now essentially dealing with binary numbers. The tiles have 8 segments, each with a binary value (on or off). So 2<sup>8</sup> = 256 meant that I would only need to evaluate the loop 256 times max in order to identify all possible combinations.</div>
 
 
-    <code class="codeblock" id="code3"></code>
+    <code class="codeblock" id="collect_binary"></code>
     <script>
-      function code3() {
-        /*<b>*/for (let n = 1; n < 256; n++) {
-          let thisblock = n.toString(2).padStart(8, "0");/*</b>*/
+      function collect_binary() {
+        let foundblocks = [];
+        /*<b>*/for (let n = 0; n < 256; n++)/*</b>*/ {
+          /*<b>*/let thisblock = n.toString(2).padStart(8, "0");/*</b>*/
           if (!foundblocks.find(block => {
             return (block + block).match(thisblock);
           })) {
             foundblocks.push(thisblock);
           }
         }
+        return foundblocks.sort();
       }
     </script>
 
     <div>But the second problem arose when checking for duplicates.</div>
 
 
-
-    <code class="codeblock" id="code8"></code>
+    <code class="codeblock" id="code1"></code>
     <script>
-      function code8() {
+      function code1() {
         /*original: 11100100 (1236) <bl-ock value="1236"></bl-ock>
         comparison string: 1110010011100100
         rot1: 01110010 (2347) <bl-ock value="2347"></bl-ock> -- duplicate, not added
@@ -259,20 +275,20 @@
         rot3: 10011100 (1456) <bl-ock value="1456"></bl-ock> -- duplicate, not added*/
       }
     </script>
+    
     <div>
-      All 3 iterations of the binary notation can be found within the comparison string, but rot1 and rot3 are not valid rotation patterns for the pattern tile, so they should have been added to the list of found patterns.
+      All 3 rotations of the binary notation above can be found within the comparison string, but rot1 and rot3 are not valid rotation patterns for the pattern tile, so they should have been considered "not a duplicate" and added to the list of found patterns.
     </div>
 
-    <div>Because the tiles have 2 segments on each side, which meant that each rotation involved 2 segments at a time.</div>
+    <div>The tiles have 2 segments on each side, which meant that each rotation involved 2 segments at a time.</div>
 
-    <div>The solution for this was to split the 8-character string into 2 character chunks. This way, the rotation-checking algorithm would not identify a match on single-character rotation:</div>
+    <h3>Solution!</h3>
+    <div>By splitting the 8-character string into 2 character chunks, the rotation-checking algorithm would not identify a match on single-character rotation:</div>
 
-
-
-    <code class="codeblock" id="code7"></code>
+    <code class="codeblock" id="split_binary"></code>
     <script>
-      function code7() {
-
+      function split_binary() {
+        let foundblocks = [];
         for (let n = 1; n < 256; n++) {
           let thisblock = n.toString(2).padStart(8, "0");
           /*<b>*/thisblock = thisblock.replace(/(\d\d)/g, "$1 ");/*</b>*/
@@ -282,14 +298,18 @@
             foundblocks.push(thisblock);
           }
         }
-
+        return foundblocks.sort();
+      }
+    </script>
+    
+    <code class="codeblock" id="code2"></code>
+    <script>
+      function code2() {
         /*
-        original: 11 10 01 00
+        original: 11 10 01 00 (1236) <bl-ock value="1236"></bl-ock>
         comparison string: 11 10 01 00 11 10 01 00
-        rot1: 01 11 00 10 -- no match, add it
-        rot2: 00 11 10 01 -- duplicate
-        rot3: 10 01 11 00 -- no match, add it
-        */
+        rot1: 01 11 00 10 (2347) <bl-ock value="2347"></bl-ock> -- no match, add it
+        rot2: 00 11 10 01 (3458) <bl-ock value="3458"></bl-ock> -- duplicate, not added*/
       }
     </script>
 
@@ -297,9 +317,9 @@
 
     <div>The Custom Element I wrote to generate each tile takes numeric representation as input, so the next step was to convert it to the numeric string:</div>
 
-    <code class="codeblock" id="code4"></code>
+    <code class="codeblock" id="code3"></code>
     <script>
-      function code4() {
+      function code3(foundblocks) {
         let generatedblocks = [];
         for (let block of foundblocks) {
           // remove the space, convert to array
@@ -313,23 +333,43 @@
       }
     </script>
 
-    <div>Finally, I wanted to optimize the numeric representations, partly for fun, partly for easier debugging, partly to compare with the original tileset.</div>
+    <div>I wanted to optimize the numeric representations, partly for fun, partly for easier debugging, partly to compare with the original tileset.</div>
 
-    <div>On my first attempt at this, subtract one less than the first (smallest) value from each digit.
-      ie: 3568
-      smallest value (3)
-      minus 1 = 2 &mdash;
-      == subtract 2 from each digit &rarr; 1346
-    </div>
+    <div>On my first attempt at this, I subtracted one less than the first (smallest) value from each digit in the tile value:</div>
+    
+    <div style="margin-left:2em">
+    Example:<br/>
+    For tile "3568"<br/>
+    The smallest value is 3<br/>
+    The minimizer quotient is 3 - 1 = 2<br/>
+    Subtract 2 from each digit of 3568 &rarr; 1346</div>
+    <code class="codeblock" id="code4"></code>
+    <script>
+      function code4() {
+        generatedblocks = generatedblocks.map(block => {
+          let minimized = "";
+          let delta;
+          for (let seg of block.split("")) {
+            delta ??= parseInt(seg) - 1;
+            minimized += parseInt(seg) - delta;
+          }
+          return minimized;
+        });
+      }
+    </script>
+
+
+    <div>However this presents a problem when encountering even-numbered first digits, again because of the paired segments. The solution was to incorporate the modulus (remainder) operator in the calculation.</div>
+
     <code class="codeblock" id="code5"></code>
     <script>
       function code5() {
         generatedblocks = generatedblocks.map(block => {
           let minimized = "";
-          let smallest;
+          let delta;
           for (let seg of block.split("")) {
-            smallest ??= parseInt(seg) - 1;
-            minimized += parseInt(seg) - smallest;
+            delta ??= /*<b>*/(parseInt(seg) + (parseInt(seg) % 2)) - 2/*</b>*/;
+            minimized += parseInt(seg) - delta;
           }
           return minimized;
         });
@@ -337,93 +377,82 @@
     </script>
 
 
-    However this presents a problem when encountering even-numbered first digits, because of the paired segments again.
-    The solution was:
+    <h3>Done!</h3>
 
-    <code class="codeblock" id="code6"></code>
+    <div>It turn out there are 68 unique patterns, excluding the "all on" or "all off" states. So finally, rather than wasting time and CPU cycles generating the 68 tiles on the fly every time, I included the resulting numeric representations in the code. the resulting Pattern Blocks game, I  Here is the finished code.</div>
+
+    <code class="codeblock" id="find_all_tiles"></code>
     <script>
-      function code6() {
-        generatedblocks = generatedblocks.map(block => {
-          let minimized = "";
-          let smallest;
-          for (let seg of block.split("")) {
-            smallest ??= /*<b>*/(parseInt(seg) + (parseInt(seg) % 2)) - 2;
-            minimized += parseInt(seg) - smallest;/*</b>*/
-          }
-          return minimized;
-        });
-      }
-    </script>
-
-
-    <div>Done!</div>
-
-    <div>Here is the finished code.</div>
-
-    <code class="codeblock" id="code9"></code>
-    <script>
-      function code9() {
+      function find_all_tiles() {
         let foundblocks = [];
         for (let n = 1; n < 256; n++) {
           // convert to binary
           let thisblock = n.toString(2).padStart(8, "0");
-          //console.log(decflower,flower);
+          // exclude all off and all on
           if (thisblock == "00000000" || thisblock == "11111111") continue;
+          // insert space to chunk into tuplets
           thisblock = thisblock.replace(/(\d\d)/g, "$1 ");
           if (!foundblocks.find(block => {
-            //console.log(pluck,flower);
+            //search for match
             return (block + block).match(thisblock);
           })) {
-            // console.log("good", block, n);
+            // match not found, add it
             foundblocks.push(thisblock);
           }
         }
-        // console.log(foundblocks);
 
         let generatedblocks = [];
         for (let block of foundblocks) {
           // remove the space we inserted for rotated duplicate filtering
           // convert to array, one wedge per item
           let thisblock = block.replace(/ /g, "").split("");
-          // console.log(thisblock);
           let numblock = "";
           for (let n = 0; n < 8; n++) {
             // convert to numeric representation
             if (thisblock[n] == "1") numblock += n + 1;
           }
-          generatedblocks.push(numblock);
-        }
-
-        generatedblocks = generatedblocks.map(block => {
-          let minimized = "";
-          let smallest;
-          for (let seg of block.split("")) {
-            smallest ??= (parseInt(seg) + (parseInt(seg) % 2)) - 2;
-            minimized += parseInt(seg) - smallest;
+          let minimized="";
+          let delta;
+          for (let seg of numblock.split("")) {
+            delta ??= (parseInt(seg) + (parseInt(seg) % 2)) - 2;
+            minimized += parseInt(seg) - delta;
           }
-          return minimized;
-        });
-
-        console.log(generatedblocks.sort());
-
+          generatedblocks.push(minimized);
+        }
+        return generatedblocks.sort();
       }
     </script>
 
     <!-- <script src="js/microlight.js"></script> -->
     <script>
       for (let codeblock of document.querySelectorAll(".codeblock")) {
-        codeblock.classList.add("microlight");
-        codeblock.innerHTML = eval(codeblock.id + '.toString()').replace(/^function.*?{\n(.*)\n*\s*}$/s, "$1").replace(/(\/\*|\*\/) */g, "").trim().replace(/(\n)? {8}(\/\/)?/g, "\n");
+        let contents = eval(codeblock.id + '.toString()');
+				let indent = contents.match(/^function code/) ? 8 : 6;
+        let indentregex = new RegExp("(\n) {" + indent + "}","g");
+				console.log(codeblock.id, indent, indentregex);
+        //let indents = new RegExp("(\n)? {6}(\/\/)?","");
+        
+        codeblock.innerHTML = contents
+        .replace(/^function code.*?{\n(.*)\n*\s*}$/s, "$1")
+        .replace(/(\/\*|\*\/) */g, "")
+        .trim() // no need to remove first indent since it is trim()med
+				.replace(indentregex, "\n")
+				;
       }
 
-      darkmode.addEventListener("change", () => {
-        setTimeout(()=>{microlight.reset();},500);
-      });
     </script>
 
 
-    Next project: Hexagon & triangle tile matching
-
+		<h3>Conclusion</h3>
+		<div>You're still reading??? In that case, here's an extra bit of trivia. The above named code blocks are functioning code bits. If you open up the Developer Tools panel of your browser (Ctrl+Shift+I) you can execute the functions by name to try it out for yourself. Happy coding!</div>
+		
+		<div>Next project: Hexagon & triangle tile matching</div>
+		
+		
+		<hr/>
+		<br/>
+		<br/>
+		<br/>
 
 </body>
 
