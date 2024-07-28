@@ -100,23 +100,22 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
   }
 
-  // static observedAttributes = "initstate".split(" ");
+  // static observedAttributes = "data-state".split(" ");
   // attributeChangedCallback(name, oldValue, newValue) {
-  //   if (name == "initstate" && this.rotatestate) {
-  //     this.state = newValue;
-  //     this.rotatestate();
-  //   }
-  // }
+    // if (name == "data-state" && this.rotatestate) {
+      // this.state = newValue;
+      // this.rotatestate();
+    // }
   // console.log("attr chage", name, newValue);
+  // }
 
 
   connectedCallback() {
     this.value = this.getAttribute("value");
-    this.id = "block" + this.value;
     this.dataset.state ??= 0;
 
     let states = [];
-
+		if (!this.id) {
     for (let r = 0; r < 4; r++) {
       states[r] = document.createElement("div");
       states[r].dataset.rot = r;
@@ -143,7 +142,10 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       }
       this.append(states[r]);
     }
-
+		}
+		
+    this.id = "block" + this.value;
+		
     this.flower ??= this.burst(this.value);
     // console.log("flowr",this.flower);
 
