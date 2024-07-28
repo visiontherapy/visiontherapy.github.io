@@ -177,7 +177,7 @@
 
     <div>A <a href="blocks.html">pattern-matching game</a> has square tiles that are radially divided into 8 segments. Each segment can be black or white. The varying distribution of the black/white segments create the tile patterns. (The game involves aligning the tiles so that the touching sides have matching patterns. But that's a talk for a later time.)</div>
 
-    <div>The original game comes with 36 tiles which, when placed in perfect arrangement, produces a 6 x 6 grid of tiles.</div>
+    <div><strike>The original game comes with</strike> When I encountered the game, the box had 36 tiles which, when placed in perfect arrangement, produces a 6 x 6 grid of tiles.</div>
 
     <h3>Query:</h3>
     <div>Are there only 36 possible tile patterns? Are there other patterns not included in the original set?</div>
@@ -394,7 +394,18 @@
 
     <h3>Done!</h3>
 
-    <div>It turn out there are 68 unique patterns, excluding the "all on" or "all off" states. So finally, rather than wasting time and CPU cycles generating the 68 tiles on the fly every time, I included the resulting numeric representations in the code. the resulting Pattern Blocks game, I  Here is the finished code.</div>
+    <div>It turn out there are 70 unique patterns. According to <a href="https://www.jaapsch.net/puzzles/izzi.htm">this interesting page</a> all about this game, the official set excludes these patterns:</div>
+		
+		<div>
+		<bl-ock value="1357"></bl-ock>
+		<bl-ock value="2468"></bl-ock>
+		<bl-ock value="1256"></bl-ock>
+		<bl-ock value="2367"></bl-ock>
+		<bl-ock value="12345678"></bl-ock>
+		<bl-ock value=""></bl-ock>
+		</diV>
+
+		<div>So the full official set has 64 tiles. Since the set is non-random and static, rather than wasting time and CPU cycles generating the tiles on the fly every time, I included the resulting numeric representations in the code. the resulting Pattern Blocks game, I  Here is the finished code.</div>
 
     <code class="codeblock" id="find_all_tiles"></code>
     <script>
@@ -403,8 +414,8 @@
         for (let n = 1; n < 256; n++) {
           // convert to binary
           let thisblock = n.toString(2).padStart(8, "0");
-          // exclude all off and all on
-          if (thisblock == "00000000" || thisblock == "11111111") continue;
+          // exclude tiles
+          if (thisblock.match(/00000000|11111111|10101010|01010101|01100110|11001100/))continue;
           // insert space to chunk into tuplets
           thisblock = thisblock.replace(/(\d\d)/g, "$1 ");
           if (!foundblocks.find(block => {
