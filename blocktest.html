@@ -8,113 +8,19 @@
   <meta name="darkreader-lock" />
 
   <!-- <script src="xx_borrowed/alljs.php"></script> -->
-  <script src="js/alljs.js"></script>
+  <!-- <script src="js/alljs.js"></script> -->
   <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
-  <link rel="stylesheet" href="css/allcss.css" />
+  <!-- <link rel="stylesheet" href="css/allcss.css" />
   <link rel="stylesheet" href="css/vision.css" />
   <script src="js/darkmode.js"></script>
   <script defer src="js/settings.js"></script>
-  <script defer src="js/topmenu.js"></script>
+  <script defer src="js/topmenu.js"></script> -->
 
   <script src="js/customblock_shadow.js"></script>
 
   <style>
-    :root {
-      --blocksize: 2.5em;
-    }
-
-    bl-ock {
-      position: relative;
-      --half: calc(var(--blocksize) / 2);
-      --margins: calc(var(--blocksize) /9);
-      --rot: 0deg;
-      width: var(--blocksize);
-      height: var(--blocksize);
-      display: inline-block;
-      margin: var(--margins);
-      transform: rotate(var(--rot));
-      transition: all 0.5s;
-      border: solid 1px var(--tranared);
-
-
-      .layer {
-        opacity: 0;
-        transition: all 1s;
-      }
-
-      &[data-state="0"] .layer[data-rot="0"],
-      &[data-state="1"] .layer[data-rot="1"],
-      &[data-state="2"] .layer[data-rot="2"],
-      &[data-state="3"] .layer[data-rot="3"] {
-        opacity: 1
-      }
-
-      & div.wedge {
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-top: var(--half) solid var(--color);
-        border-left: var(--half) solid transparent;
-        border-right: 0;
-        border-bottom: 0;
-        display: inline-block;
-        pointer-events: none;
-      }
-
-      .part_1 {
-        transform: rotate(0);
-        left: 0;
-        top: 0;
-      }
-
-      .part_2 {
-        transform: rotate(-90deg);
-        left: var(--half);
-        top: 0;
-      }
-
-      .part_3 {
-        transform: rotate(90deg);
-        top: 0;
-        left: var(--half);
-      }
-
-      .part_4 {
-        transform: rotate(0);
-        top: var(--half);
-        left: var(--half);
-      }
-
-
-      .part_5 {
-        transform: rotate(180deg);
-        top: var(--half);
-        left: var(--half);
-      }
-
-
-      .part_6 {
-        transform: rotate(90deg);
-        top: var(--half);
-        left: 0;
-      }
-
-
-      .part_7 {
-        transform: rotate(-90deg);
-        top: var(--half);
-        left: 0;
-      }
-
-
-      .part_8 {
-        transform: rotate(180deg);
-        top: 0;
-        left: 0;
-      }
-
-
-    }
+    body { background:#222;color:white}
+    
 
     #abouttext {
       font-size: 18pt;
@@ -139,24 +45,24 @@
         border: solid 1px var(--ctrlbg);
         background: var(--ctrlbg);
         padding: 1em;
-        position:relative;
-        
+        position: relative;
+
         & b {
           text-shadow: 0 0 0.5em var(--highlight);
         }
-        
+
         & button {
-          margin:1em 0;
-          display:table;
+          margin: 1em 0;
+          display: table;
         }
-        
+
         .codeout {
-          display:none;
-          background:#9999;
-          white-space:revert;
-          padding:0.5em 1em;
+          display: none;
+          background: #9999;
+          white-space: revert;
+          padding: 0.5em 1em;
         }
-    
+
       }
     }
   </style>
@@ -173,28 +79,28 @@
 
   <div id="abouttext">
     <bl-ock value="1"></bl-ock>
-    <bl-ock value="2" data-state="1"></bl-ock>
+    <bl-ock value="2" class="red"></bl-ock>
     <div id="testdiv"></div>
   </div>
-    <hr/>
-    <br/>
-    <br/>
-    <br/>
-    <script>
-        let tile = document.createElement("bl-ock");
-        tile.value = "23";
-        // randomize rotation on first load
-        
-        document.querySelector("#testdiv").append(tile);
-        
-        tile.dataset.state = 2;
-      for (let b of document.querySelectorAll("bl-ock")) {
-        console.log("initial:",b.value, b.flower);
-        b.addEventListener("click", function(e) {
-          console.log(this.flower);
-        });
-      }
-    </script>
+  <hr />
+  <br />
+  <br />
+  <br />
+  <script>
+    let tile = document.createElement("bl-ock");
+    tile.value = "23";
+    // randomize rotation on first load
+
+    document.querySelector("#testdiv").append(tile);
+
+    tile.dataset.state = 2;
+    for (let b of document.querySelectorAll("bl-ock")) {
+      // console.log("initial:",b.value, b.flower);
+      b.addEventListener("click", function (e) {
+        console.log(this.flower.join(""));
+      });
+    }
+  </script>
 
 </body>
 

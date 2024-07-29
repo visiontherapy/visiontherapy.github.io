@@ -18,18 +18,26 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
     // this.value = this._value;
 
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.innerHTML = this.blockstyle();
+
 
   }
 
+
+
+
+
+
   connectedCallback() {
 
-    // const shadow = this.attachShadow({ mode: "open" });
+    const { shadowRoot } = this; // this.attachShadow({ mode: "open" });
 
     // console.log(shadow);
     this.value = this.getAttribute("value");
     let states = [];
     if (!this.id) {
-      // let shadom = document.createElement("div");
+      let shadom = document.createElement("div");
       for (let r = 0; r < 4; r++) {
         states[r] = document.createElement("div");
         states[r].dataset.rot = r;
@@ -46,15 +54,15 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
           // b.innerText = i;
           b.className = "wedge part_" + i;
           if (layervalue.match(i)) {
-            b.style.setProperty("--color", "var(--fg)");
+            b.style.setProperty("--color", "var(--oncolor)");
           } else {
-            b.style.setProperty("--color", "var(--ctrlbg)");
+            b.style.setProperty("--color", "var(--offcolor)");
           }
           states[r].append(b);
         }
-        this.append(states[r]);
+        shadom.append(states[r]);
       }
-      // this.append(shadom);
+      shadowRoot.append(shadom);
     }
 
     this.id = "block" + this.value;
@@ -182,6 +190,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
   static observedAttributes = "data-state".split(" ");
   attributeChangedCallback(name, oldValue, newValue) {
     let delta = newValue - oldValue;
+    // this.shadowRoot.setAttribute(name,newValue);
     if (name == "data-state" && delta != 0) {
       // console.log("CHanged----", newValue);
       if (this.flower) {
@@ -191,6 +200,108 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       }
     }
   }
-  
+
+  blockstyle() {
+    return `<style>
+    :host {
+      position: relative;
+      --blocksize: 2.5em;
+      --half: calc(var(--blocksize) / 2);
+      --margins: calc(var(--blocksize) /9);
+      --rot: 0deg;
+      --bordercolor: blue;
+      --oncolor: #fff;
+      --offcolor:#000;
+      --color:#999;
+      width: var(--blocksize);
+      height: var(--blocksize);
+      display: inline-block;
+      margin: var(--margins);
+      transform: rotate(var(--rot));
+      transition: all 0.5s;
+      border: solid 1px var(--bordercolor);
+
+
+      .layer {
+        opacity: 0;
+        transition: all 1s;
+      }
+
+      &:host([data-state="0"]) .layer[data-rot="0"],
+      &:host([data-state="1"]) .layer[data-rot="1"],
+      &:host([data-state="2"]) .layer[data-rot="2"],
+      &:host([data-state="3"]) .layer[data-rot="3"] {
+        opacity: 1
+      }
+
+      & div.wedge {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-top: var(--half) solid var(--color);
+        border-left: var(--half) solid transparent;
+        border-right: 0;
+        border-bottom: 0;
+        display: inline-block;
+        pointer-events: none;
+      }
+
+      .part_1 {
+        transform: rotate(0);
+        left: 0;
+        top: 0;
+      }
+
+      .part_2 {
+        transform: rotate(-90deg);
+        left: var(--half);
+        top: 0;
+      }
+
+      .part_3 {
+        transform: rotate(90deg);
+        top: 0;
+        left: var(--half);
+      }
+
+      .part_4 {
+        transform: rotate(0);
+        top: var(--half);
+        left: var(--half);
+      }
+
+
+      .part_5 {
+        transform: rotate(180deg);
+        top: var(--half);
+        left: var(--half);
+      }
+
+
+      .part_6 {
+        transform: rotate(90deg);
+        top: var(--half);
+        left: 0;
+      }
+
+
+      .part_7 {
+        transform: rotate(-90deg);
+        top: var(--half);
+        left: 0;
+      }
+
+
+      .part_8 {
+        transform: rotate(180deg);
+        top: 0;
+        left: 0;
+      }
+
+
+    }</style>`;
+  }
+
+
 
 });
