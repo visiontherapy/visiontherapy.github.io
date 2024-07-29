@@ -14,7 +14,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
   constructor() {
     super();
     //this.state = 0;
-    this.rotations = ["0deg", "90deg", "180deg", "270deg"];
+    // this.rotations = ["0deg", "90deg", "180deg", "270deg"];
 
     // this.value = this._value;
 
@@ -86,13 +86,8 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
       }
     };
-  }
 
-  static observedAttributes = "data-state".split(" ");
-  attributeChangedCallback(name, oldValue, newValue) {
-    let delta = newValue - oldValue;
-    if (name == "data-state" && delta != 0) {
-      // console.log("CHanged----", newValue);
+    this.deltashift = function (delta) {
       if (delta > 0) {
         // console.log("forward");
         for (let n = 0; n < delta; n++) {
@@ -103,6 +98,19 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         for (let n = 0; n < Math.abs(delta); n++) {
           this.flower.push(this.flower.shift());
         }
+      }
+    };
+  }
+
+  static observedAttributes = "data-state".split(" ");
+  attributeChangedCallback(name, oldValue, newValue) {
+    let delta = newValue - oldValue;
+    if (name == "data-state" && delta != 0) {
+      // console.log("CHanged----", newValue);
+      if (this.flower) {
+        this.deltashift(delta);
+      } else {
+        this.delta = delta;
       }
     }
   }
@@ -143,6 +151,12 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     this.dataset.state ??= "0";
 
     this.flower ??= this.burst(this.value);
+
+    // console.log("thisdelta",this.delta);
+    if(this.delta) {
+      this.deltashift(this.delta);
+      this.delta = null;
+    }
 
     this.checker();
 
