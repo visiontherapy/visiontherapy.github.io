@@ -172,20 +172,28 @@
   </div>
 
   <div id="abouttext">
-    <bl-ock value="1" data-state="0"></bl-ock>
+    <bl-ock value="1"></bl-ock>
     <bl-ock value="2" data-state="1"></bl-ock>
+    <div id="testdiv"></div>
   </div>
     <hr/>
     <br/>
     <br/>
     <br/>
     <script>
-      // for (let b of document.querySelectorAll("bl-ock")) {
-      //   console.log("initial:",b.value, b.flower);
-      //   b.addEventListener("click", function(e) {
-      //     console.log(this.flower);
-      //   });
-      // }
+        let tile = document.createElement("bl-ock");
+        tile.value = "23";
+        // randomize rotation on first load
+        
+        document.querySelector("#testdiv").append(tile);
+        
+        tile.dataset.state = 2;
+      for (let b of document.querySelectorAll("bl-ock")) {
+        console.log("initial:",b.value, b.flower);
+        b.addEventListener("click", function(e) {
+          console.log(this.flower);
+        });
+      }
     </script>
 
 </body>
