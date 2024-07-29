@@ -18,104 +18,18 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
     // this.value = this._value;
 
-    this.burst = function (pattern) {
-      let burst = [];
-      let duo = "";
-      for (let i = 1; i <= 8; i++) {
-        duo += pattern.match(i.toString()) ? "1" : "0";
-        if (i % 2 == 0) {
-          burst.push(duo);
-          duo = "";
-        }
-      }
-      // console.log(burst);
-      return burst;
-    };
 
-    this.checker = function (x, y) {
-      // console.log(this.value, this.flower);
-
-      let moveaway = x && y;
-      // if coordinates are given (moving away) grab that box
-      // or else get parentelement
-      let slot = moveaway ? document.querySelector(`.playslot[data-x='${x}'][data-y='${y}']`) : this.parentElement;
-
-      // if this is a move away, set flower to null
-      let flower = moveaway ? [, , ,] : this.flower;
-      let playfield = slot.parentElement;
-      x ??= slot.dataset.x;
-      y ??= slot.dataset.y;
-
-      // get neighbors of index box
-      let naboer = [
-        playfield.querySelector(`.playslot[data-x='${x - 1}'][data-y='${y}'] bl-ock`),
-        playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - -1}'] bl-ock`),
-        playfield.querySelector(`.playslot[data-x='${x - -1}'][data-y='${y}'] bl-ock`),
-        playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - 1}'] bl-ock`)
-      ];
-      // console.log(x, y, naboer);
-
-      let nabber = [];
-      for (let n = 0; n < 4; n++) {
-        if (!naboer[n]) continue;
-        nabber[n] = naboer[n].flower[(2 + n) % 4].split("").reverse().join(""); // this is the edge matchup
-      }
-
-      if (moveaway) {
-        for (const nab of naboer) {
-          if (nab && nab != this) nab.checker();
-        }
-      } else {
-        this.correct = true;
-        for (let p = 0; p < 4; p++) {
-          if (nabber[p] && flower[p] != nabber[p]) {
-            this.correct = false; break;//no points
-          }
-        }
-
-        if (this.correct) {
-          this.classList.remove("fail");
-          // here check neighbors
-          for (const nabo of naboer) {
-            if (!nabo || nabo.correct) continue;
-            nabo.checker();
-          }
-        } else {
-          this.classList.add("fail");
-        }
-
-      }
-    };
   }
-
-  static observedAttributes = "data-state".split(" ");
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log("attr changed", newValue);
-    let delta = newValue - oldValue;
-    if (name == "data-state" && delta != 0) {
-      // console.log("CHanged----", newValue);
-      if (delta > 0) {
-        // console.log("forward");
-        for (let n = 0; n < delta; n++) {
-          this.flower.unshift(this.flower.pop());
-        }
-      } else if (delta < 0) {
-        // console.log("backward");
-        for (let n = 0; n < Math.abs(delta); n++) {
-          this.flower.push(this.flower.shift());
-        }
-      }
-      console.log(this, delta, this.flower);
-    }
-  }
-
 
   connectedCallback() {
+
+    // const shadow = this.attachShadow({ mode: "open" });
+
+    // console.log(shadow);
     this.value = this.getAttribute("value");
-    console.log("connected", this.value);
     let states = [];
     if (!this.id) {
-      let shadom = document.createElement("div");
+      // let shadom = document.createElement("div");
       for (let r = 0; r < 4; r++) {
         states[r] = document.createElement("div");
         states[r].dataset.rot = r;
@@ -138,9 +52,9 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
           }
           states[r].append(b);
         }
-        shadom.append(states[r]);
+        this.append(states[r]);
       }
-      this.append(shadom);
+      // this.append(shadom);
     }
 
     this.id = "block" + this.value;
@@ -148,6 +62,12 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     this.dataset.state ??= "0";
 
     this.flower ??= this.burst(this.value);
+
+    // console.log("thisdelta",this.delta);
+    if (this.delta) {
+      this.deltashift(this.delta);
+      this.delta = null;
+    }
 
     this.checker();
 
@@ -165,6 +85,112 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
 
   }
 
+  // ---------------------------------------------
+  // -------------- FUNCTIONS --------------------
+  // ---------------------------------------------
 
+
+
+  monkey() {
+    console.log("BLING");
+  }
+
+  burst(pattern) {
+    let burst = [];
+    let duo = "";
+    for (let i = 1; i <= 8; i++) {
+      duo += pattern.match(i.toString()) ? "1" : "0";
+      if (i % 2 == 0) {
+        burst.push(duo);
+        duo = "";
+      }
+    }
+    // console.log(burst);
+    return burst;
+  }
+
+  checker(x, y) {
+    // console.log(this.value, this.flower);
+
+    let moveaway = x && y;
+    // if coordinates are given (moving away) grab that box
+    // or else get parentelement
+    let slot = moveaway ? document.querySelector(`.playslot[data-x='${x}'][data-y='${y}']`) : this.parentElement;
+
+    // if this is a move away, set flower to null
+    let flower = moveaway ? [, , ,] : this.flower;
+    let playfield = slot.parentElement;
+    x ??= slot.dataset.x;
+    y ??= slot.dataset.y;
+
+    // get neighbors of index box
+    let naboer = [
+      playfield.querySelector(`.playslot[data-x='${x - 1}'][data-y='${y}'] bl-ock`),
+      playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - -1}'] bl-ock`),
+      playfield.querySelector(`.playslot[data-x='${x - -1}'][data-y='${y}'] bl-ock`),
+      playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - 1}'] bl-ock`)
+    ];
+    // console.log(x, y, naboer);
+
+    let nabber = [];
+    for (let n = 0; n < 4; n++) {
+      if (!naboer[n]) continue;
+      nabber[n] = naboer[n].flower[(2 + n) % 4].split("").reverse().join(""); // this is the edge matchup
+    }
+
+    if (moveaway) {
+      for (const nab of naboer) {
+        if (nab && nab != this) nab.checker();
+      }
+    } else {
+      this.correct = true;
+      for (let p = 0; p < 4; p++) {
+        if (nabber[p] && flower[p] != nabber[p]) {
+          this.correct = false; break;//no points
+        }
+      }
+
+      if (this.correct) {
+        this.classList.remove("fail");
+        // here check neighbors
+        for (const nabo of naboer) {
+          if (!nabo || nabo.correct) continue;
+          nabo.checker();
+        }
+      } else {
+        this.classList.add("fail");
+      }
+
+    }
+  }
+
+  deltashift(delta) {
+    if (delta > 0) {
+      // console.log("forward");
+      for (let n = 0; n < delta; n++) {
+        this.flower.unshift(this.flower.pop());
+      }
+    } else if (delta < 0) {
+      // console.log("backward");
+      for (let n = 0; n < Math.abs(delta); n++) {
+        this.flower.push(this.flower.shift());
+      }
+    }
+  }
+
+
+  static observedAttributes = "data-state".split(" ");
+  attributeChangedCallback(name, oldValue, newValue) {
+    let delta = newValue - oldValue;
+    if (name == "data-state" && delta != 0) {
+      // console.log("CHanged----", newValue);
+      if (this.flower) {
+        this.deltashift(delta);
+      } else {
+        this.delta = delta;
+      }
+    }
+  }
+  
 
 });
