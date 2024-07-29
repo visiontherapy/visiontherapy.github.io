@@ -16,7 +16,6 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     //this.state = 0;
     this.rotations = ["0deg", "90deg", "180deg", "270deg"];
 
-    // console.log(this.value, this._value, this.getAttribute("value"))
     // this.value = this._value;
 
     this.burst = function (pattern) {
@@ -34,6 +33,8 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     };
 
     this.checker = function (x, y) {
+      // console.log(this.value, this.flower);
+
       let moveaway = x && y;
       // if coordinates are given (moving away) grab that box
       // or else get parentelement
@@ -52,20 +53,16 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         playfield.querySelector(`.playslot[data-x='${x - -1}'][data-y='${y}'] bl-ock`),
         playfield.querySelector(`.playslot[data-x='${x}'][data-y='${y - 1}'] bl-ock`)
       ];
-
       // console.log(x, y, naboer);
 
       let nabber = [];
       for (let n = 0; n < 4; n++) {
         if (!naboer[n]) continue;
-        // console.log(n, naboer[n].flower);
         nabber[n] = naboer[n].flower[(2 + n) % 4].split("").reverse().join(""); // this is the edge matchup
       }
-      // console.log(this.flower, nabber);
 
       if (moveaway) {
         for (const nab of naboer) {
-          // console.log("nab",nab);
           if (nab && nab != this) nab.checker();
         }
       } else {
@@ -75,8 +72,6 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
             this.correct = false; break;//no points
           }
         }
-
-        // console.log(this.correct? "ALl good!" : "fail " + this.correct + " out of 4");
 
         if (this.correct) {
           this.classList.remove("fail");
@@ -90,87 +85,75 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         }
 
       }
-
-
     };
-
-
-    // this.flower = this.burst(this._value);
-
-
   }
 
-  // static observedAttributes = "data-state".split(" ");
-  // attributeChangedCallback(name, oldValue, newValue) {
-    // if (name == "data-state" && this.rotatestate) {
-      // this.state = newValue;
-      // this.rotatestate();
-    // }
-  // console.log("attr chage", name, newValue);
-  // }
+  static observedAttributes = "data-state".split(" ");
+  attributeChangedCallback(name, oldValue, newValue) {
+    let delta = newValue - oldValue;
+    if (name == "data-state" && delta != 0) {
+      // console.log("CHanged----", newValue);
+      if (delta > 0) {
+        // console.log("forward");
+        for (let n = 0; n < delta; n++) {
+          this.flower.unshift(this.flower.pop());
+        }
+      } else if (delta < 0) {
+        // console.log("backward");
+        for (let n = 0; n < Math.abs(delta); n++) {
+          this.flower.push(this.flower.shift());
+        }
+      }
+    }
+  }
 
 
   connectedCallback() {
     this.value = this.getAttribute("value");
-    this.dataset.state ??= 0;
-
     let states = [];
-		if (!this.id) {
-    for (let r = 0; r < 4; r++) {
-      states[r] = document.createElement("div");
-      states[r].dataset.rot = r;
-      states[r].classList.add("layer");
-      //if (r>0) states[r].classList.add("noshow");
-      //console.log(this.value,this.value.split("").map(v =>(v+2*r)%8));
-      let layervalue = this.value.split("").map(v => {
-        let rotr = (parseInt(v) + 2 * r) % 8;
-        return rotr == 0 ? 8 : rotr;
-      }).join("");
-      //console.log(this.value,r,layervalue);
-      for (let i = 1; i <= 8; i++) {
+    if (!this.id) {
+      for (let r = 0; r < 4; r++) {
+        states[r] = document.createElement("div");
+        states[r].dataset.rot = r;
+        states[r].classList.add("layer");
+        //if (r>0) states[r].classList.add("noshow");
+        //console.log(this.value,this.value.split("").map(v =>(v+2*r)%8));
+        let layervalue = this.value.split("").map(v => {
+          let rotr = (parseInt(v) + 2 * r) % 8;
+          return rotr == 0 ? 8 : rotr;
+        }).join("");
+        for (let i = 1; i <= 8; i++) {
 
-        let b = document.createElement("div");
-        // b.innerText = i;
-        b.className = "wedge part_" + i;
-        if (layervalue.match(i)) {
-          b.style.setProperty("--color", "var(--fg)");
-        } else {
-          b.style.setProperty("--color", "var(--ctrlbg)");
+          let b = document.createElement("div");
+          // b.innerText = i;
+          b.className = "wedge part_" + i;
+          if (layervalue.match(i)) {
+            b.style.setProperty("--color", "var(--fg)");
+          } else {
+            b.style.setProperty("--color", "var(--ctrlbg)");
+          }
+          states[r].append(b);
         }
-        // this.append(b);
-        states[r].append(b);
+        this.append(states[r]);
       }
-      this.append(states[r]);
     }
-		}
-		
-    this.id = "block" + this.value;
-		
-    this.flower ??= this.burst(this.value);
-    // console.log("flowr",this.flower);
 
+    this.id = "block" + this.value;
+
+    this.dataset.state ??= "0";
+
+    this.flower ??= this.burst(this.value);
 
     this.checker();
-
-    /* this.rotatestate = function (state) {
-       if (state) this.dataset.state = state;
-       //this.style.setProperty("--rot", this.rotations[this.state]);
-       this.flower.unshift(this.flower.pop());
-       // console.log(this.flower);
-       this.checker();
-     };*/
-
 
     this.onclick = this.oncontextmenu = function (e) {
       if (e.type == "click") {
         this.dataset.state = ++this.dataset.state % 4;
-        this.flower.unshift(this.flower.pop());
       } else if (e.type == "contextmenu") {
         e.preventDefault();
         this.dataset.state = (4 + --this.dataset.state) % 4;
-        this.flower.push(this.flower.shift());
       }
-      //this.rotatestate();
+      // rotation actions performed in attributeChangedCallback
       this.checker();
     };
 
