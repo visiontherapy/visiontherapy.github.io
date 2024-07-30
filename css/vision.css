@@ -4,7 +4,7 @@
 }
 
 [data-theme="light"] {
-  --bg: #fff;
+  --bg: #eee;
   --fg: #000;
   --ctrlbg: #ddf;
   --highlight: #099;
