@@ -16,104 +16,11 @@
   <script defer src="js/settings.js"></script>
   <script defer src="js/topmenu.js"></script>
 
-  <script src="js/customblock.js"></script>
+  <script src="js/customblock_shadow.js"></script>
 
   <style>
-    :root {
-      --blocksize: 1.5em;
-    }
-
     bl-ock {
-      position: relative;
-      --half: calc(var(--blocksize) / 2);
-      --margins: calc(var(--blocksize) /9);
-      --rot: 0deg;
-      width: var(--blocksize);
-      height: var(--blocksize);
-      display: inline-block;
-      margin: var(--margins);
-      transform: rotate(var(--rot));
-      transition: all 0.5s;
-      border: solid 1px var(--tranared);
-
-
-      .layer {
-        opacity: 0;
-        transition: all 1s;
-      }
-
-      &[data-state="0"] .layer[data-rot="0"],
-      &[data-state="1"] .layer[data-rot="1"],
-      &[data-state="2"] .layer[data-rot="2"],
-      &[data-state="3"] .layer[data-rot="3"] {
-        opacity: 1
-      }
-
-      & div.wedge {
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-top: var(--half) solid var(--color);
-        border-left: var(--half) solid transparent;
-        border-right: 0;
-        border-bottom: 0;
-        display: inline-block;
-        pointer-events: none;
-      }
-
-      .part_1 {
-        transform: rotate(0);
-        left: 0;
-        top: 0;
-      }
-
-      .part_2 {
-        transform: rotate(-90deg);
-        left: var(--half);
-        top: 0;
-      }
-
-      .part_3 {
-        transform: rotate(90deg);
-        top: 0;
-        left: var(--half);
-      }
-
-      .part_4 {
-        transform: rotate(0);
-        top: var(--half);
-        left: var(--half);
-      }
-
-
-      .part_5 {
-        transform: rotate(180deg);
-        top: var(--half);
-        left: var(--half);
-      }
-
-
-      .part_6 {
-        transform: rotate(90deg);
-        top: var(--half);
-        left: 0;
-      }
-
-
-      .part_7 {
-        transform: rotate(-90deg);
-        top: var(--half);
-        left: 0;
-      }
-
-
-      .part_8 {
-        transform: rotate(180deg);
-        top: 0;
-        left: 0;
-      }
-
-
+      --blocksize: 1.5em;
     }
 
     #abouttext {

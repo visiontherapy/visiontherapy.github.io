@@ -204,15 +204,16 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
   blockstyle() {
     return `<style>
     :host {
-      position: relative;
       --blocksize: 2.5em;
+      --bordercolor: #88f;
+      --oncolor: #fff;
+      --offcolor: #000;
+      --color: #999;
+      position: relative;
       --half: calc(var(--blocksize) / 2);
       --margins: calc(var(--blocksize) /9);
       --rot: 0deg;
-      --bordercolor: blue;
-      --oncolor: #fff;
-      --offcolor:#000;
-      --color:#999;
+      vertical-align: middle;
       width: var(--blocksize);
       height: var(--blocksize);
       display: inline-block;
@@ -220,8 +221,8 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       transform: rotate(var(--rot));
       transition: all 0.5s;
       border: solid 1px var(--bordercolor);
-
-
+      user-select:none;
+      
       .layer {
         opacity: 0;
         transition: all 1s;
@@ -251,54 +252,41 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         left: 0;
         top: 0;
       }
-
       .part_2 {
         transform: rotate(-90deg);
         left: var(--half);
         top: 0;
       }
-
       .part_3 {
         transform: rotate(90deg);
         top: 0;
         left: var(--half);
       }
-
       .part_4 {
         transform: rotate(0);
         top: var(--half);
         left: var(--half);
       }
-
-
       .part_5 {
         transform: rotate(180deg);
         top: var(--half);
         left: var(--half);
       }
-
-
       .part_6 {
         transform: rotate(90deg);
         top: var(--half);
         left: 0;
       }
-
-
       .part_7 {
         transform: rotate(-90deg);
         top: var(--half);
         left: 0;
       }
-
-
       .part_8 {
         transform: rotate(180deg);
         top: 0;
         left: 0;
       }
-
-
     }</style>`;
   }
 
