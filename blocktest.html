@@ -19,51 +19,27 @@
   <script src="js/customblock_shadow.js"></script>
 
   <style>
-    body { background:#222;color:white}
-    
+    body {
+      background: #222;
+      color: white
+    }
 
-    #abouttext {
+    bl-ock {
+      --blocksize: 5em;
+      --bordercolor: var(--tranared);
+      --oncolor:green;
+      --offcolor:gray;
+    }
+
+    #testblock {
       font-size: 18pt;
       margin: 0 1em;
-
-      & bl-ock {
-        vertical-align: middle;
-      }
 
       &>div {
         margin: 1em;
         /* text-indent: 0.5em; */
       }
 
-      .codeblock {
-        display: block;
-        white-space: pre-wrap;
-        font-family: monospace;
-        /* text-indent: 0; */
-        margin: 1.5em 4em;
-        font-size: 80%;
-        border: solid 1px var(--ctrlbg);
-        background: var(--ctrlbg);
-        padding: 1em;
-        position: relative;
-
-        & b {
-          text-shadow: 0 0 0.5em var(--highlight);
-        }
-
-        & button {
-          margin: 1em 0;
-          display: table;
-        }
-
-        .codeout {
-          display: none;
-          background: #9999;
-          white-space: revert;
-          padding: 0.5em 1em;
-        }
-
-      }
     }
   </style>
 </head>
@@ -77,7 +53,7 @@
 
   </div>
 
-  <div id="abouttext">
+  <div id="testblock">
     <bl-ock value="1"></bl-ock>
     <bl-ock value="2" class="red"></bl-ock>
     <div id="testdiv"></div>
