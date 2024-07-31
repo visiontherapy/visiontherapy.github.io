@@ -37,7 +37,6 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     this.value = this.getAttribute("value");
     let states = [];
     if (!this.id) {
-      let shadom = document.createElement("div");
       for (let r = 0; r < 4; r++) {
         states[r] = document.createElement("div");
         states[r].dataset.rot = r;
@@ -60,9 +59,11 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
           }
           states[r].append(b);
         }
-        shadom.append(states[r]);
+        shadowRoot.append(states[r]);
       }
-      shadowRoot.append(shadom);
+      let overlay = document.createElement("div");
+      overlay.className = "overlay";
+      shadowRoot.append(overlay);
     }
 
     this.id = "block" + this.value;
@@ -208,20 +209,19 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
       --bordercolor: #88f;
       --oncolor: #fff;
       --offcolor: #000;
-      --color: #999;
+      --failcolor: #f003;
       position: relative;
-      --half: calc(var(--blocksize) / 2);
-      --margins: calc(var(--blocksize) /9);
-      --rot: 0deg;
       vertical-align: middle;
+      user-select:none;
+      display: inline-block;
+      transition: all 0.5s;
+      --half: calc(var(--blocksize) / 2);
+      --rot: 0deg;
+      margin: calc(var(--blocksize) /9);
       width: var(--blocksize);
       height: var(--blocksize);
-      display: inline-block;
-      margin: var(--margins);
       transform: rotate(var(--rot));
-      transition: all 0.5s;
       border: solid 1px var(--bordercolor);
-      user-select:none;
       
       .layer {
         opacity: 0;
@@ -286,6 +286,21 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         transform: rotate(180deg);
         top: 0;
         left: 0;
+      }
+
+      .overlay {
+        transition: all 0.5s;
+        content: " ";
+        display: block;
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events:none;
+      }
+
+      &:host(.fail) .overlay {
+        opacity: 1;
+        background: var(--failcolor);
       }
     }</style>`;
   }

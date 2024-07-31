@@ -19,10 +19,8 @@
   <script src="js/customblock_shadow.js"></script>
 
   <style>
-
     bl-ock {
       --blocksize: 2.5em;
-      --bordercolor: var(--tranared);
     }
 
 
@@ -58,18 +56,6 @@
           --blocksize: calc(var(--playsize) / var(--gridsize));
           margin: 0;
           position: absolute;
-
-          &::after {
-            transition: all 0.5s;
-            content: "";
-            display: block;
-            position: absolute;
-            inset: 0;
-          }
-
-          &.fail::after {
-            background: #f003;
-          }
         }
       }
 
