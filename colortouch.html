@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Touch</title>
+  <meta name="darkreader-lock">
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="js/alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script>
+
+</head>
+
+<body>
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" checked="true" /><label for="darkmode">Dark mode</label></div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="colortouch"></div>
+
+
+
+  <style>
+    :root {
+      --pointsize: 2em;
+    }
+
+    .ct_point {
+      width: 0;
+      height: 0;
+      display: inline-block;
+      position: relative;
+
+      &.red {
+        --ctcolor: red;
+      }
+
+      &.blue {
+        --ctcolor: blue;
+      }
+
+      &.yellow {
+        --ctcolor: yellow;
+      }
+
+      &.white {
+        --ctcolor: white;
+      }
+
+      &.green {
+        --ctcolor: green;
+      }
+
+      &.wedge {
+        border-top: 0;
+        border-left: var(--pointsize) transparent;
+        border-right: var(--pointsize) transparent;
+        border-bottom: var(--pointsize) var(--ctcolor);
+        border-style: solid;
+        margin: calc(var(--pointsize)/1.5) 1em;
+
+        &.left {
+          transform: rotate(-90deg);
+        }
+
+        &.right {
+          transform: rotate(90deg);
+        }
+
+        &.down {
+          transform: rotate(180deg);
+        }
+
+        &.up {
+          transform: rotate(0deg);
+        }
+
+      }
+
+
+      &.triangle {
+        border-top: 0;
+        border-left: var(--pointsize) transparent;
+        border-right: var(--pointsize) transparent;
+        border-bottom: var(--pointsize) var(--ctcolor);
+        border-bottom: calc(var(--pointsize)*1.5) var(--ctcolor);
+        border-style: solid;
+      }
+
+      &.circle {
+        width: calc(var(--pointsize)*1.5);
+        height: calc(var(--pointsize)*1.5);
+        background-color: var(--ctcolor);
+        border-radius: 100%;
+      }
+
+      &.square {
+        width: calc(var(--pointsize)*1.5);
+        height: calc(var(--pointsize)*1.5);
+        background-color: var(--ctcolor);
+      }
+
+    }
+
+    #ct_targets {
+      --pointsize: 4em;
+      text-align: center;
+      margin: calc(var(--pointsize)/2);
+
+      .updown {
+        margin-left: calc(var(--pointsize)/1.5);
+        transform: rotate(90deg);
+      }
+
+      .inline {
+        display: inline-block;
+      }
+
+      .ct_point.wedge {
+        margin: calc(var(--pointsize)/2) calc(var(--pointsize)/-2.25);
+
+      }
+    }
+  </style>
+
+  <script>
+
+    // layout:
+    // 10x 4 rows of small shapes
+    // remainder up top for large shapes
+
+    let colors = ("red blue yellow white" || "red green blue").split(" ");
+    let shapes = ("left right up down" || "circle square wedge").split(" ");
+
+    let targets = document.createElement("div");
+    targets.id = "ct_targets";
+    targets.innerHTML = `
+    <div class="inline">
+    <div class="ct_point triangle left blue"></div>
+    <div class="ct_point circle right red"></div>
+    </div>
+    <div class="inline updown">
+    <div class="ct_point square left yellow"></div>
+    <div class="ct_point wedge right white"></div>
+    </div>
+    `;
+    targets.innerHTML = `
+    <div class="inline">
+    <div class="ct_point triangle blue"></div>
+    <div class="ct_point circle red"></div>
+    <div class="ct_point square green"></div>
+    </div>
+    `;
+
+    let instruct = document.createElement("div");
+    instruct.id = "ct_instruct";
+    document.querySelector("#colortouch").append(targets, instruct);
+
+
+    for (let x = 0; x < 40; x++) {
+      let point = document.createElement("div");
+      point.className = "ct_point wedge " + randarray(colors) + " " + randarray(shapes);
+      instruct.append(point);
+    }
+
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart();
+      window.location.hash = "";
+    };
+
+    // TODO : Make this printable
+
+  </script>
+  <style>
+  </style>
+
+
+</body>
+
+</html>
