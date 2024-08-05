@@ -228,13 +228,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         transition: all 1s;
       }
 
-      &:host([data-state="0"]) .layer[data-rot="0"],
-      &:host([data-state="1"]) .layer[data-rot="1"],
-      &:host([data-state="2"]) .layer[data-rot="2"],
-      &:host([data-state="3"]) .layer[data-rot="3"] {
-        opacity: 1
-      }
-
+      
       & div.wedge {
         position: absolute;
         width: 0;
@@ -298,11 +292,23 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
         pointer-events:none;
       }
 
-      &:host(.fail) .overlay {
+      
+    }
+
+:host([data-state="0"]) .layer[data-rot="0"],
+      :host([data-state="1"]) .layer[data-rot="1"],
+      :host([data-state="2"]) .layer[data-rot="2"],
+      :host([data-state="3"]) .layer[data-rot="3"] {
+        opacity: 1
+      }
+
+:host(.fail) .overlay {
         opacity: 1;
         background: var(--failcolor);
       }
-    }</style>`;
+
+
+</style>`;
   }
 
 
