@@ -129,7 +129,7 @@
         case "all":
           return allblocks.split(" ");
         case "rogue":
-          return (allblocks + "1357 2468 2367 1256 12345678 ").split(" ");
+          return (allblocks + "1357 2468 2367 1256 12345678 ").split(" "); // the final space serves as delimiter for the null value, denoting a blank tile
         case "36":
           return ashuffle(allblocks.split(" ")).slice(0, 36);
       }
