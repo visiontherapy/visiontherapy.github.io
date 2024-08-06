@@ -134,6 +134,9 @@
 
       }
     }
+    .chars {
+      font-size: 100pt;
+    }
   </style>
 
   <script>
@@ -143,12 +146,17 @@
     // remainder up top for large shapes
 
     let colors = ("red blue yellow white" || "red green blue").split(" ");
+
+    let shps = "■ ▲ ● ◸"; // &#9632; &#9650; &#9679; &#9700;
+
+  
     let shapes = ("left right up down" || "circle square wedge").split(" ");
 
     let targets = document.createElement("div");
     targets.id = "ct_targets";
     targets.innerHTML = `
     <div class="inline">
+<<<<<<< Updated upstream
     <div class="ct_point left blue"></div>
     <div class="ct_point right red"></div>
     </div>
@@ -158,6 +166,17 @@
     </div>
     `;
    /* targets.innerHTML = `
+=======
+    <div class="ct_point wedge left blue"></div>
+    <div class="ct_point wedge right red"></div>
+    </div>
+    <div class="inline updown">
+    <div class="ct_point wedge left yellow"></div>
+    <div class="ct_point wedge right white"></div>
+    </div>
+    `;
+    targets.inneeeeerHTML = `
+>>>>>>> Stashed changes
     <div class="inline">
     <div class="ct_point triangle blue"></div>
     <div class="ct_point circle red"></div>
@@ -173,6 +192,7 @@
     for (let x = 0; x < 40; x++) {
       let point = document.createElement("div");
       point.className = "ct_point wedge " + randarray(colors) + " " + randarray(shapes);
+      // point.className = "chars";      point.innerText = randarray(shps.split(" "));
       instruct.append(point);
     }
 
