@@ -31,9 +31,43 @@
 
   <div id="colortouch"></div>
 
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <path d="M150 5 L75 200 L225 200 Z"
+    style="fill:none;stroke:green;stroke-width:3" />
+  </svg> 
+
+
+
+<svg class="icon  icon--plus" viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 1 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" />
+</svg>
+
+
+<svg class="icon  icon--plus" viewBox="0 0 4 1.5" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 1.5 l2 -1.5 l2 1.5 z" />
+</svg>
+
+
 
 
   <style>
+    .icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 5em;
+}
+
+.icon--plus {
+    background-color: none;
+}
+
+.icon--plus > path {
+    fill: red;
+    stroke: gold;
+    stroke-width: 0.1;
+    stroke-linejoin: round;
+}
+
     :root {
       --pointsize: 2em;
     }
@@ -156,17 +190,6 @@
     targets.id = "ct_targets";
     targets.innerHTML = `
     <div class="inline">
-<<<<<<< Updated upstream
-    <div class="ct_point left blue"></div>
-    <div class="ct_point right red"></div>
-    </div>
-    <div class="inline updown">
-    <div class="ct_point left yellow"></div>
-    <div class="ct_point right white"></div>
-    </div>
-    `;
-   /* targets.innerHTML = `
-=======
     <div class="ct_point wedge left blue"></div>
     <div class="ct_point wedge right red"></div>
     </div>
@@ -175,8 +198,7 @@
     <div class="ct_point wedge right white"></div>
     </div>
     `;
-    targets.inneeeeerHTML = `
->>>>>>> Stashed changes
+   /* targets.innerHTML = `
     <div class="inline">
     <div class="ct_point triangle blue"></div>
     <div class="ct_point circle red"></div>

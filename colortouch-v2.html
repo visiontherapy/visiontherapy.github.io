@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Touch</title>
+  <meta name="darkreader-lock">
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="js/alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script>
+
+
+  <style>
+    :root {
+      --pointsize: 2em;
+    }
+
+    #ct_targets {
+      --pointsize: 4em;
+      text-align: center;
+      margin: calc(var(--pointsize)/2);
+
+      .updown {
+        margin-left: calc(var(--pointsize)/1.5);
+        transform: rotate(90deg);
+      }
+
+      .inline {
+        display: inline-block;
+      }
+
+      /* .ct_point.wedge {
+        margin: calc(var(--pointsize)/2) calc(var(--pointsize)/-2.25);
+
+      } */
+    }
+
+    .chars {
+      font-size: 100pt;
+    }
+
+
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+      height: 3em;
+      margin: 0.5em;
+      /* background-color: cornflowerblue; */
+
+      --ctcolor: red;
+
+      path,
+      circle {
+        fill: var(--ctcolor);
+        stroke: var(--fg);
+        stroke-width: 0.1;
+        stroke-linejoin: round;
+
+      }
+
+      &.red {
+        --ctcolor: red;
+      }
+
+      &.blue {
+        --ctcolor: blue;
+      }
+
+      &.yellow {
+        --ctcolor: yellow;
+      }
+
+      &.white {
+        --ctcolor: white;
+      }
+
+      &.green {
+        --ctcolor: green;
+      }
+
+      &.left {
+        transform: rotate(0deg);
+      }
+
+      &.right {
+        transform: rotate(180deg);
+      }
+
+      &.down {
+        transform: rotate(-90deg);
+      }
+
+      &.up {
+        transform: rotate(90deg);
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" checked="true" /><label for="darkmode">Dark mode</label></div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="colortouch"></div>
+
+
+  <script>
+    function svgpath({ viewBox = "0 0 2.2 2.2", path, cls } = {}) {
+      let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", viewBox);
+      let thepath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      thepath.setAttribute("d", "M0.1 0.1 " + path);
+      svg.appendChild(thepath);
+      svg.classList.add("icon");
+      if (cls) svg.classList.add(...cls.split(" "));
+      return svg;
+    }
+
+    function svgcircle({ cls } = {}) {
+      let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 2.2 2.2");
+      let c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute("cx", 1.1);
+      c.setAttribute("cy", 1.1);
+      c.setAttribute("r", 1);
+      svg.appendChild(c);
+      svg.classList.add("icon");
+      if (cls) svg.classList.add(...cls.split(" "));
+      return svg;
+      // document.body.append(svg);
+    }
+
+    function shape(s, cls) {
+      switch (s) {
+        case "left":
+        case "right":
+        case "up":
+        case "down":
+        case "wedge":
+          return svgpath({ viewBox: "0 0 2.2 4.2", path: "m2 0 l-2 2 l2 2 z", cls: cls + " " + s });
+          break;
+        case "circle": return svgcircle({ cls: cls + " " + s });
+          break;
+        case "square":
+          return svgpath({ path: "m0 0 h2 v2 h-2 z", cls: cls + " " + s });
+          break;
+        case "triangle":
+          return svgpath({ path: "m0 2 l1 -2 l1 2 z", cls: cls + " " + s });
+          break;
+      }
+    }
+
+    document.body.append(shape("square", "blue"), shape("circle"), shape("triangle", "yellow"));
+
+    let colors = ("red blue green white" || "red green blue").split(" ");
+
+    let shapes = ("left right up down" || "circle square wedge").split(" ");
+
+    let targets = document.createElement("div");
+    targets.id = "ct_targets";
+    let left = document.createElement("div");
+    left.className = "inline";
+    left.append(shape("left", "green"), shape("right", "blue"));
+    let right = document.createElement("div");
+    right.className = "inline updown";
+    right.append(shape("left", "red"), shape("right", "white"));
+
+    targets.append(left, right);
+
+    let instruct = document.createElement("div");
+    instruct.id = "ct_instruct";
+    document.querySelector("#colortouch").append(targets, instruct);
+
+
+    for (let x = 0; x < 40; x++) {
+      // let point = document.createElement("div");
+      // point.className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
+      // point.className = "chars";      point.innerText = randarray(shps.split(" "));
+      // .className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
+
+      instruct.append(shape(randarray(shapes), randarray(colors)));
+    }
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart();
+      window.location.hash = "";
+    };
+
+    // TODO : Make this printable
+
+
+    /* targets.innerHTML = `
+     <div class="inline">
+     <div class="ct_point triangle blue"></div>
+     <div class="ct_point circle red"></div>
+     <div class="ct_point square green"></div>
+     </div>
+     `;
+ */
+
+  </script>
+
+  <!-- <svg class="icon" viewBox="0 0 3 3" xmlns="http://www.w3.org/2000/svg"><path d="M1 0 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" /></svg> -->
+
+
+</body>
+
+</html>
