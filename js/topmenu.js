@@ -79,7 +79,13 @@ let data = [ //first two items comprise the menu opener (open / close)
     "src": "img/icon_fistbump.svg",
     "alt": "Closed/Open/Flat",
     "link": "fistbump.html"
+  }, {
+    "id": "id12",
+    "src": "img/logo.svg",
+    "alt": "Color Touch",
+    "link": "colortouch.html"
   },
+
 ];
 
 let menuthing = document.createElement("div");

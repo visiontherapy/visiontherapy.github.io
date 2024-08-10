@@ -306,3 +306,10 @@ label h3 {
 .circlemenu .togglediv img {
   filter: invert(0.5);
 }
+
+
+@media print {
+  #ctrlbar, #controls {
+    display:none;
+  }
+}
