@@ -128,6 +128,7 @@
 
     @media print {
       .icon {
+
         path,
         circle {
           stroke: black;
@@ -252,15 +253,20 @@
     instruct.id = "ct_instruct";
     document.querySelector("#colortouch").append(targets, instruct);
 
+    function showchart() {
+      instruct.innerHTML = "";
 
-    for (let x = 0; x < 40; x++) {
-      // let point = document.createElement("div");
-      // point.className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
-      // point.className = "chars";      point.innerText = randarray(shps.split(" "));
-      // .className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
+      for (let x = 0; x < 40; x++) {
+        // let point = document.createElement("div");
+        // point.className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
+        // point.className = "chars";      point.innerText = randarray(shps.split(" "));
+        // .className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
 
-      instruct.append(shape(randarray(shapes), randarray(colors)));
+        instruct.append(shape(randarray(shapes), randarray(colors)));
+      }
     }
+
+    showchart();
 
     document.querySelector("#reload").onclick = function (e) {
       showchart();
