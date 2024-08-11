@@ -289,7 +289,6 @@
       let rngseed = pattern ?? Math.floor(Math.random() * 100000000);
       let rng = random(rngseed);
 
-      let txferstring = "";
       main.innerHTML = "";
       let lastchar = "";
       for (let x = 1; x <= 10; x++) {
@@ -304,16 +303,12 @@
           let breakcount;
           slot.dataset.char = slot.innerText = lastchar = nextletter(lastchar);
           //pattern ? pattern.shift() : 
-          txferstring += lastchar;
           main.append(slot);
         }
       }
 
-      // return txferstring;
-      // if (!pattern) {
       let url = window.location.toString();
       url.replace(/[\?#&].*$/, "");
-      // let qrstring = url + "#" + txferstring;
       let qrstring = url + "#" + rngseed;
       // console.log(qrstring);
       qrplace.innerHTML = "";
