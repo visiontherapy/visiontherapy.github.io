@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hart Chart exercise</title>
+  <meta name="darkreader-lock">
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="js/alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script>
+
+
+  <style>
+    body {
+      --scale: 1;
+      --topgap: 2em;
+      /* clamp(2.5rem, 2.5em, 10vh); */
+      /* --slotsize: calc(var(--boxsize) / 10); */
+      --codegap: 2.5em;
+      --boxsize: min(calc(95vh - var(--topgap) - var(--codegap)), calc(95vw - var(--topgap) - var(--codegap)));
+      --basefont: calc(var(--boxsize) / 13);
+    }
+
+    #hartmain {
+      position: relative;
+      font-family: 'Times New Roman', Times, serif;
+      height: var(--boxsize);
+      width: var(--boxsize);
+      font-size: var(--basefont);
+      margin-top: 1em;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      left: 50%;
+      transform-origin: top;
+      transform: translate(-50%) scale(var(--scale));
+
+      .slot {
+        position: relative;
+        text-align: center;
+        line-height: var(--basefont);
+        /* grid layout takes care of size */
+        /* width: var(--slotsize);
+        height: var(--slotsize); */
+      }
+    }
+
+
+    #qrplace {
+      display: none;
+      position: relative;
+      text-align: center;
+      /* left: 50%;
+      transform: translate(-50%);
+      top: 0.5em; */
+    }
+
+    .qrcode {
+      padding: 10px;
+      background: #fff;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      top: 1.5em;
+      z-index: 1000;
+    }
+
+    #qrtoggle:checked~#qrplace {
+      display: block;
+    }
+
+
+    #boxscale {
+      position: relative;
+      top: 1em;
+      left: 50%;
+      transform: translate(-50%);
+      width: 40%;
+
+      & input {
+        width: 100%;
+      }
+    }
+
+    #boxscale::before,
+    #boxscale::after {
+      content: "A";
+      font-size: 100%;
+      display: block;
+      position: absolute;
+      width: 1em;
+      height: 1em;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    #boxscale::before {
+      left: -1.5em;
+    }
+
+    #boxscale::after {
+      font-size: 150%;
+      right: -1.5em;
+    }
+
+    #hartchart {
+      display: flex;
+      flex-direction: column;
+
+
+      #hartmain {
+        order: 1;
+      }
+
+      #codeout {
+        font-size: calc(var(--basefont) /2);
+        order: 2;
+        transition: all 0.5s;
+
+        .lettercode {
+          padding: 0 0.25em;
+          cursor: pointer;
+          background: transparent;
+          border: none;
+          width: 3.2em;
+          color: var(--fg);
+          font-size: 90%;
+          text-align: center;
+          display: inline-block;
+
+          &.correct {
+            color: var(--highlight);
+          }
+        }
+
+        .lettercode:not([data-row]) {
+          pointer-events: none;
+        }
+
+      }
+
+      #codeout.finished {
+        background: green;
+
+        .lettercode {
+          padding: 0;
+          margin: 0;
+          width: 1em;
+
+          .correct {
+            color: var(--fg);
+          }
+        }
+      }
+
+      #codehints {
+        order: 3;
+      }
+
+    }
+
+    @media print {
+
+      #boxscale {
+        display: none;
+      }
+
+      #codeout {
+        line-height: 1.6em;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+  <div id="ctrlbar" class="z1">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+    <div><input type="checkbox" class="slider" id="shapearrow" /><label for="shapearrow">Shapes/Arrows</label></div>
+
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+
+  <div id="hartchart" class="contents">
+    <div id="hartmain"></div>
+  </div>
+
+  <script>
+
+
+    let main = document.querySelector("#hartmain");
+
+      showchart();
+
+
+    function showchart(pattern) {
+      let rngseed = pattern ?? Math.floor(Math.random() * 100000000);
+      let rng = random(rngseed);
+
+      main.innerHTML = "";
+      let lastchar = "";
+      for (let x = 1; x <= 10; x++) {
+        for (let y = 1; y <= 10; y++) {
+          let slot = document.createElement("div");
+          slot.className = "slot";
+
+          //slot.id = "slot" + x + "-" + y;
+          slot.dataset.slot = [x, y];
+          slot.dataset.row = x;
+          slot.dataset.col = y;
+          let breakcount;
+          slot.dataset.char = slot.innerText = lastchar = nextletter(lastchar);
+          //pattern ? pattern.shift() : 
+          main.append(slot);
+        }
+      }
+
+
+
+
+
+
+      function nextletter(lastchar) {
+        let alpha = "ABCDEFGHKLMNOPQRSTUVWXYZ".split("");
+        let loopcount = 0;
+        let nextchar;
+        do {
+          // nextchar = alpha[Math.floor(Math.random() * alpha.length)];
+          nextchar = alpha[Math.floor(rng() * alpha.length)];
+          // console.log("checking mark",loopcount,nextmark,centerpoint.dataset.mark);
+          if (++loopcount > 5) break; // prevent infinite loop when only one mark is available
+        } while (nextchar && nextchar == lastchar);
+        return nextchar;
+      }
+
+    }
+
+
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart();
+      window.location.hash = "";
+    };
+
+
+  </script>
+
+</body>
+
+</html>
