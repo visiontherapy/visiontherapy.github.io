@@ -99,6 +99,15 @@
     #ctrlbar:has([value="colorful"]:checked)~#saccades .dot {
       color: var(--colorfg);
     }
+
+
+    @media print {
+      #saccades.midspace .dot:not(#centerpoint) {
+        background: black;
+        color: black;
+        print-color-adjust: exact !important;
+      }
+    }
   </style>
 </head>
 

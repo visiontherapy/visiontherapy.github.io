@@ -134,7 +134,7 @@
           cursor: pointer;
           background: transparent;
           border: none;
-          width: 5ex;
+          width: 3.2em;
           color: var(--fg);
           font-size: 90%;
           text-align: center;
@@ -165,13 +165,9 @@
         }
       }
 
-
-
       #codehints {
         order: 3;
       }
-
-
 
       #codehints:has(input:checked)~#codeout {
 
@@ -198,6 +194,19 @@
           color: var(--highlight);
         }
       }
+    }
+
+    @media print {
+
+      #boxscale,
+      #codehints {
+        display: none;
+      }
+
+      #codeout {
+        line-height: 1.6em;
+      }
+
     }
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->

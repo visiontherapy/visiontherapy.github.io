@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head id="prnt">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Closed, Open, Flat</title>
@@ -63,33 +63,45 @@ https://gamedevelopment.tutsplus.com/picking-a-color-palette-for-your-games-artw
     .bumpthing {
       width: 3em;
       height: 3em;
-      --bumpcolor: var(--fg);
+      --bumpcolor: var(--fc7);
 
       &::after {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         content: " ";
-        border: solid 0.2em var(--bumpcolor);
+        /* border: solid 0.2em var(--bumpcolor); */
         display: block;
         position: relative;
+        background: var(--bumpcolor);
       }
 
       &[data-state="1"]::after {
-        width: 0;
+        width: 0.5em;
         height: 100%;
       }
 
       &[data-state="2"]::after {
-        width: 50%;
-        height: 50%;
-        border-width: 0.4em;
+        width: 75%;
+        height: 75%;
+        /* border-width: 0.4em; */
+        border: none;
         border-radius: 50%;
       }
 
       &[data-state="3"]::after {
         width: 45%;
-        height: 0;
+        height: 0.5em;
+      }
+    }
+
+    @media print {
+      :root {
+        --fc7: black;
+      }
+
+      .bumpthing::after {
+        print-color-adjust: exact !important;
       }
     }
   </style>
@@ -154,9 +166,6 @@ https://gamedevelopment.tutsplus.com/picking-a-color-palette-for-your-games-artw
     // TODO : Make this printable
 
   </script>
-  <style>
-  </style>
-
 
 </body>
 

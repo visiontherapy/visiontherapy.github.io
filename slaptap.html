@@ -69,7 +69,7 @@
       --entitybg: transparent;
 
       .line {
-        border: solid var(--line) var(--fg);
+        border: solid var(--line) var(--fc7);
         border-right-width: 0;
         top: 0;
         bottom: 0;
@@ -89,7 +89,7 @@
       &[data-set*="2"] .rh,
       &[data-set*="3"] .lf,
       &[data-set*="4"] .rf {
-        border: solid var(--line) var(--fg);
+        border: solid var(--line) var(--fc7);
         background-color: var(--entitybg);
       }
 
@@ -135,6 +135,17 @@
         bottom: 0;
       }
     }
+
+
+    @media print {
+      :root {
+        --fc7: black;
+      }
+
+      .entity {
+        print-color-adjust: exact !important;
+      }
+    }
   </style>
 
 </head>
@@ -165,7 +176,7 @@
 
   <div id="slapthing"></div>
 
-  
+
   <script>
     let entities = {};
     entities[1] = [1, 2, 3, 4];
