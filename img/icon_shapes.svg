@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="13.260665mm"
+   height="13.260665mm"
+   viewBox="0 0 13.260665 13.260665"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   sodipodi:docname="icon_spotit.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.1283896"
+     inkscape:cx="125.39995"
+     inkscape:cy="35.448749"
+     inkscape:window-width="1920"
+     inkscape:window-height="1129"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" /><defs
+     id="defs1" /><style
+     type="text/css"
+     id="style2">
+	.st0{fill:#1DA1F2;}
+	.st1{fill:#FFFFFF;}
+</style><g
+     id="g139"
+     transform="translate(-74.902001,-5.3664508)"><circle
+       r="6.2996035"
+       cy="11.996783"
+       cx="81.532333"
+       id="circle127"
+       style="fill:#603d23;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.661458;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><path
+       id="path61"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.646281;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:0.561714;paint-order:markers stroke fill"
+       d="m 81.532354,9.9384583 0.625666,1.0949987 1.234767,0.256692 -0.84806,0.933457 0.137432,1.253602 -1.149805,-0.518092 -1.149838,0.518092 0.137432,-1.253602 -0.848026,-0.933457 1.234734,-0.256692 z m 0,-2.1330227 -1.326096,2.3207154 -2.616893,0.544037 1.797309,1.978308 -0.291216,2.656939 2.436896,-1.098044 2.436852,1.098044 -0.291213,-2.656939 1.797309,-1.978308 -2.616893,-0.544037 z" /></g></svg>
