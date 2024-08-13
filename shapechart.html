@@ -29,26 +29,28 @@
     }
 
     #hartmain {
+      --numslots: 8;
       position: relative;
-      font-family: 'Times New Roman', Times, serif;
       height: var(--boxsize);
       width: var(--boxsize);
       font-size: var(--basefont);
+      --slotsize: calc(var(--boxsize) / var(--numslots));
       margin-top: 1em;
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(10, 1fr);
+      grid-template-columns: repeat(var(--numslots), 1fr);
+      grid-template-rows: repeat(var(--numslots), 1fr);
       left: 50%;
+      grid-gap: calc(var(--slotsize) / 8);
       transform-origin: top;
       transform: translate(-50%) scale(var(--scale));
 
       .slot {
         position: relative;
         text-align: center;
-        line-height: var(--basefont);
+        /* line-height: var(--basefont); */
         /* grid layout takes care of size */
-        /* width: var(--slotsize);
-        height: var(--slotsize); */
+        width: calc(var(--slotsize) * 7 / 8);
+        height: calc(var(--slotsize) * 7 / 8);
       }
     }
 
@@ -119,54 +121,44 @@
         order: 1;
       }
 
-      #codeout {
-        font-size: calc(var(--basefont) /2);
-        order: 2;
-        transition: all 0.5s;
+    }
 
-        .lettercode {
-          padding: 0 0.25em;
-          cursor: pointer;
-          background: transparent;
-          border: none;
-          width: 3.2em;
-          color: var(--fg);
-          font-size: 90%;
-          text-align: center;
-          display: inline-block;
 
-          &.correct {
-            color: var(--highlight);
-          }
-        }
+    .shape {
 
-        .lettercode:not([data-row]) {
-          pointer-events: none;
-        }
-
+      --arrowscale: 0.7;
+      scale: 0.9;
+      &.arrow {
+        scale: var(--arrowscale);
+      }
+      &.up {
+        /* transform: scale(var(--arrowscale)) rotate(-90deg); */
+        rotate: -90deg;
       }
 
-      #codeout.finished {
-        background: green;
-
-        .lettercode {
-          padding: 0;
-          margin: 0;
-          width: 1em;
-
-          .correct {
-            color: var(--fg);
-          }
-        }
+      &.left {
+        rotate: 180deg;
       }
 
-      #codehints {
-        order: 3;
+      &.down {
+        rotate: 90deg;
+      }
+
+      path,
+      circle {
+        fill: var(--fg);
+        /* stroke: var(--fg); */
+        /* stroke-width: 0.1; */
+        stroke-linejoin: round;
+
       }
 
     }
 
     @media print {
+      #hartmain {
+        --boxsize: 6.5in;
+      }
 
       #boxscale {
         display: none;
@@ -177,6 +169,10 @@
       }
 
     }
+
+    #ctrlbar:has(#shapearrow:checked)~#hartchart #hartmain {
+      --numslots: 6;
+    }
   </style>
 </head>
 
@@ -184,7 +180,7 @@
 
 
 
-  <div id="ctrlbar" class="z1">
+  <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
@@ -204,50 +200,44 @@
   <script>
 
 
+    // arrows in 4 directions (maybe 8?
+    // shapes: square, diamond (square45deg), circle, triangle, star
+    // console.log(shapes);
+
+
     let main = document.querySelector("#hartmain");
+    let arrow = document.querySelector("#shapearrow");
+    arrow.onchange = showchart;
 
-      showchart();
+    showchart();
 
 
-    function showchart(pattern) {
-      let rngseed = pattern ?? Math.floor(Math.random() * 100000000);
-      let rng = random(rngseed);
+    function showchart() {
+
+      let shapes = arrow.checked ? [["up", "down"], ["left", "right"]] : "star circle diamond square triangle".split(" "); //.map(s => "img/chart/chart_" + s + ".svg");
+
 
       main.innerHTML = "";
-      let lastchar = "";
-      for (let x = 1; x <= 10; x++) {
-        for (let y = 1; y <= 10; y++) {
+      let previous = [];
+
+      let shapecount = arrow.checked ? 6 : 8;
+
+
+      for (let x = 1; x <= shapecount; x++) {
+        for (let y = 1; y <= shapecount; y++) {
           let slot = document.createElement("div");
           slot.className = "slot";
 
-          //slot.id = "slot" + x + "-" + y;
-          slot.dataset.slot = [x, y];
-          slot.dataset.row = x;
-          slot.dataset.col = y;
-          let breakcount;
-          slot.dataset.char = slot.innerText = lastchar = nextletter(lastchar);
-          //pattern ? pattern.shift() : 
+          if (arrow.checked) {
+            slot.append(shape(randarray(shapes[(x + y) % 2])));
+          } else {
+            previous.push(randarray(shapes, [previous[previous.length - 1], previous[previous.length - shapecount]]));
+            // shp.src =
+            slot.append(shape(previous[previous.length - 1]));
+            //pattern ? pattern.shift() : 
+          }
           main.append(slot);
         }
-      }
-
-
-// arrows in 4 directions (maybe 8?
-// shapes: square, diamond (square45deg), circle, triangle, star
-
-
-
-      function nextletter(lastchar) {
-        let alpha = "ABCDEFGHKLMNOPQRSTUVWXYZ".split("");
-        let loopcount = 0;
-        let nextchar;
-        do {
-          // nextchar = alpha[Math.floor(Math.random() * alpha.length)];
-          nextchar = alpha[Math.floor(rng() * alpha.length)];
-          // console.log("checking mark",loopcount,nextmark,centerpoint.dataset.mark);
-          if (++loopcount > 5) break; // prevent infinite loop when only one mark is available
-        } while (nextchar && nextchar == lastchar);
-        return nextchar;
       }
 
     }
@@ -258,6 +248,91 @@
       showchart();
       window.location.hash = "";
     };
+
+
+    function svgpath({ viewBox = "0 0 2.2 2.2", path, cls } = {}) {
+      let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", viewBox);
+      let thepath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      thepath.setAttribute("d", "M0.1 0.1 " + path);
+      svg.appendChild(thepath);
+      svg.classList.add("shape");
+      if (cls) svg.classList.add(...cls.split(" "));
+      return svg;
+    }
+
+    function svgcircle({ cls } = {}) {
+      let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 2.2 2.2");
+      let c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute("cx", 1.1);
+      c.setAttribute("cy", 1.1);
+      c.setAttribute("r", 0.9);
+      svg.appendChild(c);
+      svg.classList.add("shape");
+      if (cls) svg.classList.add(...cls.split(" "));
+      return svg;
+      // document.body.append(svg);
+    }
+
+
+    function shape(s) {
+      switch (s) {
+        case "left":
+        case "right":
+        case "up":
+        case "down":
+          return svgpath({ path: "m0 0.85 l1.5 0 l0 -0.3 l0.5 0.45 l-0.5 0.45 l0 -0.3 l-1.5 0 z", cls: "arrow " + s });
+          break;
+        case "circle": return svgcircle({ cls: s });
+          break;
+        case "square":
+          return svgpath({ path: "m0.2 0.2 h1.6 v1.6 h-1.6 z", cls: s });
+          break;
+        case "triangle":
+          return svgpath({ path: "m0 1.8 l1 -1.732 l1 1.732 z", cls: s });
+          break;
+        case "diamond":
+          return svgpath({ path: "m0 1 l1 -1 l1 1 l-1 1 z", cls: s });
+          break;
+
+        case "star": // real
+          return svgpath({
+            path:
+              "m0 0.727 " +
+              "l0.753 -0.016 " +
+              "l0.247	-0.711 " +
+
+              "l0.247 0.711 " +
+              "l0.753 0.016 " +
+
+              "l-0.6 0.454 " +
+              "l0.218 0.721 " +
+
+              "l-0.618 -0.430 " +
+              "l-0.618 0.430 " +
+              "l0.218 -0.721 " +
+              "z ", cls: s
+          });
+          break;
+        case "handstar":
+          return svgpath({
+            path:
+              "m0 0.7 " + //left point
+              "l0.75 0 " + // left in
+              "l0.25 -0.7 " + // top point
+              "l0.25 0.7 " + // down to right in
+              "l0.75 0 " + // right point
+              "l-0.6 0.5 " + // RL in
+              "l0.25 0.7 " + // RL point
+              "l-0.65 -0.45 " + // bottom in
+              "l-0.65 0.45 " + // LL point
+              "l0.25 -0.7 " + // LL in
+              "z", cls: s
+          });
+          break;
+      }
+    }
 
 
   </script>
