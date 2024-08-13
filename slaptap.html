@@ -190,9 +190,8 @@
 
     let colormode = document.querySelector("#colormode");
 
-    level.onchange = colormode.onclick = () => {
-      showchart();
-    };
+    level.onchange = colormode.onclick = showchart;
+    
 
     showchart();
 

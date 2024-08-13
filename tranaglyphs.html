@@ -327,10 +327,8 @@
 
 
 
-    fusion.onchange = function (e) {
-      fusiontoggle();
-    };
-
+    fusion.onchange = fusiontoggle; 
+    
 
     function fusiontoggle() {
       if (fusion.checked) {
@@ -364,10 +362,8 @@
 
 
     slider.setAttribute("step", basestep);
-    slider.oninput = function (e) {
-      movecircles();
-    };
-
+    slider.oninput = movecircles; 
+    
 
 
     calibrator.oninput = function (e) {
