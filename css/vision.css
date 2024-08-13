@@ -309,6 +309,9 @@ label h3 {
 
 
 @media print {
+  :root {
+    --fg:black;
+  }
   #ctrlbar, #controls {
     display:none;
   }
