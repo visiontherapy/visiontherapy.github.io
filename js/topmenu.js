@@ -45,6 +45,11 @@ let data = [ //first two items comprise the menu opener (open / close)
     "alt": "Hart Chart",
     "link": "hartchart.html"
   }, {
+    "id": "id13",
+    "src": "img/icon_shapes.svg",
+    "alt": "Shape Chart",
+    "link": "shapechart.html"
+  }, {
     "id": "id5",
     "src": "img/icon_tracking.svg",
     "alt": "Letter Tracking",
@@ -81,11 +86,10 @@ let data = [ //first two items comprise the menu opener (open / close)
     "link": "fistbump.html"
   }, {
     "id": "id12",
-    "src": "img/logo.svg",
+    "src": "img/icon_color.svg",
     "alt": "Color Touch",
     "link": "colortouch.html"
   },
-
 ];
 
 let menuthing = document.createElement("div");
