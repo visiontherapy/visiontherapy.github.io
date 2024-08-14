@@ -36,27 +36,27 @@ let data = [ //first two items comprise the menu opener (open / close)
     "link": "index.html"
   }, {
     "id": "id3",
-    "src": "img/icon_saccades.svg",
+    "src": "img/icon_cpsaccades.svg",
     "alt": "CP Saccades",
     "link": "cpsaccades.html"
   }, {
     "id": "id4",
-    "src": "img/icon_hart.svg",
+    "src": "img/icon_hartchart.svg",
     "alt": "Hart Chart",
     "link": "hartchart.html"
   }, {
     "id": "id13",
-    "src": "img/icon_shapes.svg",
+    "src": "img/icon_shapechart.svg",
     "alt": "Shape Chart",
     "link": "shapechart.html"
   }, {
     "id": "id5",
-    "src": "img/icon_tracking.svg",
+    "src": "img/icon_lettertracking.svg",
     "alt": "Letter Tracking",
     "link": "lettertracking.html"
   }, {
     "id": "id6",
-    "src": "img/icon_glyphs.svg",
+    "src": "img/icon_tranaglyphs.svg",
     "alt": "Tranaglyphs",
     "link": "tranaglyphs.html"
   }, {
@@ -71,7 +71,7 @@ let data = [ //first two items comprise the menu opener (open / close)
     "link": "blocks.html"
   }, {
     "id": "id9",
-    "src": "img/icon_spotit.svg",
+    "src": "img/icon_spotmatch.svg",
     "alt": "Spot the Match",
     "link": "spotmatch.html"
   }, {
@@ -86,7 +86,7 @@ let data = [ //first two items comprise the menu opener (open / close)
     "link": "fistbump.html"
   }, {
     "id": "id12",
-    "src": "img/icon_color.svg",
+    "src": "img/icon_colortouch.svg",
     "alt": "Color Touch",
     "link": "colortouch.html"
   },
