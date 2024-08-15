@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CP saccades exercise</title>
+  <meta name="darkreader-lock">
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <script src="js/alljs.js"></script>
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script>
+
+  <style>
+    #saccades {
+      position: relative;
+      height: min(85vh, 98vw);
+      width: 90vw;
+      margin: 0;
+      left: 50%;
+      transform: translate(-50%);
+      cursor: default;
+      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+      user-select: none;
+
+      &.midspace .dot:not(#centerpoint) {
+        background: var(--fg);
+        color: var(--fg);
+      }
+
+    }
+
+
+    .dot {
+      position: absolute;
+      background: transparent;
+      text-align: center;
+      height: 1em;
+      width: 1em;
+      border-radius: 1em;
+    }
+
+    /* centerpoint is also a dot */
+    #centerpoint {
+      /* top: calc(50% - 0.5em);
+  left: calc(50% - 0.5em);
+  transform: translate(calc(-50% + 0.5em));
+  width: 1em;
+  height: 1em; */
+      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+
+      &::after {
+        content: attr(data-mark);
+        position: absolute;
+        display: block;
+        width: 1em;
+        height: 1em;
+        text-align: center;
+        border-radius: 1em;
+        border: solid 1px #888;
+      }
+    }
+
+
+
+    #ctrlbar:has([value="redgreen"]:checked)~#saccades {
+
+      .red {
+        color: var(--tranared);
+      }
+
+      .green {
+        color: var(--tranagreen);
+      }
+
+    }
+
+    #ctrlbar:has([value="hybrid"]:checked)~#saccades {
+
+      .red {
+        background: linear-gradient(90deg, var(--tranagreen) 49%, var(--tranared) 50%);
+        color: transparent;
+        background-clip: text;
+      }
+
+      .green {
+        background: linear-gradient(90deg, var(--tranared) 49%, var(--tranagreen) 50%);
+        color: transparent;
+        background-clip: text;
+      }
+
+    }
+
+    #ctrlbar:has([value="colorful"]:checked)~#saccades .dot {
+      color: var(--colorfg);
+    }
+
+
+    @media print {
+      #saccades.midspace .dot:not(#centerpoint) {
+        background: black;
+        color: black;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="ctrlbar">
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+    <div><input type="checkbox" class="threestate" id="spacefix" /><label class="button" for="spacefix">Space Fixator</label></div>
+
+
+    <div>
+      Color mode:
+      <select id="colormode">
+        <option value="default">Default</option>
+        <option value="colorful">Colorful</option>
+        <option value="redgreen">Red/green</option>
+        <option value="hybrid">Red+green</option>
+      </select>
+    </div>
+
+    <!-- div><input type="checkbox" class="slider" id="colormode_x" /><label class="button" for="colormode_x">Colorful markers</label></div>
+
+    <div><input type="checkbox" class="slider" id="redgreen" /><label class="button" for="redgreen">Red/Green mode</label></div-->
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+  
+    <div class="ctrlbox">
+      <div>Markers <input type="text" id="markers" /></div>
+
+      <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
+
+
+    </div>
+  </div>
+
+  <div id="saccades" data-mark=""></div>
+
+
+<style>
+.mark {
+display:inline-block;
+background:#8834;
+font-size: 40pt;
+position:absolute;
+width: 1.25em;
+height: 1.25em;
+line-height: 1.25em;
+text-align: center;
+}
+
+
+#ck input[type="checkbox"]:checked {
+	counter-increment: checked-boxes;
+}
+
+
+
+#ck:has(input:checked:nth-of-type(2)) input:not(:checked) {
+pointer-events:none;
+opacity:0.2;
+}
+
+</style>
+<div id="ck">
+<input type="checkbox" >
+<input type="checkbox" checked>
+<input type="checkbox" >
+<input type="checkbox" checked>
+</div>
+
+<script>
+
+let sac = document.querySelector("#saccades");
+let markers = {
+	ucaps:"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
+	lcaps:"abcdefghijklmnopqrstuvwxyz".split(""),
+	alphanums: makearray(1,26)
+	};
+
+let chosen = ["ucaps","alphanums"];
+function showchart() {
+sac.innerHTML = "";
+
+let marks = [];
+chosen.forEach( n => {
+marks.push(...markers[n]);
+});
+//"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split(""); //
+
+let placedmarks = [];
+
+for (let mark of marks) {
+let m = document.createElement("div");
+m.innerText = mark;
+m.className = "mark";
+m.dataset.mark = mark;
+sac.append(m);
+
+placerandom(m);
+
+}
+
+function placerandom(m,counter=0) {
+m.style.left= minmax(0,95) + "%";
+m.style.top= minmax(0,90) + "%";
+let b = m.getBoundingClientRect();
+for (let p of placedmarks) {
+if (!(b.right < p.left  ||
+	b.left > p.right ||
+	b.bottom < p.top ||
+	b.top > p.bottom)
+	//console.log("no overlap, continue");	
+	//} else if (
+	&&
+	(isbetween(b.left, p.left, p.right) || isbetween(b.right,p.left,p.right)) &&
+	(isbetween(b.top,p.top,p.bottom) || isbetween(b.bottom,p.top,p.bottom))
+	){
+	//console.log(m);
+	if (counter<50) {
+	placerandom(m,++counter);
+	return;
+	}
+	m.style.color="red";
+	}
+
+}
+	placedmarks.push({left:b.left,right:b.right,top:b.top,bottom:b.bottom});
+
+}
+
+//console.log(placedmarks);
+
+}
+
+showchart();
+
+let m = document.querySelector(".mark");
+
+// - check if value is between two others
+// - default includes endpoints
+function isbetween(num, min, max, equ = true) {
+  if (equ) {
+    return num >= min && num <= max;
+  } else {
+    return num > min && num < max;
+  }
+}
+
+// - convenience function to create an array of x numbers, or an array with values between x and y
+function makearray(start, end) {
+  if (!end) {
+    end = start - 1;
+    start = 0;
+  }
+  return [...Array(end + 1).keys()].slice(start);
+}
+// makearray(3) == [0,1,2]
+// makearray(5,9) == [5,6,7,8,9]
+
+document.querySelector("#reload").onclick = function (e) {
+	showchart();
+};
+
+
+
+</script>
+<pre>
+Issues:
+- distribution density is dependent on window size
+- marker size will impact ovrlap avoidance function
+- overlap avoidance only loops 50 times to prevent infinite loop crash
+ - consider making this adjustable
+
+</pre>
+</body>
+
+</html>
