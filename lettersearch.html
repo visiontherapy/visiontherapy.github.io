@@ -93,7 +93,14 @@
 
       <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
 
-	<div id="marktypes">
+	<h3>Marks</h3>
+	<div id="marktypes"></div>
+	
+	
+	<h3>Colors</h3>
+	<div id="mk_colors">
+	<input type="checkbox" id="mk_red"><label for="mk_red">Red</label><br/>
+	<input type="checkbox" id="mk_green"><label for="mk_green">Green</label><br/>
 	
 	</div>
 
@@ -116,15 +123,51 @@ text-align: center;
 }
 
 
-#marktypes.maxed .mk_row:has(input:not(:checked)) {
-	opacity:0.5;
-	pointer-events:none;
+#controls {
+	line-height:1em;
+	
+	& h3 {
+		margin-bottom:0.1em;
+	}
+}
+	
+
+#controls:has(#mk_red:checked) ~ #saccades .mark {
+color:var(--tranared)
 }
 
+#controls:has(#mk_green:checked) ~ #saccades .mark {
+color:var(--tranagreen);
+}
+
+
+#controls:has(#mk_green:checked):has(#mk_red:checked) ~ #saccades .mk_parttwo {
+color:var(--tranared);
+}
+
+
+
+
+
+#marktypes {
+
+	&.maxed .mk_row:has(input:not(:checked)) {
+		opacity:0.5;
+		pointer-events:none;
+	}
+	
+	&.min .mk_row:has(input:checked) {
+	opacity:0.5;
+	pointer-events:none;
+	}
+
+}
 </style>
 
 <script>
 let marktypes = document.querySelector("#marktypes");
+let redmark = document.querySelector("#mk_red");
+let greenmark = document.querySelector("#mk_green");
 
 let sac = document.querySelector("#saccades");
 let markers = {
@@ -156,7 +199,11 @@ marktypes.append(mk_row);
 marktypes.onclick = function(e) {
 	if (e.target.classList.contains("markcheck")) {
 		let chks = marktypes.querySelectorAll("input:checked");
-		marktypes.className = chks.length ==2 ? "maxed": "";
+		marktypes.className= "";
+		if (chks.length ==2) {
+		marktypes.className= "maxed";
+		}
+		//else if (chks.length ==1) {marktypes.className= "min";}
 		chosen = [];
 		
 		if (chks.length >0) {
@@ -177,18 +224,20 @@ function showchart() {
 	sac.innerHTML = "";
 	let placedmarks = [];
 
-	let redgreen = 0;
+	let parttwo;
 	if (chosen.length ==1) chosen.push(chosen[0]);
 	for (let choice of chosen) {
 		for (let mark of markers[choice]) {
 			let m = document.createElement("div");
 			m.innerText = mark;
 			m.className = "mark";
+			if (parttwo) m.classList.add("mk_parttwo");
 			m.dataset.mark = mark;
 			sac.append(m);
 
 			placerandom(m);
 		}
+		parttwo = true;
 	}
 
 	function placerandom(m,counter=0) {
@@ -211,7 +260,7 @@ function showchart() {
 					placerandom(m,++counter);
 					return;
 				}
-				m.style.color="red";
+				m.style.background="#f003";
 			}
 		}
 		placedmarks.push({left:b.left,right:b.right,top:b.top,bottom:b.bottom});
