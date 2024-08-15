@@ -29,44 +29,7 @@
       font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
       user-select: none;
 
-      &.midspace .dot:not(#centerpoint) {
-        background: var(--fg);
-        color: var(--fg);
-      }
-
     }
-
-
-    .dot {
-      position: absolute;
-      background: transparent;
-      text-align: center;
-      height: 1em;
-      width: 1em;
-      border-radius: 1em;
-    }
-
-    /* centerpoint is also a dot */
-    #centerpoint {
-      /* top: calc(50% - 0.5em);
-  left: calc(50% - 0.5em);
-  transform: translate(calc(-50% + 0.5em));
-  width: 1em;
-  height: 1em; */
-      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
-
-      &::after {
-        content: attr(data-mark);
-        position: absolute;
-        display: block;
-        width: 1em;
-        height: 1em;
-        text-align: center;
-        border-radius: 1em;
-        border: solid 1px #888;
-      }
-    }
-
 
 
     #ctrlbar:has([value="redgreen"]:checked)~#saccades {
@@ -119,23 +82,6 @@
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
-    <div><input type="checkbox" class="threestate" id="spacefix" /><label class="button" for="spacefix">Space Fixator</label></div>
-
-
-    <div>
-      Color mode:
-      <select id="colormode">
-        <option value="default">Default</option>
-        <option value="colorful">Colorful</option>
-        <option value="redgreen">Red/green</option>
-        <option value="hybrid">Red+green</option>
-      </select>
-    </div>
-
-    <!-- div><input type="checkbox" class="slider" id="colormode_x" /><label class="button" for="colormode_x">Colorful markers</label></div>
-
-    <div><input type="checkbox" class="slider" id="redgreen" /><label class="button" for="redgreen">Red/Green mode</label></div-->
-
     <button id="reload">Reload</button>
 
   </div>
@@ -144,11 +90,10 @@
     <div id="settings">*SETTINGS*</div>
   
     <div class="ctrlbox">
-      <div>Markers <input type="text" id="markers" /></div>
 
       <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
 
-	<div>
+	<div id="marktypes">
 	
 	</div>
 
@@ -171,26 +116,15 @@ text-align: center;
 }
 
 
-#ck input[type="checkbox"]:checked {
-	counter-increment: checked-boxes;
-}
-
-
-
-#ck:has(input:checked:nth-of-type(2)) input:not(:checked) {
-pointer-events:none;
-opacity:0.2;
+#marktypes.maxed .mk_row:has(input:not(:checked)) {
+	opacity:0.5;
+	pointer-events:none;
 }
 
 </style>
-<div id="ck">
-<input type="checkbox" >
-<input type="checkbox" checked>
-<input type="checkbox" >
-<input type="checkbox" checked>
-</div>
 
 <script>
+let marktypes = document.querySelector("#marktypes");
 
 let sac = document.querySelector("#saccades");
 let markers = {
@@ -199,13 +133,52 @@ let markers = {
 	alphanums: makearray(1,26)
 	};
 
-let chosen = ["ucaps","alphanums"];
+let chosen = ["ucaps"];
 
+for (let mk of Object.keys(markers)) {
+let mk_row = document.createElement("div");
+mk_row.className = "mk_row";
+
+let mk_input = document.createElement("input");
+mk_input.type="checkbox";
+mk_input.id="mk_"+mk;
+mk_input.className = "markcheck";
+
+let mk_label = document.createElement("label");
+mk_label.htmlFor = mk_input.id;
+mk_label.innerText = mk;
+
+mk_row.append(mk_input,mk_label);
+marktypes.append(mk_row);
+}
+
+
+marktypes.onclick = function(e) {
+	if (e.target.classList.contains("markcheck")) {
+		let chks = marktypes.querySelectorAll("input:checked");
+		marktypes.className = chks.length ==2 ? "maxed": "";
+		chosen = [];
+		
+		if (chks.length >0) {
+		for (let n of chks) {
+			chosen.push(n.id.replace(/mk_/,""))
+		}
+		showchart();
+		}
+	}
+}
+
+// make adjustable:
+// padding
+// mark font size
+//
 
 function showchart() {
 	sac.innerHTML = "";
 	let placedmarks = [];
 
+	let redgreen = 0;
+	if (chosen.length ==1) chosen.push(chosen[0]);
 	for (let choice of chosen) {
 		for (let mark of markers[choice]) {
 			let m = document.createElement("div");
@@ -279,9 +252,8 @@ document.querySelector("#reload").onclick = function (e) {
 </script>
 <pre>
 Issues:
-- distribution density is dependent on window size
-- marker size will impact ovrlap avoidance function
-- overlap avoidance only loops 50 times to prevent infinite loop crash
+- distribution density is dependent on window size and marker size
+- overlap avoidance function only loops 50 times to prevent infinite loop crash
  - consider making this adjustable
 
 </pre>
