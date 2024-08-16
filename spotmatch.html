@@ -324,31 +324,33 @@
             options.port = 9999;
             options.host = "/";
           }
-          options.config = {iceServers: [
-            {
-              urls: "stun:stun.relay.metered.ca:80",
-            },
-            {
-              urls: "turn:global.relay.metered.ca:80",
-              username: "eb1f0e6ff95cf3df5ddf2960",
-              credential: "/VLqS9m+A88cvSlR",
-            },
-            {
-              urls: "turn:global.relay.metered.ca:80?transport=tcp",
-              username: "eb1f0e6ff95cf3df5ddf2960",
-              credential: "/VLqS9m+A88cvSlR",
-            },
-            {
-              urls: "turn:global.relay.metered.ca:443",
-              username: "eb1f0e6ff95cf3df5ddf2960",
-              credential: "/VLqS9m+A88cvSlR",
-            },
-            {
-              urls: "turns:global.relay.metered.ca:443?transport=tcp",
-              username: "eb1f0e6ff95cf3df5ddf2960",
-              credential: "/VLqS9m+A88cvSlR",
-            },
-          ]};
+          options.config = {
+            iceServers: [
+              {
+                urls: "stun:stun.relay.metered.ca:80",
+              },
+              {
+                urls: "turn:global.relay.metered.ca:80",
+                username: "eb1f0e6ff95cf3df5ddf2960",
+                credential: "/VLqS9m+A88cvSlR",
+              },
+              {
+                urls: "turn:global.relay.metered.ca:80?transport=tcp",
+                username: "eb1f0e6ff95cf3df5ddf2960",
+                credential: "/VLqS9m+A88cvSlR",
+              },
+              {
+                urls: "turn:global.relay.metered.ca:443",
+                username: "eb1f0e6ff95cf3df5ddf2960",
+                credential: "/VLqS9m+A88cvSlR",
+              },
+              {
+                urls: "turns:global.relay.metered.ca:443?transport=tcp",
+                username: "eb1f0e6ff95cf3df5ddf2960",
+                credential: "/VLqS9m+A88cvSlR",
+              },
+            ]
+          };
 
 
           peer = new Peer(options); /*

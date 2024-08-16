@@ -42,24 +42,24 @@
         border: solid 1px var(--ctrlbg);
         background: var(--ctrlbg);
         padding: 1em;
-        position:relative;
-        
+        position: relative;
+
         & b {
           text-shadow: 0 0 0.5em var(--highlight);
         }
-        
+
         & button {
-          margin:1em 0;
-          display:table;
+          margin: 1em 0;
+          display: table;
         }
-        
+
         .codeout {
-          display:none;
-          background:#9999;
-          white-space:revert;
-          padding:0.5em 1em;
+          display: none;
+          background: #9999;
+          white-space: revert;
+          padding: 0.5em 1em;
         }
-    
+
       }
     }
   </style>
@@ -96,7 +96,7 @@
     <div>By numbering each of the 8 segments, the tile can be represented by string containing the numbers of "on" segments.</div>
 
     <div>For example this is tile "1236": <bl-ock value="1236"></bl-ock></div>
-   
+
     <div>Starting clockwise from the top left: segments 1, 2, 3, and 6 are in the "on" state.</div>
 
     <div>The tile elment is a <a href="https://web.dev/articles/custom-elements-v1">Custom Element</a>. I converted the original tile set into a list of numeric representations that the script uses to generate the tiles programmatically</div>
@@ -119,12 +119,12 @@
           if (!foundblocks.includes(thisblock)) foundblocks.push(thisblock);
           counter++;
         }
-        return foundblocks.sort(function(a, b){return a - b});
+        return foundblocks.sort(function (a, b) { return a - b; });
       }
     </script>
 
     <div>Because of imperfect randomization this approach was inefficient, requiring more iterations than the `maxtiles` value. But the main problem is that this does not actually identify duplicates since the tiles can be rotated.</div>
-    
+
     <div>In the real world, <bl-ock value="1236"></bl-ock> (1236) is the same tile as <bl-ock value="2567"></bl-ock> (2567) and <bl-ock value="1478"></bl-ock> (1478). (You can verify this yourself by clicking the tiles to rotate them until they are oriented the same way.)</div>
 
     <h3>Epihpany:</h3>
@@ -192,7 +192,7 @@
         rot3: 10011100 (1456) <bl-ock value="1456"></bl-ock> -- "duplicate"*/
       }
     </script>
-    
+
     <div>All 3 rotations of the binary notation above can be found within the comparison string, but rot1 and rot3 are not valid rotation patterns for the pattern tile, so they should have been considered "not a duplicate" and added to the list of found patterns.</div>
 
     <div>Because the tiles have 2 segments on each side, each rotation has to involve 2 segments at a time.</div>
@@ -216,7 +216,7 @@
         return foundblocks.sort();
       }
     </script>
-    
+
     <code class="codeblock" id="codex2"></code>
     <script>
       function codex2() {
@@ -245,20 +245,20 @@
           }
           generatedblocks.push(numblock);
         }
-        return generatedblocks.sort(function(a, b){return a - b});
+        return generatedblocks.sort(function (a, b) { return a - b; });
       }
     </script>
 
     <div>I wanted to optimize the numeric representations, partly for fun, partly for easier debugging, partly to compare with the original tileset.</div>
 
     <div>On my first attempt at this, I subtracted one less than the first (smallest) value from each digit in the tile value:</div>
-    
+
     <div style="margin-left:2em">
-    Example:<br/>
-    For tile "3568"<br/>
-    The smallest value is 3<br/>
-    The minimizer quotient is 3 - 1 = 2<br/>
-    Subtract 2 from each digit of 3568 &rarr; 1346</div>
+      Example:<br />
+      For tile "3568"<br />
+      The smallest value is 3<br />
+      The minimizer quotient is 3 - 1 = 2<br />
+      Subtract 2 from each digit of 3568 &rarr; 1346</div>
     <code class="codeblock" id="code4"></code>
     <script>
       function code4(generatedblocks = code3()) {
@@ -271,7 +271,7 @@
           }
           return minimized;
         });
-        return generatedblocks.sort(function(a, b){return a - b});
+        return generatedblocks.sort(function (a, b) { return a - b; });
       }
     </script>
 
@@ -290,7 +290,7 @@
           }
           return minimized;
         });
-        return generatedblocks.sort(function(a, b){return a - b});
+        return generatedblocks.sort(function (a, b) { return a - b; });
       }
     </script>
 
@@ -298,17 +298,17 @@
     <h3>Done!</h3>
 
     <div>It turn out there are 70 unique patterns. According to <a href="https://www.jaapsch.net/puzzles/izzi.htm">this interesting page</a> all about this game, the official set excludes these patterns:</div>
-		
-		<div>
-		<bl-ock value="1357"></bl-ock>
-		<bl-ock value="2468"></bl-ock>
-		<bl-ock value="1256"></bl-ock>
-		<bl-ock value="2367"></bl-ock>
-		<bl-ock value="12345678"></bl-ock>
-		<bl-ock value=""></bl-ock>
-		</diV>
 
-		<div>So the full official set has 64 tiles. Since the set is non-random and static, rather than wasting time and CPU cycles generating the tiles on the fly every time, I included the resulting numeric representations in the code. Here is the finished code.</div>
+    <div>
+      <bl-ock value="1357"></bl-ock>
+      <bl-ock value="2468"></bl-ock>
+      <bl-ock value="1256"></bl-ock>
+      <bl-ock value="2367"></bl-ock>
+      <bl-ock value="12345678"></bl-ock>
+      <bl-ock value=""></bl-ock>
+    </diV>
+
+    <div>So the full official set has 64 tiles. Since the set is non-random and static, rather than wasting time and CPU cycles generating the tiles on the fly every time, I included the resulting numeric representations in the code. Here is the finished code.</div>
 
     <code class="codeblock" id="find_all_tiles"></code>
     <script>
@@ -318,7 +318,7 @@
           // convert to binary
           let thisblock = n.toString(2).padStart(8, "0");
           // exclude tiles
-          if (thisblock.match(/00000000|11111111|10101010|01010101|01100110|11001100/))continue;
+          if (thisblock.match(/00000000|11111111|10101010|01010101|01100110|11001100/)) continue;
           // insert space to chunk into tuplets
           thisblock = thisblock.replace(/(\d\d)/g, "$1 ");
           if (!foundblocks.find(block => {
@@ -340,7 +340,7 @@
             // convert to numeric representation
             if (thisblock[n] == "1") numblock += n + 1;
           }
-          let minimized="";
+          let minimized = "";
           let delta;
           for (let seg of numblock.split("")) {
             delta ??= (parseInt(seg) + (parseInt(seg) % 2)) - 2;
@@ -348,7 +348,7 @@
           }
           generatedblocks.push(minimized);
         }
-        return generatedblocks.sort(function(a, b){return a - b});
+        return generatedblocks.sort(function (a, b) { return a - b; });
       }
     </script>
 
@@ -357,48 +357,48 @@
       for (let codeblock of document.querySelectorAll(".codeblock")) {
         let contents = eval(codeblock.id + '.toString()');
         let indent = contents.match(/^function code/) ? 8 : 6;
-        let indentregex = new RegExp("(\n) {" + indent + "}","g");
+        let indentregex = new RegExp("(\n) {" + indent + "}", "g");
         //let indents = new RegExp("(\n)? {6}(\/\/)?","");
 
         codeblock.innerHTML += contents
-        .replace(/^function code.*?{\n(.*)\n*\s*}$/s, "$1")
-        .replace(/(\/\*|\*\/) */g, "")
-        .trim() // no need to remove first indent since it is trim()med
-        .replace(indentregex, "\n")
-        ;
-        
+          .replace(/^function code.*?{\n(.*)\n*\s*}$/s, "$1")
+          .replace(/(\/\*|\*\/) */g, "")
+          .trim() // no need to remove first indent since it is trim()med
+          .replace(indentregex, "\n")
+          ;
+
         //if (indent == 6) { // this is a functioning code block
         if (!contents.match(/^function codex/)) {
           let runcode = document.createElement("button");
           runcode.innerHTML = "Run";
-          
+
           let codeout = document.createElement("div");
           codeout.className = "codeout";
-    
-          runcode.onclick = function(e) {
-            codeout.style.display="block";
-            codeout.innerHTML = //codeblock.id + "()<br/>" + 
-            eval(codeblock.id + "()").join(", ");
-          }
 
-          codeblock.append(runcode,codeout);
-          }
+          runcode.onclick = function (e) {
+            codeout.style.display = "block";
+            codeout.innerHTML = //codeblock.id + "()<br/>" + 
+              eval(codeblock.id + "()").join(", ");
+          };
+
+          codeblock.append(runcode, codeout);
         }
+      }
 
     </script>
 
 
     <h3>Conclusion</h3>
     <div>You're still here??? Well, I hope you enjoyed this journey into my mind.</div>
-    
+
     <div>Next project: Hexagon & triangle tile matching</div>
-    
-    
+
+
   </div>
-    <hr/>
-    <br/>
-    <br/>
-    <br/>
+  <hr />
+  <br />
+  <br />
+  <br />
 
 </body>
 

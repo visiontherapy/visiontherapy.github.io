@@ -6,7 +6,7 @@
 // - css = style document text
 // - id = optional ID for style element
 function addCSS(css, id, anchor) { // append CSS style element to head
-	let styl = document.querySelector(`#${id}`) ?? document.createElement("style");
+  let styl = document.querySelector(`#${id}`) ?? document.createElement("style");
   styl.innerHTML = css;
   styl.id = id;
   anchor ? anchor.appendChild(styl) : document.head.appendChild(styl);
@@ -538,7 +538,7 @@ function localCookie(name, value) {
 // - useful for pulling attention to floating window
 // - onclickfn replaces click response
 // - alsofn runs in addition to default click response
-function makedimbg({ source, parentbox, before, onclickfn, fadetime = "0.35s", alsofn, opacity = 1, scroll} = {}) {
+function makedimbg({ source, parentbox, before, onclickfn, fadetime = "0.35s", alsofn, opacity = 1, scroll } = {}) {
   let dimbox;
 
   dimbox = document.createElement("div");
@@ -622,7 +622,7 @@ function makedimbg({ source, parentbox, before, onclickfn, fadetime = "0.35s", a
 // - seeded pseudo random number generator
 // - let rng = random(123456); rng();
 function random(seed) {
-  seed ??= Math.random() * 10**9;
+  seed ??= Math.random() * 10 ** 9;
   let m = 2 ** 35 - 31;
   let a = 185852;
   let s = seed % m;
@@ -652,9 +652,9 @@ function minmaxexcept(min, max, except) {
 
 
 // - rreturn andom array element; optional exclusion parameter
-function randarray(arr,except) {
+function randarray(arr, except) {
   let num = arr[Math.floor(Math.random() * (arr.length))];
-  return (except && except.includes(num)) ? randarray(arr,except) : num;
+  return (except && except.includes(num)) ? randarray(arr, except) : num;
 }
 
 

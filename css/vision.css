@@ -67,7 +67,7 @@ a {
   display: table;
 
   .plain {
-    line-height:1em;
+    line-height: 1em;
   }
 }
 
@@ -307,12 +307,12 @@ label h3 {
   filter: invert(0.5);
 }
 
-
 @media print {
   :root {
-    --fg:black;
+    --fg: black;
   }
-  #ctrlbar, #controls {
-    display:none;
+  #ctrlbar,
+  #controls {
+    display: none;
   }
 }

@@ -153,7 +153,7 @@ customElements.define("bl-ock", class CustomBlock extends HTMLElement {
     this.flower ??= this.burst(this.value);
 
     // console.log("thisdelta",this.delta);
-    if(this.delta) {
+    if (this.delta) {
       this.deltashift(this.delta);
       this.delta = null;
     }

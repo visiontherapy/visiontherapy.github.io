@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,93 +17,94 @@
   <script defer src="js/topmenu.js"></script>
 
 
-<style>
-#saccades {
-	position: relative;
-	height: min(85vh, 98vw);
-	width: 90vw;
-	margin: 0;
-	left: 50%;
-	transform: translate(-50%);
-	cursor: default;
-	font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
-	user-select: none;
-	font-weight:bold;
-	font-family:sans-serif;
-}
+  <style>
+    #saccades {
+      position: relative;
+      height: min(85vh, 98vw);
+      width: 90vw;
+      margin: 0;
+      left: 50%;
+      transform: translate(-50%);
+      cursor: default;
+      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+      user-select: none;
+      font-weight: bold;
+      font-family: sans-serif;
+    }
 
 
-[data-theme="light"] {
---tranagreen: #11eeee;
---tranared: #eebb11;
-}
+    [data-theme="light"] {
+      --tranagreen: #11eeee;
+      --tranared: #eebb11;
+    }
 
-[data-theme="dark"] {
---tranagreen: #008;
---tranared: #500;
-}
-
-
-.mark {
-	display:block;
-	position:absolute;
-	width: min(5vw,10vh,1.25em);
-	height: min(5vw,10vh,1.25em);
-	line-height: min(5vw,10vh,1.25em);
-	text-align: center;
-	border-radius: 0.35em;
-	/*background:#33a3;*/
-	&::after {
-		content: attr(data-mark);
-		position:relative;
-		display:block;
-		font-size:80%;
-		scale:var(--mk_scale)
-	}
-	
-	&.clicked {
-		background:var(--highlight);
-	}
-}
+    [data-theme="dark"] {
+      --tranagreen: #008;
+      --tranared: #500;
+    }
 
 
-#controls {
-	line-height:1em;
-	user-select:none;
-	
-	& h3 {
-		margin-bottom:0.1em;
-	}
-}
-	
+    .mark {
+      display: block;
+      position: absolute;
+      width: min(5vw, 10vh, 1.25em);
+      height: min(5vw, 10vh, 1.25em);
+      line-height: min(5vw, 10vh, 1.25em);
+      text-align: center;
+      border-radius: 0.35em;
 
-#controls:has(#mk_red:checked) ~ #saccades .mark {
-	color:var(--tranared);
-}
+      /*background:#33a3;*/
+      &::after {
+        content: attr(data-mark);
+        position: relative;
+        display: block;
+        font-size: 80%;
+        scale: var(--mk_scale)
+      }
 
-#controls:has(#mk_green:checked) ~ #saccades .mark {
-	color:var(--tranagreen);
-}
+      &.clicked {
+        background: var(--highlight);
+      }
+    }
 
 
-#controls:has(#mk_green:checked):has(#mk_red:checked) ~ #saccades .mk_parttwo {
-	color:var(--tranared);
-}
+    #controls {
+      line-height: 1em;
+      user-select: none;
 
-#marktypes {
+      & h3 {
+        margin-bottom: 0.1em;
+      }
+    }
 
-	&.maxed .mk_row:has(input:not(:checked)) {
-		opacity:0.5;
-		pointer-events:none;
-	}
-	
-	&.min .mk_row:has(input:checked) {
-	opacity:0.5;
-	pointer-events:none;
-	}
 
-}
-</style>
+    #controls:has(#mk_red:checked)~#saccades .mark {
+      color: var(--tranared);
+    }
+
+    #controls:has(#mk_green:checked)~#saccades .mark {
+      color: var(--tranagreen);
+    }
+
+
+    #controls:has(#mk_green:checked):has(#mk_red:checked)~#saccades .mk_parttwo {
+      color: var(--tranared);
+    }
+
+    #marktypes {
+
+      &.maxed .mk_row:has(input:not(:checked)) {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      &.min .mk_row:has(input:checked) {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+    }
+  </style>
 </head>
 
 <body>
@@ -121,194 +121,194 @@
 
   <div id="controls">
     <div id="settings">*SETTINGS*</div>
-  
+
     <div class="ctrlbox">
 
       <div>Scale <input id="mk_scale" type="range" min="0.3" max="1.8" value="1" step="0.1" /> <span id="mk_scalenum"></span></div>
 
-	<h3>Marks</h3>
-	<div id="marktypes"></div>
-	
-	
-	<h3>Colors</h3>
-	<div id="mk_colors">
-	<input type="checkbox" checked id="mk_red"><label for="mk_red">Red</label><br/>
-	<input type="checkbox" checked id="mk_green"><label for="mk_green">Blue</label><br/>
-	
-	</div>
+      <h3>Marks</h3>
+      <div id="marktypes"></div>
+
+
+      <h3>Colors</h3>
+      <div id="mk_colors">
+        <input type="checkbox" checked id="mk_red"><label for="mk_red">Red</label><br />
+        <input type="checkbox" checked id="mk_green"><label for="mk_green">Blue</label><br />
+
+      </div>
 
     </div>
   </div>
 
   <div id="saccades" data-mark=""></div>
 
-<script>
-let marktypes = document.querySelector("#marktypes");
-let alpha = "abcdefghijklmnopqrstuvwxyz";
-let sac = document.querySelector("#saccades");
+  <script>
+    let marktypes = document.querySelector("#marktypes");
+    let alpha = "abcdefghijklmnopqrstuvwxyz";
+    let sac = document.querySelector("#saccades");
 
-document.querySelector("#mk_scale").oninput = function(e) {
-document.querySelector("#mk_scalenum").innerText = this.value;
-sac.style.setProperty("--mk_scale", this.value);
-}
-let markers = {
-	Uppercase:alpha.toUpperCase().split(""),
-	lowercase:alpha.split(""),
-	numbers: makearray(1,26)
-	};
+    document.querySelector("#mk_scale").oninput = function (e) {
+      document.querySelector("#mk_scalenum").innerText = this.value;
+      sac.style.setProperty("--mk_scale", this.value);
+    };
+    let markers = {
+      Uppercase: alpha.toUpperCase().split(""),
+      lowercase: alpha.split(""),
+      numbers: makearray(1, 26)
+    };
 
-let chosen = ["Uppercase"];
+    let chosen = ["Uppercase"];
 
-for (let mk of Object.keys(markers)) {
-let mk_row = document.createElement("div");
-mk_row.className = "mk_row";
+    for (let mk of Object.keys(markers)) {
+      let mk_row = document.createElement("div");
+      mk_row.className = "mk_row";
 
-let mk_input = document.createElement("input");
-mk_input.type="checkbox";
-mk_input.id="mk_"+mk;
-if (chosen.includes(mk)) mk_input.checked=true;
-mk_input.className = "markcheck";
+      let mk_input = document.createElement("input");
+      mk_input.type = "checkbox";
+      mk_input.id = "mk_" + mk;
+      if (chosen.includes(mk)) mk_input.checked = true;
+      mk_input.className = "markcheck";
 
-let mk_label = document.createElement("label");
-mk_label.htmlFor = mk_input.id;
-mk_label.innerText = mk;
+      let mk_label = document.createElement("label");
+      mk_label.htmlFor = mk_input.id;
+      mk_label.innerText = mk;
 
-mk_row.append(mk_input,mk_label);
-marktypes.append(mk_row);
-}
-
-
-marktypes.onclick = function(e) {
-	if (e.target.classList.contains("markcheck")) {
-		let chks = marktypes.querySelectorAll("input:checked");
-		marktypes.className= "";
-		if (chks.length ==2) {
-		marktypes.className= "maxed";
-		}
-		else if (chks.length ==1) {marktypes.className= "min";}
-		chosen = [];
-		
-		if (chks.length >0) {
-		for (let n of chks) {
-			chosen.push(n.id.replace(/mk_/,""))
-		}
-		showchart();
-		}
-	}
-}
-
-// make adjustable:
-// padding
-// mark font size
-//
-let m;
-function showchart() {
-	sac.replaceChildren(); // = "";
-	let placedmarks = [];
-
-	let clickedmark;
-	
-	let parttwo;
-	if (chosen.length ==1) chosen.push(chosen[0]);
-	for (let choice of chosen) {
-		for (let mark of markers[choice]) {
-			let m = document.createElement("div");
-//			m.innerText = mark;
-			m.className = "mark";
-			m.dataset.mark = mark;
-			if (parttwo) m.classList.add("mk_parttwo");
-			sac.append(m);
-			m.onclick = checkmatch;
-			placerandom(m);
-		}
-		parttwo = true;
-	}
-
-	function placerandom(m,counter=0) {
-		m.style.left= minmax(0,95) + "%";
-		m.style.top= minmax(0,90) + "%";
-		let b = m.getBoundingClientRect();
-		for (let p of placedmarks) {
-			if (!(b.right < p.left  ||
-				b.left > p.right ||
-				b.bottom < p.top ||
-				b.top > p.bottom)
-				//console.log("no overlap, continue");	
-				//} else if (
-				&&
-				(isbetween(b.left, p.left, p.right) || isbetween(b.right,p.left,p.right))
-				&&
-				(isbetween(b.top,p.top,p.bottom) || isbetween(b.bottom,p.top,p.bottom))
-				) {
-				if (counter<50) {
-					placerandom(m,++counter);
-					return;
-				}
-				m.style.background="#f003";
-				console.log("overlap",m.dataset.mark);
-			}
-		}
-		placedmarks.push({left:b.left,right:b.right,top:b.top,bottom:b.bottom});
-	}
-	
-	
-	function checkmatch(e) {
-		if (!clickedmark) {
-			clickedmark = this; 
-			this.classList.add("clicked");
-		} else if (clickedmark == this) {
-			clickedmark.classList.remove("clicked");
-			clickedmark = null;	
-		} else if (logicalmatch(clickedmark.dataset.mark, this.dataset.mark)) {
-			clickedmark.remove();
-			this.remove();
-			clickedmark = null;
-		}	
-	}
-	
-m = document.querySelector(".mark");
-
-}
-
-function logicalmatch(a,b) {
-	if (a.toLowerCase() == b.toLowerCase() ||
-	a.toLowerCase() == alpha.split("")[parseInt(b)-1] ||
-	b.toLowerCase() == alpha.split("")[parseInt(a)-1]) return true;
-}
+      mk_row.append(mk_input, mk_label);
+      marktypes.append(mk_row);
+    }
 
 
-showchart();
+    marktypes.onclick = function (e) {
+      if (e.target.classList.contains("markcheck")) {
+        let chks = marktypes.querySelectorAll("input:checked");
+        marktypes.className = "";
+        if (chks.length == 2) {
+          marktypes.className = "maxed";
+        }
+        else if (chks.length == 1) { marktypes.className = "min"; }
+        chosen = [];
+
+        if (chks.length > 0) {
+          for (let n of chks) {
+            chosen.push(n.id.replace(/mk_/, ""));
+          }
+          showchart();
+        }
+      }
+    };
+
+    // make adjustable:
+    // padding
+    // mark font size
+    //
+    let m;
+    function showchart() {
+      sac.replaceChildren(); // = "";
+      let placedmarks = [];
+
+      let clickedmark;
+
+      let parttwo;
+      if (chosen.length == 1) chosen.push(chosen[0]);
+      for (let choice of chosen) {
+        for (let mark of markers[choice]) {
+          let m = document.createElement("div");
+          //			m.innerText = mark;
+          m.className = "mark";
+          m.dataset.mark = mark;
+          if (parttwo) m.classList.add("mk_parttwo");
+          sac.append(m);
+          m.onclick = checkmatch;
+          placerandom(m);
+        }
+        parttwo = true;
+      }
+
+      function placerandom(m, counter = 0) {
+        m.style.left = minmax(0, 95) + "%";
+        m.style.top = minmax(0, 90) + "%";
+        let b = m.getBoundingClientRect();
+        for (let p of placedmarks) {
+          if (!(b.right < p.left ||
+            b.left > p.right ||
+            b.bottom < p.top ||
+            b.top > p.bottom)
+            //console.log("no overlap, continue");	
+            //} else if (
+            &&
+            (isbetween(b.left, p.left, p.right) || isbetween(b.right, p.left, p.right))
+            &&
+            (isbetween(b.top, p.top, p.bottom) || isbetween(b.bottom, p.top, p.bottom))
+          ) {
+            if (counter < 50) {
+              placerandom(m, ++counter);
+              return;
+            }
+            m.style.background = "#f003";
+            console.log("overlap", m.dataset.mark);
+          }
+        }
+        placedmarks.push({ left: b.left, right: b.right, top: b.top, bottom: b.bottom });
+      }
 
 
+      function checkmatch(e) {
+        if (!clickedmark) {
+          clickedmark = this;
+          this.classList.add("clicked");
+        } else if (clickedmark == this) {
+          clickedmark.classList.remove("clicked");
+          clickedmark = null;
+        } else if (logicalmatch(clickedmark.dataset.mark, this.dataset.mark)) {
+          clickedmark.remove();
+          this.remove();
+          clickedmark = null;
+        }
+      }
 
-// - check if value is between two others
-// - default includes endpoints
-function isbetween(num, min, max, equ = true) {
-  if (equ) {
-    return num >= min && num <= max;
-  } else {
-    return num > min && num < max;
-  }
-}
+      m = document.querySelector(".mark");
 
-// - convenience function to create an array of x numbers, or an array with values between x and y
-function makearray(start, end) {
-  if (!end) {
-    end = start - 1;
-    start = 0;
-  }
-  return [...Array(end + 1).keys()].slice(start);
-}
-// makearray(3) == [0,1,2]
-// makearray(5,9) == [5,6,7,8,9]
+    }
 
-document.querySelector("#reload").onclick = function (e) {
-	showchart();
-};
+    function logicalmatch(a, b) {
+      if (a.toLowerCase() == b.toLowerCase() ||
+        a.toLowerCase() == alpha.split("")[parseInt(b) - 1] ||
+        b.toLowerCase() == alpha.split("")[parseInt(a) - 1]) return true;
+    }
+
+
+    showchart();
 
 
 
-</script>
+    // - check if value is between two others
+    // - default includes endpoints
+    function isbetween(num, min, max, equ = true) {
+      if (equ) {
+        return num >= min && num <= max;
+      } else {
+        return num > min && num < max;
+      }
+    }
+
+    // - convenience function to create an array of x numbers, or an array with values between x and y
+    function makearray(start, end) {
+      if (!end) {
+        end = start - 1;
+        start = 0;
+      }
+      return [...Array(end + 1).keys()].slice(start);
+    }
+    // makearray(3) == [0,1,2]
+    // makearray(5,9) == [5,6,7,8,9]
+
+    document.querySelector("#reload").onclick = function (e) {
+      showchart();
+    };
+
+
+
+  </script>
 </body>
 
 </html>

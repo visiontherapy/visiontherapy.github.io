@@ -94,7 +94,7 @@
 
     function peerconnect(partnerid) {
       peer = new Peer( //);
-      {debug: 2 , port: 9999, host: "/"});
+        { debug: 2, port: 9999, host: "/" });
       peer.on("open", (id) => {
         out.innerHTML += `peer id: ${id} <br/>
         <a href="?id=${id}">Partner link: ${id}</a><br/>`;

@@ -32,41 +32,40 @@
   <div id="colortouch"></div>
 
   <svg xmlns="http://www.w3.org/2000/svg">
-    <path d="M150 5 L75 200 L225 200 Z"
-    style="fill:none;stroke:green;stroke-width:3" />
-  </svg> 
+    <path d="M150 5 L75 200 L225 200 Z" style="fill:none;stroke:green;stroke-width:3" />
+  </svg>
 
 
 
-<svg class="icon  icon--plus" viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
-  <path d="M2 1 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" />
-</svg>
+  <svg class="icon  icon--plus" viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 1 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" />
+  </svg>
 
 
-<svg class="icon  icon--plus" viewBox="0 0 4 1.5" xmlns="http://www.w3.org/2000/svg">
-  <path d="M0 1.5 l2 -1.5 l2 1.5 z" />
-</svg>
+  <svg class="icon  icon--plus" viewBox="0 0 4 1.5" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 1.5 l2 -1.5 l2 1.5 z" />
+  </svg>
 
 
 
 
   <style>
     .icon {
-    display: inline-block;
-    vertical-align: middle;
-    width: 5em;
-}
+      display: inline-block;
+      vertical-align: middle;
+      width: 5em;
+    }
 
-.icon--plus {
-    background-color: none;
-}
+    .icon--plus {
+      background-color: none;
+    }
 
-.icon--plus > path {
-    fill: red;
-    stroke: gold;
-    stroke-width: 0.1;
-    stroke-linejoin: round;
-}
+    .icon--plus>path {
+      fill: red;
+      stroke: gold;
+      stroke-width: 0.1;
+      stroke-linejoin: round;
+    }
 
     :root {
       --pointsize: 2em;
@@ -168,6 +167,7 @@
 
       }
     }
+
     .chars {
       font-size: 100pt;
     }
@@ -183,7 +183,7 @@
 
     let shps = "■ ▲ ● ◸"; // &#9632; &#9650; &#9679; &#9700;
 
-  
+
     let shapes = ("left right up down" || "circle square wedge").split(" ");
 
     let targets = document.createElement("div");
@@ -198,14 +198,14 @@
     <div class="ct_point wedge right white"></div>
     </div>
     `;
-   /* targets.innerHTML = `
-    <div class="inline">
-    <div class="ct_point triangle blue"></div>
-    <div class="ct_point circle red"></div>
-    <div class="ct_point square green"></div>
-    </div>
-    `;
-*/
+    /* targets.innerHTML = `
+     <div class="inline">
+     <div class="ct_point triangle blue"></div>
+     <div class="ct_point circle red"></div>
+     <div class="ct_point square green"></div>
+     </div>
+     `;
+ */
     let instruct = document.createElement("div");
     instruct.id = "ct_instruct";
     document.querySelector("#colortouch").append(targets, instruct);

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,21 +26,23 @@
     }
 
 
-[data-theme="light"] {
---tranagreen: #eebb11;
---tranared: #11eeee;
-#circles #green {
-	mix-blend-mode: darken;
-}
-}
+    [data-theme="light"] {
+      --tranagreen: #eebb11;
+      --tranared: #11eeee;
 
-[data-theme="dark"] {
---tranagreen: #008;
---tranared: #500;
-#circles #green {
-	mix-blend-mode: difference;
-}
-}
+      #circles #green {
+        mix-blend-mode: darken;
+      }
+    }
+
+    [data-theme="dark"] {
+      --tranagreen: #008;
+      --tranared: #500;
+
+      #circles #green {
+        mix-blend-mode: difference;
+      }
+    }
 
 
     body {
@@ -67,7 +68,8 @@
 
       /* filter: brightness(0) saturate(0);*/
       /* margin-top: calc(40vh - 5em - var(--glyphsize)); */
-      top:0;
+      top: 0;
+
       * {
         mix-blend-mode: normal;
       }
@@ -343,8 +345,8 @@
 
 
 
-    fusion.onchange = fusiontoggle; 
-    
+    fusion.onchange = fusiontoggle;
+
 
     function fusiontoggle() {
       if (fusion.checked) {
@@ -378,8 +380,8 @@
 
 
     slider.setAttribute("step", basestep);
-    slider.oninput = movecircles; 
-    
+    slider.oninput = movecircles;
+
 
 
     calibrator.oninput = function (e) {

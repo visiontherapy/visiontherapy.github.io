@@ -1,21 +1,14 @@
-
 <div id="badges"></div>
 <style>
-#badges {
-display:grid;
-grid-template-columns: repeat(4, 1fr);
-
-.badge {
-
-}
-
-}
-
+  #badges {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
 </style>
 <script>
-let badges = document.querySelector("#badges");
+  let badges = document.querySelector("#badges");
 
-let toc = `cpsaccades:CP Saccades/Space Fixator/Red-green Delete
+  let toc = `cpsaccades:CP Saccades/Space Fixator/Red-green Delete
 hartchart:Hart Chart/Decoder
 shapechart:Shape Chart/Arrow Chart
 lettertracking:Letter Tracking
@@ -25,21 +18,21 @@ blocks:Pattern Blocks
 spotmatch:Spot the Match
 slaptap:Slap Tap
 fistbump:Closed, Open, Flat
-colortouch:Color Touch`.split("\n").map(l => {let m = l.match(/^(.*):(.*)$/); return {name:m[1], desc:m[2]}});
+colortouch:Color Touch`.split("\n").map(l => { let m = l.match(/^(.*):(.*)$/); return { name: m[1], desc: m[2] }; });
 
-console.log(toc);
+  console.log(toc);
 
-for (let l of toc) {
+  for (let l of toc) {
 
-let badge = document.createElement("div");
-badge.className = "badge";
-let bimg = document.createElement("img");
-bimg.src = "img/icon_" + l.name + ".svg";
-bimg.alt = l.name;
-let span = document.createElement("div");
-span.innerText = l.desc.replace(/\//g,"\n");
-badge.append(bimg,span);
-badges.append(badge);
-}
+    let badge = document.createElement("div");
+    badge.className = "badge";
+    let bimg = document.createElement("img");
+    bimg.src = "img/icon_" + l.name + ".svg";
+    bimg.alt = l.name;
+    let span = document.createElement("div");
+    span.innerText = l.desc.replace(/\//g, "\n");
+    badge.append(bimg, span);
+    badges.append(badge);
+  }
 
 </script>

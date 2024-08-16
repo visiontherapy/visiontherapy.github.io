@@ -10,7 +10,7 @@
   <!-- <script src="xx_borrowed/alljs.php"></script> -->
   <script src="js/alljs.js"></script>
   <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
-   <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/allcss.css" />
   <link rel="stylesheet" href="css/vision.css" />
   <script src="js/darkmode.js"></script>
   <script defer src="js/settings.js"></script>
@@ -48,25 +48,26 @@
 
     #totop {
       position: fixed;
-      display:block;
+      display: block;
       right: 2rem;
       bottom: 2rem;
       width: 1em;
       height: 1em;
       border-radius: 2rem;
-      background:var(--ctrlbg);
-      line-height:1.5em;
-      font-size:50pt;
+      background: var(--ctrlbg);
+      line-height: 1.5em;
+      font-size: 50pt;
       text-align: center;
       color: var(--fg);
       opacity: 0;
       transition: all 0.5s linear;
-      pointer-events:none;
+      pointer-events: none;
     }
 
-    #ctrlbar[data-scroll="x"] ~ #totop {
+    #ctrlbar[data-scroll="x"]~#totop {
       opacity: 1;
-      pointer-events: all;;
+      pointer-events: all;
+      ;
     }
   </style>
 </head>
@@ -81,13 +82,13 @@
   <div id="abouttext">
     <h2>Vision Therapy exercises</h2>
     <div class="plain">
-      These tools and mini-games are designed for use under guidance from a vision therapist. Some of the tools are modeled after existing games, and can be played as regular games.<br/><br/>
-      Please visit the project's <a href="https://github.com/visiontherapy/visiontherapy.github.io">GitHub repository</a> to view the code, contribute, or provide feedback.<br/>
+      These tools and mini-games are designed for use under guidance from a vision therapist. Some of the tools are modeled after existing games, and can be played as regular games.<br /><br />
+      Please visit the project's <a href="https://github.com/visiontherapy/visiontherapy.github.io">GitHub repository</a> to view the code, contribute, or provide feedback.<br />
       (See <a href="https://github.com/visiontherapy/visiontherapy.github.io/issues">current issues</a> under active consideration.)
-     
+
     </div>
     <hr />
-Contents:
+    Contents:
     <ul>
       <li><a href="#cp">CP Saccades / Space Fixator / Red-Green delete</a> (printable)</li>
       <li><a href="#hart">Hart Chart / Decoding</a> (printable)</li>
@@ -100,7 +101,7 @@ Contents:
       <li><a href="#slaptap">Slap Tap</a> (printable)</li>
       <li><a href="#fistbump">Closed, Open, Flat</a> (printable)</li>
       <li><a href="#colortouch">Color Touch</a> (printable)</li>
-			<li><a href="#lettersearch">Letter Search</a></li>
+      <li><a href="#lettersearch">Letter Search</a></li>
     </ul>
 
     <hr />
@@ -163,7 +164,7 @@ Contents:
         <li>Printable chart! Layout will be optimized when printing.</li>
       </ul>
     </div>
-    
+
 
 
     <h3 id="tracking"><a href="lettertracking.html">Letter Tracking</a></h3>
@@ -249,7 +250,7 @@ Contents:
         <li>Dual device feature:
           <ul>
             <li>Toggle Matched mode to display one shape cluster on the first device.</li>
-            <li>Scan the QR code with your  second device (smartphone) to display the matched cluster.</li>
+            <li>Scan the QR code with your second device (smartphone) to display the matched cluster.</li>
             <li>*NEW* Auto-advance mode: clicking a match on one device will also trigger a change on the other device.</li>
             <li>For manual play, uncheck Auto Advance mode. Identify and click the matching shape on both devices to proceed in parallel.</li>
           </ul>
@@ -306,25 +307,25 @@ Contents:
         <li>Printable chart! Layout will be optimized when printing.</li>
       </ul>
     </div>
-		
+
     <h3 id="lettersearch"><a href="lettersearch.html">Letter Search</a></h3>
-<ul>
-<li>Wear your red/green glasses as guided by your vision therapist.</li>
-<li>Select the matching letters in alphabetical order.</li>
-<li>If any letters appear to fade or disappear, try any anti-supperssion techniques that help you to engage both eyes.</li>
-<li>Discontinue this activity/ if you experience consistent double vision and are unable to resolve this as you play.</li>
-</ul>
-<b>Monocular Fixation in Binocular Field</b>
-<ul>
-<li>Use the Settings panel to pick a desired color.</li>
-<li>While both eyes will see the screen, only one eye will see the letters.</li>
-<li>Select matching letters in alphabetical order.</li>
-</ul>
-<b>Alternate Markers</b>
-<ul>
-<li>Use the Settings panel to select the desired character set.</li>
-<li>If the number set is paired with an alphabet set, pair the number corresponding to the letter (A=1, B=2, etc).</li>
-</ul>
+    <ul>
+      <li>Wear your red/green glasses as guided by your vision therapist.</li>
+      <li>Select the matching letters in alphabetical order.</li>
+      <li>If any letters appear to fade or disappear, try any anti-supperssion techniques that help you to engage both eyes.</li>
+      <li>Discontinue this activity/ if you experience consistent double vision and are unable to resolve this as you play.</li>
+    </ul>
+    <b>Monocular Fixation in Binocular Field</b>
+    <ul>
+      <li>Use the Settings panel to pick a desired color.</li>
+      <li>While both eyes will see the screen, only one eye will see the letters.</li>
+      <li>Select matching letters in alphabetical order.</li>
+    </ul>
+    <b>Alternate Markers</b>
+    <ul>
+      <li>Use the Settings panel to select the desired character set.</li>
+      <li>If the number set is paired with an alphabet set, pair the number corresponding to the letter (A=1, B=2, etc).</li>
+    </ul>
     <hr />
     <br />
     <br />
@@ -337,9 +338,9 @@ Contents:
     let ctrlbar = document.querySelector("#ctrlbar");
     document.addEventListener("scroll", function (e) {
       if (ctrlbar.getBoundingClientRect().y == 0) {
-        ctrlbar.dataset.scroll=0;
+        ctrlbar.dataset.scroll = 0;
       } else {
-        ctrlbar.dataset.scroll="x";
+        ctrlbar.dataset.scroll = "x";
       }
     })
   </script>
