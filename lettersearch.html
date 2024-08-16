@@ -17,43 +17,6 @@
   <script defer src="js/settings.js"></script>
   <script defer src="js/topmenu.js"></script>
 
-</head>
-
-<body>
-
-
-  <div id="ctrlbar">
-    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
-
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
-
-    <button id="reload">Reload</button>
-
-  </div>
-
-  <div id="controls">
-    <div id="settings">*SETTINGS*</div>
-  
-    <div class="ctrlbox">
-
-      <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
-
-	<h3>Marks</h3>
-	<div id="marktypes"></div>
-	
-	
-	<h3>Colors</h3>
-	<div id="mk_colors">
-	<input type="checkbox" id="mk_red"><label for="mk_red">Red</label><br/>
-	<input type="checkbox" id="mk_green"><label for="mk_green">Blue</label><br/>
-	
-	</div>
-
-    </div>
-  </div>
-
-  <div id="saccades" data-mark=""></div>
-
 
 <style>
 #saccades {
@@ -84,7 +47,6 @@
 
 .mark {
 	display:block;
-	/*font-size: 40pt;*/
 	position:absolute;
 	width: min(5vw,10vh,1.25em);
 	height: min(5vw,10vh,1.25em);
@@ -96,6 +58,8 @@
 		content: attr(data-mark);
 		position:relative;
 		display:block;
+		font-size:80%;
+		scale:var(--mk_scale);
 	}
 	
 	&.clicked {
@@ -106,6 +70,7 @@
 
 #controls {
 	line-height:1em;
+	user-select:none;
 	
 	& h3 {
 		margin-bottom:0.1em;
@@ -140,11 +105,52 @@
 
 }
 </style>
+</head>
+
+<body>
+
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+    <button id="reload">Reload</button>
+
+  </div>
+
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+  
+    <div class="ctrlbox">
+
+      <div>Scale <input id="mk_scale" type="range" min="0.3" max="1.8" value="1" step="0.1" /> <span id="mk_scalenum"></span></div>
+
+	<h3>Marks</h3>
+	<div id="marktypes"></div>
+	
+	
+	<h3>Colors</h3>
+	<div id="mk_colors">
+	<input type="checkbox" id="mk_red"><label for="mk_red">Red</label><br/>
+	<input type="checkbox" id="mk_green"><label for="mk_green">Blue</label><br/>
+	
+	</div>
+
+    </div>
+  </div>
+
+  <div id="saccades" data-mark=""></div>
 
 <script>
 let marktypes = document.querySelector("#marktypes");
 let alpha = "abcdefghijklmnopqrstuvwxyz";
 let sac = document.querySelector("#saccades");
+
+document.querySelector("#mk_scale").oninput = function(e) {
+document.querySelector("#mk_scalenum").innerText = this.value;
+sac.style.setProperty("--mk_scale", this.value);
+}
 let markers = {
 	Uppercase:alpha.toUpperCase().split(""),
 	lowercase:alpha.split(""),
@@ -302,13 +308,6 @@ document.querySelector("#reload").onclick = function (e) {
 
 
 </script>
-<pre>
-Issues:
-- distribution density is dependent on window size and marker size
-- overlap avoidance function only loops 50 times to prevent infinite loop crash
- - consider making this adjustable
-
-</pre>
 </body>
 
 </html>
