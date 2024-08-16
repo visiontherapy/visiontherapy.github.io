@@ -28,8 +28,8 @@
 
 
 [data-theme="light"] {
---tranagreen: #11eeee;
---tranared: #eebb11;
+--tranagreen: #eebb11;
+--tranared: #11eeee;
 #circles #green {
 	mix-blend-mode: darken;
 }
@@ -113,16 +113,16 @@
       transform: translate(calc(-50% + var(--delta) * var(--scale) * var(--units)));
     }
 
-    #red,
-    #red * {
+    #green,
+    #green * {
       --units: -1cm;
-      --tranacolor: var(--tranared);
+      --tranacolor: var(--tranagreen);
       border-color: var(--tranacolor);
     }
 
-    #green,
-    #green * {
-      --tranacolor: var(--tranagreen);
+    #red,
+    #red * {
+      --tranacolor: var(--tranared);
       border-color: var(--tranacolor);
     }
 
