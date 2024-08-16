@@ -91,7 +91,7 @@ let data = [ //first two items comprise the menu opener (open / close)
     "link": "colortouch.html"
   }, {
     "id": "id14",
-    "src": "img/logo.svg",
+    "src": "img/icon_lettersearch.svg",
     "alt": "Letter Search",
     "link": "lettersearch.html"
   },
