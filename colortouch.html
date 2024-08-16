@@ -33,6 +33,10 @@
         margin: 0.05in;
       }
 
+      &.shaped .icon {
+        height: 1in;
+      }
+
       margin-top: 0.15in;
       margin-bottom:0.5in;
 
@@ -76,7 +80,7 @@
       width: var(--pointsize);
       /* background-color: cornflowerblue; */
 
-      --ctcolor: red;
+      /* --ctcolor: red; */
 
       path,
       circle {
@@ -136,24 +140,6 @@
         }
       }
 
-      /* .print { */
-      /* body {
-        width: 11in;
-        height: 8.5in;
-        border: 1px red solid;
-        position: relative; */
-
-
-      /* #ct_targets {
-          .icon {
-            height: 1.5in;
-          }
-
-          margin-top: 0.15in;
-          margin-bottom:0.5in;
-        } */
-
-
       #ct_instruct {
         display: grid;
         grid-template-columns: repeat(10, 1fr);
@@ -167,7 +153,6 @@
         }
       }
 
-      /* } */
     }
   </style>
 </head>
@@ -178,6 +163,9 @@
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" checked="true" /><label for="darkmode">Dark mode</label></div>
+
+    <div><input type="checkbox" class="slider" id="shapetoggle" /><label for="shapetoggle">Shapes</label></div>
+
 
     <button id="reload">Reload</button>
 
@@ -232,29 +220,51 @@
       }
     }
 
+
+    let shapetoggle = document.querySelector("#shapetoggle");
     // document.body.append(shape("square", "blue"), shape("circle"), shape("triangle", "yellow"));
 
-    let colors = ("red blue green white" || "red green blue").split(" ");
+    shapetoggle.onchange = () => {
+      showchart();
+    };
 
-    let shapes = ("left right up down" || "circle square wedge").split(" ");
-
-    let targets = document.createElement("div");
-    targets.id = "ct_targets";
-    let left = document.createElement("div");
-    left.className = "inline";
-    left.append(shape("left", "green"), shape("right", "blue"));
-    let right = document.createElement("div");
-    right.className = "inline updown";
-    right.append(shape("left", "red"), shape("right", "white"));
-
-    targets.append(left, right);
-
-    let instruct = document.createElement("div");
-    instruct.id = "ct_instruct";
-    document.querySelector("#colortouch").append(targets, instruct);
 
     function showchart() {
-      instruct.innerHTML = "";
+
+      let colors = (shapetoggle.checked ? "red green blue" : "red blue green white").split(" ");
+
+      let shapes = (shapetoggle.checked ? "circle square triangle" : "left right up down").split(" ");
+
+      let targets = document.createElement("div");
+      targets.id = "ct_targets";
+
+      if (shapetoggle.checked) {
+        targets.className = "shaped";
+        let targetcolors = [...colors];
+        for (let sh of shapes) {
+          let color = randarray(targetcolors);
+          console.log(targetcolors, color);
+
+          targetcolors = targetcolors.filter(c => c !== color);
+          // targetcolors.splice(targetcolors.indexOf(targetcolors), 1);
+          targets.append(shape(sh, color));
+        }
+      } else {
+        let left = document.createElement("div");
+        left.className = "inline";
+        left.append(shape("left", "green"), shape("right", "blue"));
+        let right = document.createElement("div");
+        right.className = "inline updown";
+        right.append(shape("left", "red"), shape("right", "white"));
+
+        targets.append(left, right);
+      }
+
+      let instruct = document.createElement("div");
+      instruct.id = "ct_instruct";
+      document.querySelector("#colortouch").replaceChildren(targets, instruct);
+
+      // instruct.innerHTML = "";
 
       for (let x = 0; x < 40; x++) {
         // let point = document.createElement("div");
