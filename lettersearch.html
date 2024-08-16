@@ -39,19 +39,24 @@
       height: min(5vw, 10vh, 1.25em);
       line-height: min(5vw, 10vh, 1.25em);
       text-align: center;
-      border-radius: 0.35em;
-
+      border-radius: 20%;
+      scale: var(--mk_scale);
       /*background:#33a3;*/
+
       &::after {
         content: attr(data-mark);
-        position: relative;
         display: block;
-        font-size: 80%;
-        scale: var(--mk_scale)
+        /* position: relative; */
+        /* font-size: 80%; */
       }
 
       &.clicked {
         background: var(--highlight);
+      }
+
+      &.overlap {
+        background: #f003;
+        border-radius: 0;
       }
     }
 
@@ -187,7 +192,7 @@
 
     // make adjustable:
     // padding
-    // mark font size
+    // mark font size
     //
     let m;
     function showchart() {
@@ -232,7 +237,8 @@
               placerandom(m, ++counter);
               return;
             }
-            m.style.background = "#f003";
+            m.classList.add("overlap");
+            //.background = "#f003";
             console.log("overlap", m.dataset.mark);
           }
         }
