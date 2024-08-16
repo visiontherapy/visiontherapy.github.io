@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CP saccades exercise</title>
+  <title>Letter Search</title>
   <meta name="darkreader-lock">
 
   <!-- <script src="xx_borrowed/alljs.php"></script> -->
@@ -17,62 +17,6 @@
   <script defer src="js/settings.js"></script>
   <script defer src="js/topmenu.js"></script>
 
-  <style>
-    #saccades {
-      position: relative;
-      height: min(85vh, 98vw);
-      width: 90vw;
-      margin: 0;
-      left: 50%;
-      transform: translate(-50%);
-      cursor: default;
-      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
-      user-select: none;
-
-    }
-
-
-    #ctrlbar:has([value="redgreen"]:checked)~#saccades {
-
-      .red {
-        color: var(--tranared);
-      }
-
-      .green {
-        color: var(--tranagreen);
-      }
-
-    }
-
-    #ctrlbar:has([value="hybrid"]:checked)~#saccades {
-
-      .red {
-        background: linear-gradient(90deg, var(--tranagreen) 49%, var(--tranared) 50%);
-        color: transparent;
-        background-clip: text;
-      }
-
-      .green {
-        background: linear-gradient(90deg, var(--tranared) 49%, var(--tranagreen) 50%);
-        color: transparent;
-        background-clip: text;
-      }
-
-    }
-
-    #ctrlbar:has([value="colorful"]:checked)~#saccades .dot {
-      color: var(--colorfg);
-    }
-
-
-    @media print {
-      #saccades.midspace .dot:not(#centerpoint) {
-        background: black;
-        color: black;
-        print-color-adjust: exact !important;
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -100,7 +44,7 @@
 	<h3>Colors</h3>
 	<div id="mk_colors">
 	<input type="checkbox" id="mk_red"><label for="mk_red">Red</label><br/>
-	<input type="checkbox" id="mk_green"><label for="mk_green">Green</label><br/>
+	<input type="checkbox" id="mk_green"><label for="mk_green">Blue</label><br/>
 	
 	</div>
 
@@ -111,15 +55,46 @@
 
 
 <style>
+#saccades {
+	position: relative;
+	height: min(85vh, 98vw);
+	width: 90vw;
+	margin: 0;
+	left: 50%;
+	transform: translate(-50%);
+	cursor: default;
+	font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+	user-select: none;
+	font-weight:bold;
+	font-family:sans-serif;
+}
+
+
+[data-theme="light"] {
+--tranagreen: #11eeee;
+--tranared: #eebb11;
+}
+
+[data-theme="dark"] {
+--tranagreen: #008;
+--tranared: #500;
+}
+
+
 .mark {
-display:inline-block;
-background:#8834;
-font-size: 40pt;
-position:absolute;
-width: 1.25em;
-height: 1.25em;
-line-height: 1.25em;
-text-align: center;
+	display:inline-block;
+	font-size: 40pt;
+	position:absolute;
+	width: 1.25em;
+	height: 1.25em;
+	line-height: 1.25em;
+	text-align: center;
+	
+	&::after {
+		content: attr(data-mark);
+		position:relative;
+		
+	}
 }
 
 
@@ -133,21 +108,17 @@ text-align: center;
 	
 
 #controls:has(#mk_red:checked) ~ #saccades .mark {
-color:var(--tranared)
+	color:var(--tranared);
 }
 
 #controls:has(#mk_green:checked) ~ #saccades .mark {
-color:var(--tranagreen);
+	color:var(--tranagreen);
 }
 
 
 #controls:has(#mk_green:checked):has(#mk_red:checked) ~ #saccades .mk_parttwo {
-color:var(--tranared);
+	color:var(--tranared);
 }
-
-
-
-
 
 #marktypes {
 
@@ -166,8 +137,6 @@ color:var(--tranared);
 
 <script>
 let marktypes = document.querySelector("#marktypes");
-let redmark = document.querySelector("#mk_red");
-let greenmark = document.querySelector("#mk_green");
 
 let sac = document.querySelector("#saccades");
 let markers = {
@@ -229,10 +198,10 @@ function showchart() {
 	for (let choice of chosen) {
 		for (let mark of markers[choice]) {
 			let m = document.createElement("div");
-			m.innerText = mark;
+//			m.innerText = mark;
 			m.className = "mark";
-			if (parttwo) m.classList.add("mk_parttwo");
 			m.dataset.mark = mark;
+			if (parttwo) m.classList.add("mk_parttwo");
 			sac.append(m);
 
 			placerandom(m);
