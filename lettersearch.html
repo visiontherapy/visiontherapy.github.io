@@ -233,12 +233,11 @@
             &&
             (isbetween(b.top, p.top, p.bottom) || isbetween(b.bottom, p.top, p.bottom))
           ) {
-            if (counter < 50) {
+            if (counter <= 50) {
               placerandom(m, ++counter);
               return;
             }
             m.classList.add("overlap");
-            //.background = "#f003";
             console.log("overlap", m.dataset.mark);
           }
         }
@@ -274,32 +273,9 @@
     showchart();
 
 
-
-    // - check if value is between two others
-    // - default includes endpoints
-    function isbetween(num, min, max, equ = true) {
-      if (equ) {
-        return num >= min && num <= max;
-      } else {
-        return num > min && num < max;
-      }
-    }
-
-    // - convenience function to create an array of x numbers, or an array with values between x and y
-    function makearray(start, end) {
-      if (!end) {
-        end = start - 1;
-        start = 0;
-      }
-      return [...Array(end + 1).keys()].slice(start);
-    }
-    // makearray(3) == [0,1,2]
-    // makearray(5,9) == [5,6,7,8,9]
-
     document.querySelector("#reload").onclick = function (e) {
       showchart();
     };
-
 
 
   </script>

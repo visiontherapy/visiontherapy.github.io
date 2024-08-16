@@ -668,3 +668,28 @@ function toradians(degrees) {
   return degrees * Math.PI / 180;
 };
 
+
+
+
+// - check if value is between two others
+// - default includes endpoints
+function isbetween(num, min, max, equ = true) {
+  if (equ) {
+    return num >= min && num <= max;
+  } else {
+    return num > min && num < max;
+  }
+}
+
+// - convenience function to create an array of x numbers, or an array with values between x and y
+function makearray(start, end) {
+  if (!end) {
+    end = start - 1;
+    start = 0;
+  }
+  return [...Array(end + 1).keys()].slice(start);
+}
+// makearray(3) == [0,1,2]
+// makearray(5,9) == [5,6,7,8,9]
+
+
