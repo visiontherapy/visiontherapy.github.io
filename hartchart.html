@@ -50,21 +50,25 @@
       .slot {
         position: relative;
         text-align: center;
-        line-height: var(--basefont);
-        /* grid layout takes care of size */
-        /* width: var(--slotsize);
-        height: var(--slotsize); */
+        display: block;
+        /* grid layout takes care of size * /
+        line-height: var(--basefont); 
+        width: var(--basefont);
+        height: var(--basefont); /* */
+
+        &::after {
+          display: block;
+          position: absolute;
+          inset: 0;
+          content: attr(data-char);
+        }
       }
     }
-
 
     #qrplace {
       display: none;
       position: relative;
       text-align: center;
-      /* left: 50%;
-      transform: translate(-50%);
-      top: 0.5em; */
     }
 
     .qrcode {
@@ -72,8 +76,7 @@
       background: #fff;
       position: absolute;
       left: 50%;
-      transform: translate(-50%);
-      top: 1.5em;
+      top: 1em;
       z-index: 1000;
     }
 
@@ -196,7 +199,59 @@
       }
     }
 
+
+
+    #controls:has(#redmode[data-state="1"])~#hartchart #hartmain {
+      & .slot:nth-child(even) {
+        background: var(--tranared);
+        color: var(--bg);
+      }
+
+      & .slot:nth-child(odd) {
+        color: var(--tranagreen);
+      }
+    }
+
+
+
+    #controls:has(#redmode[data-state="2"])~#hartchart #hartmain {
+      & .slot.randomred {
+        background: var(--tranared);
+        color: var(--bg);
+      }
+
+      & .slot:not(.randomred) {
+        color: var(--tranagreen);
+      }
+    }
+
+
     @media print {
+
+
+      #controls:has(#redmode[data-state="1"])~#hartchart #hartmain {
+        & .slot:nth-child(even) {
+          background: red;
+          color: black;
+          print-color-adjust: exact !important;
+        }
+
+        & .slot:nth-child(odd) {
+          color: red;
+        }
+      }
+
+      #controls:has(#redmode[data-state="2"])~#hartchart #hartmain {
+        & .slot.randomred {
+          background: red;
+          color: black;
+          print-color-adjust: exact !important;
+        }
+
+        & .slot:not(.randomred) {
+          color: red;
+        }
+      }
 
       #boxscale,
       #codehints {
@@ -208,6 +263,8 @@
       }
 
     }
+
+    /* document.querySelector("#controls:has(#redmode[data-state=\"1\"]) ~ #hartchart #hartmain .slot:nth-child(even)") */
   </style>
   <!-- https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/ -->
   <!-- https://dev.to/murtuzaalisurti/how-to-make-a-qr-code-generator-using-vanilla-javascript-3cla -->
@@ -244,14 +301,27 @@
       </div>
     </div> -->
 
-    <div>
-      <input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>
-      <div id="qrplace"></div>
-    </div>
 
     <button id="reload">Reload</button>
 
   </div>
+
+
+  <div id="controls">
+    <div id="settings">*SETTINGS*</div>
+
+    <div class="ctrlbox">
+
+      <div><input type="checkbox" class="threestate" id="redmode" /><label for="redmode">Red filter</label></div>
+
+      <div>
+        <input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>
+        <div id="qrplace"></div>
+      </div>
+
+    </div>
+  </div>
+
 
 
   <div id="hartchart" class="contents">
@@ -268,6 +338,16 @@
     let codeout = document.querySelector("#codeout");
     let qrplace = document.querySelector("#qrplace");
     let querypattern = window.location.hash.replace(/^#/, "");
+
+
+    let redmode = document.querySelector("#redmode");
+
+    redmode.oninput = function (e) {
+      threestate(this);
+      // console.log(this.dataset.state);
+      // showchart();
+    };
+
 
     // querypattern = querypattern.toUpperCase().replace(/[^A-Z]/g, "");
     querypattern = querypattern.replace(/[^\d]/g, "");
@@ -295,13 +375,13 @@
         for (let y = 1; y <= 10; y++) {
           let slot = document.createElement("div");
           slot.className = "slot";
-
+          if (minmax(1, 40) % 2 == 1) slot.classList.add("randomred");
           //slot.id = "slot" + x + "-" + y;
           slot.dataset.slot = [x, y];
           slot.dataset.row = x;
           slot.dataset.col = y;
           let breakcount;
-          slot.dataset.char = slot.innerText = lastchar = nextletter(lastchar);
+          slot.dataset.char = lastchar = nextletter(lastchar);
           //pattern ? pattern.shift() : 
           main.append(slot);
         }
