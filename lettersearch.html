@@ -23,6 +23,7 @@
 
 
   <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
@@ -145,12 +146,12 @@ let marktypes = document.querySelector("#marktypes");
 let alpha = "abcdefghijklmnopqrstuvwxyz";
 let sac = document.querySelector("#saccades");
 let markers = {
-	ucaps:alpha.toUpperCase().split(""),
-	lcaps:alpha.split(""),
-	alphanums: makearray(1,26)
+	Uppercase:alpha.toUpperCase().split(""),
+	lowercase:alpha.split(""),
+	numbers: makearray(1,26)
 	};
 
-let chosen = ["ucaps"];
+let chosen = ["Uppercase"];
 
 for (let mk of Object.keys(markers)) {
 let mk_row = document.createElement("div");
@@ -177,7 +178,7 @@ marktypes.onclick = function(e) {
 		if (chks.length ==2) {
 		marktypes.className= "maxed";
 		}
-		//else if (chks.length ==1) {marktypes.className= "min";}
+		else if (chks.length ==1) {marktypes.className= "min";}
 		chosen = [];
 		
 		if (chks.length >0) {
