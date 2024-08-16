@@ -166,6 +166,7 @@ mk_row.className = "mk_row";
 let mk_input = document.createElement("input");
 mk_input.type="checkbox";
 mk_input.id="mk_"+mk;
+if (chosen.includes(mk)) mk_input.checked=true;
 mk_input.className = "markcheck";
 
 let mk_label = document.createElement("label");
