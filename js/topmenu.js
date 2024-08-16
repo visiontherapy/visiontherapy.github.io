@@ -89,6 +89,11 @@ let data = [ //first two items comprise the menu opener (open / close)
     "src": "img/icon_colortouch.svg",
     "alt": "Color Touch",
     "link": "colortouch.html"
+  }, {
+    "id": "id14",
+    "src": "img/logo.svg",
+    "alt": "Letter Search",
+    "link": "lettersearch.html"
   },
 ];
 
@@ -98,4 +103,3 @@ document.querySelector("#ctrlbar").append(menuthing);
 // styles:styles,config:configuration,
 // floatmenu({ styles: styles, config: configuration, menuitems: data, anchor: document.querySelector("#menubenu") });
 floatmenu({ styles: styles, config: configuration, menuitems: data, anchor: menuthing });
-
