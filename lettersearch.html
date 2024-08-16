@@ -142,11 +142,11 @@
 
 <script>
 let marktypes = document.querySelector("#marktypes");
-
+let alpha = "abcdefghijklmnopqrstuvwxyz";
 let sac = document.querySelector("#saccades");
 let markers = {
-	ucaps:"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
-	lcaps:"abcdefghijklmnopqrstuvwxyz".split(""),
+	ucaps:alpha.toUpperCase().split(""),
+	lcaps:alpha.split(""),
 	alphanums: makearray(1,26)
 	};
 
@@ -193,9 +193,9 @@ marktypes.onclick = function(e) {
 // padding
 // mark font size
 //
-
+let m;
 function showchart() {
-	sac.innerHTML = "";
+	sac.replaceChildren(); // = "";
 	let placedmarks = [];
 
 	let clickedmark;
@@ -245,30 +245,33 @@ function showchart() {
 	
 	
 	function checkmatch(e) {
-	console.log(e.target, this);
-	if (!clickedmark) {
-		clickedmark = this; 
-		this.classList.add("clicked");
-	} else if (clickedmark == this) {
-		clickedmark.classList.remove("clicked");
-		clickedmark = null;	
-	} else if (clickedmark.dataset.mark == this.dataset.mark) {
-		clickedmark.remove();
-		this.remove();
-		clickedmark = null;
+		if (!clickedmark) {
+			clickedmark = this; 
+			this.classList.add("clicked");
+		} else if (clickedmark == this) {
+			clickedmark.classList.remove("clicked");
+			clickedmark = null;	
+		} else if (logicalmatch(clickedmark.dataset.mark, this.dataset.mark)) {
+			clickedmark.remove();
+			this.remove();
+			clickedmark = null;
+		}	
 	}
-
 	
-	}
-
-
+m = document.querySelector(".mark");
 
 }
+
+function logicalmatch(a,b) {
+	if (a.toLowerCase() == b.toLowerCase() ||
+	a.toLowerCase() == alpha.split("")[parseInt(b)-1] ||
+	b.toLowerCase() == alpha.split("")[parseInt(a)-1]) return true;
+}
+
 
 showchart();
 
 
-let m = document.querySelector(".mark");
 
 // - check if value is between two others
 // - default includes endpoints
