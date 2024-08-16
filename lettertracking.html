@@ -60,8 +60,7 @@
     }
 
     #output.red {
-      background: var(--trackredbg);
-      color: var(--trackred);
+      color: var(--tranared);
     }
 
 
@@ -128,6 +127,12 @@
 
       #output {
         margin: 1em 4em 1em 3.5em;
+      }
+
+      #output.red {
+        background: red;
+        color: black;
+        print-color-adjust: exact !important;
       }
 
       #ctrlbar,

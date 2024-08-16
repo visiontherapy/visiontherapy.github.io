@@ -27,8 +27,6 @@
 
 
     [data-theme="light"] {
-      --tranagreen: #eebb11;
-      --tranared: #11eeee;
 
       #circles #green {
         mix-blend-mode: darken;
@@ -36,8 +34,6 @@
     }
 
     [data-theme="dark"] {
-      --tranagreen: #008;
-      --tranared: #500;
 
       #circles #green {
         mix-blend-mode: difference;
@@ -71,7 +67,7 @@
       top: 0;
 
       * {
-        mix-blend-mode: normal;
+        mix-blend-mode: normal !important;
       }
 
       --tranared: var(--fg);

@@ -22,6 +22,11 @@
   <script src="js/peerjs.min.js"></script>
 
   <style>
+    :root {
+      --spotbg: var(--tranared);
+      --spotbgbw: var(--fg);
+    }
+
     #ctrlbar:has(#blue:checked)~.spotit .spot {
       background: var(--spotbg);
     }
@@ -67,7 +72,7 @@
           mask-size: contain;
           mask-repeat: no-repeat;
           mask-position: center;
-          mix-blend-mode: difference;
+          /* mix-blend-mode: difference; */
 
           &.null {
             visibility: hidden;
@@ -157,7 +162,7 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Filtered</label></div>
+    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Red filter</label></div>
 
     <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 

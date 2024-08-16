@@ -8,10 +8,11 @@
   --fg: #000;
   --ctrlbg: #ddf;
   --highlight: #099;
-  --tranared: #03f;
-  --tranagreen: #f00;
-  --spotbg: var(--tranared);
-  --spotbgbw: var(--bg); /* because of mid-blend-mode:difference */
+  /* -- tranared: #03f; */
+  /* -- tranagreen: #f00; */
+  --tranagreen: #eebb11;
+  --tranared: #11eeee;
+
   --trackred: #f00;
   --trackredbg: var(--bg);
   --homefilter: brightness(0);
@@ -22,10 +23,11 @@
   --fg: #fff;
   --ctrlbg: #222;
   --highlight: #0ff;
-  --tranared: #008;
-  --spotbg: var(--tranared);
-  --spotbgbw: var(--fg);
-  --tranagreen: #500;
+  /* -- tranared: #008; */
+  /* -- tranagreen: #500; */
+  --tranagreen: #008;
+  --tranared: #500;
+
   --trackred: var(--fg);
   --trackredbg: #ff0000;
   --homefilter: saturate(0) brightness(100);
