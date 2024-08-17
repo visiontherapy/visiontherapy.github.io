@@ -14,10 +14,5 @@ function getqr(data, target) {
     colorLight: "#fff",
     correctionLovel: QRCode.CorrectLevel.L,
   });
-  // let qrplace = document.querySelector("#qrplace");
-  // qrplace.innerHTML = `<input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>`;
-  // qrplace.innerHTML = "";
-  // qrplace.append(qrcode);
-  // qrplace.innerHTML += data;
   return qrcode;
 }
