@@ -243,7 +243,7 @@
         let targetcolors = [...colors];
         for (let sh of shapes) {
           let color = randarray(targetcolors);
-          console.log(targetcolors, color);
+          // console.log(targetcolors, color);
 
           targetcolors = targetcolors.filter(c => c !== color);
           // targetcolors.splice(targetcolors.indexOf(targetcolors), 1);
@@ -264,14 +264,7 @@
       instruct.id = "ct_instruct";
       document.querySelector("#colortouch").replaceChildren(targets, instruct);
 
-      // instruct.innerHTML = "";
-
       for (let x = 0; x < 40; x++) {
-        // let point = document.createElement("div");
-        // point.className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
-        // point.className = "chars";      point.innerText = randarray(shps.split(" "));
-        // .className = "icon wedge " + randarray(colors) + " " + randarray(shapes);
-
         instruct.append(shape(randarray(shapes), randarray(colors)));
       }
     }
@@ -283,22 +276,7 @@
       window.location.hash = "";
     };
 
-    // TODO : Make this printable
-
-
-    /* targets.innerHTML = `
-     <div class="inline">
-     <div class="ct_point triangle blue"></div>
-     <div class="ct_point circle red"></div>
-     <div class="ct_point square green"></div>
-     </div>
-     `;
- */
-
   </script>
-
-  <!-- <svg class="icon" viewBox="0 0 3 3" xmlns="http://www.w3.org/2000/svg"><path d="M1 0 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" /></svg> -->
-
 
 </body>
 
