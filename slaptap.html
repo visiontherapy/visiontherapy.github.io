@@ -196,7 +196,7 @@
     showchart();
 
     function showchart() {
-      main.innerHTML = "";
+      main.replaceChildren(); //.inner Text = "";
       for (let n = 0; n < 50; n++) {
         let clap = randarray(entities[level.value]);
         main.append(makething(clap));

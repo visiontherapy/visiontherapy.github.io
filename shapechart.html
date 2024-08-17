@@ -219,7 +219,7 @@
       let shapes = arrow.checked ? [["up", "down"], ["left", "right"]] : "star circle diamond square triangle".split(" "); //.map(s => "img/chart/chart_" + s + ".svg");
 
 
-      main.innerHTML = "";
+      main.replaceChildren(); //.inner Text = "";
       let previous = [];
 
       let shapecount = arrow.checked ? 6 : 8;

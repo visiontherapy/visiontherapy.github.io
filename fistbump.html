@@ -139,7 +139,7 @@ https://gamedevelopment.tutsplus.com/picking-a-color-palette-for-your-games-artw
 
     function showchart() {
 
-      main.innerHTML = "";
+      main.replaceChildren(); //.inner Text = "";
       for (let n = 0; n < 100; n++) {
         let bump = randarray(states);
         main.append(makething(bump));

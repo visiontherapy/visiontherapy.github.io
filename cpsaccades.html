@@ -266,7 +266,7 @@
       let dot = document.createElement("div");
       dot.className = "dot";
       let bounds = box.getBoundingClientRect();
-      box.innerHTML = "";
+      box.replaceChildren(); //.inner Text = "";.inner HTML = "";
 
 
       let centerpoint = document.createElement("div");

@@ -457,8 +457,7 @@
       let url = window.location.toString().replace(/[\?#&]+.*$/g, "");
       // console.log("showing QR CODE:", gameid);
       let qrstring = url + "#" + gameid;
-      qrplace.innerHTML = "";
-      qrplace.append(getqr(qrstring, "_partner"));
+      qrplace.replaceChildren(getqr(qrstring, "_partner"));
     }
 
 
@@ -477,7 +476,7 @@
         uuid = gameuuid;
         gamenumber.dataset.id = gamenumber.innerText = gameuuid;
       } else {
-        gamenumber.innerText = "";
+        gamenumber.replaceChildren(); //.inner Text = "";
         gamenumber.removeAttribute("data-id");
       }
 
@@ -485,7 +484,7 @@
 
       rng ??= random(thisseed);
       gamerng = rng;
-      anchor.innerText = "";
+      anchor.replaceChildren(); //.inner Text = "";
       let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
 
       // if (matched.dataset.state != 2) anchor.append(leftcard);

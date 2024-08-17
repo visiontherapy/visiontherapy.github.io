@@ -105,7 +105,7 @@
     function showchart() {
       answer.value = "";
       answer.style = "";
-      barcode.innerHTML = "";
+      barcode.replaceChildren(); //.inner Text = "";
 
       linecount = 15 + Math.floor(Math.random() * 30);
       console.log(linecount);

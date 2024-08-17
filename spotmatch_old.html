@@ -233,7 +233,7 @@
 
 
       rng ??= random(thisseed);
-      anchor.innerText = "";
+      anchor.replaceChildren(); //.inner Text = "";
       let [leftcard, cardimgs] = makecard({ imgbank: [...images] });
 
       // if (matched.dataset.state != 2) anchor.append(leftcard);

@@ -207,7 +207,8 @@
 
       blocks = ashuffle(choosetiles(alltiles.value));
 
-      tileholder.innerHTML = playfield.innerHTML = "";
+      tileholder.replaceChildren();
+      playfield.replaceChildren(); //.inner Text = "";inner HTML = "";
 
       for (let b of blocks) {
         let tile = document.createElement("bl-ock");
