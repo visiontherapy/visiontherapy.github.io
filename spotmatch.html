@@ -418,6 +418,12 @@
                     if (spotitdebug) console.log("closing connection");
                     conn.close();
                     conn = null;
+
+                    window.location.hash = "";
+                    globalmatchedmode = null;
+                    if (peer) peer.disconnect();
+                    showchart();
+
                     // peer.destroy();
                     break;
                   case "reload":
