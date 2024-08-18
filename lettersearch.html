@@ -26,28 +26,31 @@
       left: 50%;
       transform: translate(-50%);
       cursor: default;
-      font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw);
+      /* font-size: min(var(--fontsize) * 1vh, var(--fontsize) * 1vw); */
       user-select: none;
       font-weight: bold;
       font-family: sans-serif;
+      --mk_scale: 1;
     }
 
     .mark {
       display: block;
       position: absolute;
-      width: min(5vw, 10vh, 1.25em);
-      height: min(5vw, 10vh, 1.25em);
-      line-height: min(5vw, 10vh, 1.25em);
+      --marksize: calc(var(--mk_scale) * min(5vw, 10vh, 0.75in));
+      width: var(--marksize);
+      height: var(--marksize);
+      line-height: var(--marksize);
       text-align: center;
       border-radius: 20%;
-      scale: var(--mk_scale);
+      /* scale: var(--mk_scale); */
       /*background:#33a3;*/
+      font-size: var(--marksize);
 
       &::after {
         content: attr(data-mark);
         display: block;
-        /* position: relative; */
-        /* font-size: 80%; */
+        position: absolute;
+        inset: 0;
       }
 
       &.clicked {
@@ -97,6 +100,19 @@
       }
 
     }
+
+    @media print {
+      @page {
+        size: landscape;
+
+      }
+
+      .mark {
+        --marksize: 0.5in;
+        print-color-adjust: exact !important;
+
+      }
+    }
   </style>
 </head>
 
@@ -117,7 +133,7 @@
 
     <div class="ctrlbox">
 
-      <div>Scale <input id="mk_scale" type="range" min="0.3" max="1.8" value="1" step="0.1" /> <span id="mk_scalenum"></span></div>
+      <div>Scale <input id="mk_scale" type="range" min="0.3" max="1.5" value="1" step="0.05" /> <span id="mk_scalenum"></span></div>
 
       <h3>Marks</h3>
       <div id="marktypes"></div>
@@ -209,6 +225,7 @@
           //			m.innerText = mark;
           m.className = "mark";
           m.dataset.mark = mark;
+          // m.innerText = mark;
           if (parttwo) m.classList.add("mk_parttwo");
           sac.append(m);
           m.onclick = checkmatch;
@@ -218,8 +235,30 @@
       }
 
       function placerandom(m, counter = 0) {
-        m.style.left = minmax(0, 95) + "%";
+        console.log(m.dataset.mark);
+
+        // let top = minmax(0, 100);
+        // if (top < 50) {
+        //   m.style.top = top + "%";
+        //   m.style.bottom = "";
+        // } else {
+        //   m.style.bottom = 100 - top + "%";
+        //   m.style.top = "";
+        // }
+
+        // let left = minmax(0, 100);
+        // if (left < 50) {
+        //   m.style.left = left + "%";
+        //   m.style.right="";
+        // } else {
+        //   m.style.right = 100 - left + "%";
+        //   m.style.left = "";
+        // }
+
         m.style.top = minmax(0, 90) + "%";
+        m.style.left = minmax(0, 90) + "%";
+
+
         let b = m.getBoundingClientRect();
         for (let p of placedmarks) {
           if (!(b.right < p.left ||
@@ -233,7 +272,7 @@
             &&
             (isbetween(b.top, p.top, p.bottom) || isbetween(b.bottom, p.top, p.bottom))
           ) {
-            if (counter <= 50) {
+            if (counter <= 77) {
               placerandom(m, ++counter);
               return;
             }
@@ -276,6 +315,20 @@
     document.querySelector("#reload").onclick = function (e) {
       showchart();
     };
+
+    
+    window.addEventListener("beforeprint", (e) => {
+      sac.style.width = "10in";
+      sac.style.height = "7.5in";
+      // showchart();
+    });
+
+    window.addEventListener("afterprint", (e) => {
+      sac.style.width = "";
+      sac.style.height = "";
+    });
+
+    /* */
 
 
   </script>
