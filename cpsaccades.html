@@ -102,11 +102,16 @@
 
 
     @media print {
+      @page {
+        size: landscape;
+      }
+
       #saccades.midspace .dot:not(#centerpoint) {
-        background: black;
-        color: black;
+        /* background: black;
+        color: red; */
         print-color-adjust: exact !important;
       }
+
     }
   </style>
 </head>

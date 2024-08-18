@@ -96,8 +96,9 @@ https://gamedevelopment.tutsplus.com/picking-a-color-palette-for-your-games-artw
     }
 
     @media print {
-      :root {
-        --fc7: black;
+      @page {
+        size: landscape;
+        /* --fc7: black; */
       }
 
       .bumpthing::after {
