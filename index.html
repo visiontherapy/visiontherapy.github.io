@@ -89,24 +89,12 @@
     </div>
     <hr />
     Contents:
-    <ul>
-      <li><a href="#cp">CP Saccades / Space Fixator / Red-Green delete</a> (printable)</li>
-      <li><a href="#hart">Hart Chart / Decoding</a> (printable)</li>
-      <li><a href="#shapes">Shape/Arrow chart</a> (printable)</li>
-      <li><a href="#tracking">Letter Tracking</a> (printable)</li>
-      <li><a href="#glyphs">Tranaglyphs / Fusion cards</a></li>
-      <li><a href="#lines">Line counting</a></li>
-      <li><a href="#blocks">Pattern Blocks</a></li>
-      <li><a href="#spotmatch">Spot the Match</a></li>
-      <li><a href="#slaptap">Slap Tap</a> (printable)</li>
-      <li><a href="#fistbump">Closed, Open, Flat</a> (printable)</li>
-      <li><a href="#colortouch">Color Touch</a> (printable)</li>
-      <li><a href="#lettersearch">Letter Search</a></li>
-    </ul>
 
+    <ul id="toc"></ul>
+    
     <hr />
 
-    <h3 id="cp"><a href="cpsaccades.html">CP Saccades / Space Fixator / Red-Green delete</a></h3>
+    <h3 id="cp" data-p="p"><a href="cpsaccades.html">CP Saccades / Space Fixator / Red-Green delete</a></h3>
     <div>
       <ul>
         <li>CP saccades:
@@ -135,7 +123,7 @@
       </ul>
     </div>
 
-    <h3 id="hart"><a href="hartchart.html">Hart Chart / Decoding</a></h3>
+    <h3 id="hart" data-p="p"><a href="hartchart.html">Hart Chart / Decoding</a></h3>
     <div>
       <ul>
         <li>Read each letter at a steady pace.</li>
@@ -157,7 +145,7 @@
     </div>
 
 
-    <h3 id="shapes"><a href="shapechart.html">Shape/Arrow chart</a></h3>
+    <h3 id="shapes" data-p="p"><a href="shapechart.html">Shape/Arrow chart</a></h3>
     <div>
       <ul>
         <li>Toggle between 8x8 grid of shapes or 6x6 grid of arrows</li>
@@ -167,7 +155,7 @@
 
 
 
-    <h3 id="tracking"><a href="lettertracking.html">Letter Tracking</a></h3>
+    <h3 id="tracking" data-p="p"><a href="lettertracking.html">Letter Tracking</a></h3>
     <div>
       <ul>
         <li>Find each letter of the alphabet in order.</li>
@@ -254,7 +242,7 @@
     </div>
 
 
-    <h3 id="slaptap"><a href="slaptap.html">Slap Tap</a></h3>
+    <h3 id="slaptap" data-p="p"><a href="slaptap.html">Slap Tap</a></h3>
     <div>
       <ul>
         <li>Tap your hand or foot according to the figures
@@ -276,7 +264,7 @@
 
 
 
-    <h3 id="fistbump"><a href="fistbump.html">Closed, Open, Flat</a></h3>
+    <h3 id="fistbump" data-p="p"><a href="fistbump.html">Closed, Open, Flat</a></h3>
     <div>
       <ul>
         <li>Tap/bump your hands according to the figures
@@ -292,7 +280,7 @@
 
     </div>
 
-    <h3 id="colortouch"><a href="colortouch.html">Color Touch</a></h3>
+    <h3 id="colortouch" data-p="p"><a href="colortouch.html">Color Touch</a></h3>
     <div>
       <ul>
         <li>Touch matching large reference targets and the smaller task targets simultaneously with your index finger of both hands.</li>
@@ -303,7 +291,7 @@
       </ul>
     </div>
 
-    <h3 id="lettersearch"><a href="lettersearch.html">Letter Search</a></h3>
+    <h3 id="lettersearch" data-p="p"><a href="lettersearch.html">Letter Search</a></h3>
     <ul>
       <li>Wear your red/green glasses as guided by your vision therapist.</li>
       <li>Select the matching letters in alphabetical order.</li>
@@ -319,7 +307,7 @@
     <b>Alternate Markers</b>
     <ul>
       <li>Use the Settings panel to select the desired character set.</li>
-      <li>If the number set is paired with an alphabet set, pair the number corresponding to the letter (A=1, B=2, etc).</li>
+      <li>If the number set is paired with an alphabet set, match the number corresponding to the letter (A=1, B=2, etc).</li>
     </ul>
     <hr />
     <br />
@@ -337,7 +325,18 @@
       } else {
         ctrlbar.dataset.scroll = "x";
       }
-    })
+    });
+
+    let toc = document.querySelector("#toc");
+
+    for (let h of document.querySelectorAll("h3")) {
+      let li = document.createElement("li");
+      let a = h.querySelector("a");
+      li.innerHTML = '<a href="#' + h.id + '">' + a.innerText + "</a>" + (h.dataset.p ? " (printable)" : "");
+      toc.append(li);
+    }
+
+
   </script>
 
 
