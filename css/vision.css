@@ -76,6 +76,7 @@ a {
 #settings {
   cursor: default;
   display: inline-block;
+  padding:0.3em;
 }
 
 .ctrlbox {
@@ -130,7 +131,7 @@ input#help + label {
   border-radius: 0.5em;
   display: inline-block;
   cursor: pointer;
-  transition: all 0.5s;
+  transition: all 0.25s;
 }
 
 input#help:checked + label {
