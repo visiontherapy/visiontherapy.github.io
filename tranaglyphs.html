@@ -40,11 +40,6 @@
       }
     }
 
-
-    body {
-      text-align: center;
-    }
-
     input[type=range] {
       width: 60%;
       /* margin: 0.5em 0 0 10%; */
@@ -235,24 +230,33 @@
       height: 1.5em;
       line-height: 1.5em;
       margin: 0.5em;
-      padding: 1em;
     }
 
-    #calibrate {
-      position: relative;
-      width: var(--basesize);
-      height: 1.5em;
-      line-height: 1.5em;
-      border-left: 2px solid var(--fg);
-      border-right: 2px solid var(--fg);
-      left: 50%;
-      transform: translate(-50%);
+    #calibrators {
+      margin-top: 2em;
       text-align: center;
-    }
 
-    #calibrate::after {
-      content: attr(data-value) "x ⮕ 4in (10.16cm)";
-      text-align: center;
+      >b {
+        display: block;
+        font-size: 150%;
+      }
+
+      #calibrate {
+        position: relative;
+        width: var(--basesize);
+        height: 1.5em;
+        line-height: 1.5em;
+        border-left: 2px solid var(--fg);
+        border-right: 2px solid var(--fg);
+        left: 50%;
+        transform: translate(-50%);
+        text-align: center;
+      }
+
+      #calibrate::after {
+        content: attr(data-value) "x ⮕ 4in (10.16cm)";
+        text-align: center;
+      }
     }
 
     /* #ctrlbar:has(#fusion:checked) {
@@ -285,12 +289,20 @@
 
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
-    <div><input type="checkbox" class="slider" id="fusion" /><label for="fusion">Fusion mode</label></div>
+
+
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+    <div><input type="checkbox" class="slider" id="fusion" /><label for="fusion">Fusion mode</label></div>
+
+
+  </div>
+
+
   </div>
 
   <div id="calibrators">
-    <label>Calibrators:</label><br />
+    <b>Calibrator:</b>
     <input type="range" id="calibrator" min="0.5" max="3" step="0.05" value="1.65" />
     <div id="calibrate" data-value="1.65"></div>
 
@@ -358,6 +370,8 @@
       } else {
         document.documentElement.style.setProperty("--glyphscale", "1");
         // document.documentElement.style.setProperty("--saturate", "1");
+        slider.value=0;
+        movecircles();
         circles.classList.remove("fusion");
         // document.documentElement.setAttribute("data-theme", "light");
       }
