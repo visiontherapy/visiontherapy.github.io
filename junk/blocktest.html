@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extending Pattern Blocks</title>
+  <meta name="darkreader-lock" />
+
+  <!-- <script src="xx_borrowed/alljs.php"></script> -->
+  <!-- <script src="js/alljs.js"></script> -->
+  <!-- <link rel="stylesheet" href="xx_borrowed/allcss.php" /> -->
+  <!-- <link rel="stylesheet" href="css/allcss.css" />
+  <link rel="stylesheet" href="css/vision.css" />
+  <script src="js/darkmode.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/topmenu.js"></script> -->
+
+  <script src="js/customblock_shadow.js"></script>
+
+  <style>
+    body {
+      background: #222;
+      color: white
+    }
+
+    bl-ock {
+      --blocksize: 5em;
+      --bordercolor: var(--tranared);
+      --oncolor: green;
+      --offcolor: gray;
+    }
+
+    #testblock {
+      font-size: 18pt;
+      margin: 0 1em;
+
+      &>div {
+        margin: 1em;
+        /* text-indent: 0.5em; */
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="ctrlbar">
+    <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
+
+    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+
+  </div>
+
+  <div id="testblock">
+    <bl-ock value="1"></bl-ock>
+    <bl-ock value="2" class="red"></bl-ock>
+    <div id="testdiv"></div>
+  </div>
+  <hr />
+  <br />
+  <br />
+  <br />
+  <script>
+    let tile = document.createElement("bl-ock");
+    tile.value = "23";
+    // randomize rotation on first load
+
+    document.querySelector("#testdiv").append(tile);
+
+    tile.dataset.state = 2;
+    for (let b of document.querySelectorAll("bl-ock")) {
+      // console.log("initial:",b.value, b.flower);
+      b.addEventListener("click", function (e) {
+        console.log(this.flower.join(""));
+      });
+    }
+  </script>
+
+</body>
+
+</html>
