@@ -162,48 +162,51 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Red filter</label></div>
 
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
+    <div id="ctrlsettings"><input type="checkbox" id="ctrlset" /><label for="ctrlset"><img src="img/icon_ctrlsettings.svg" /></label>
+
+      <div class="ctrlbox">
+        <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+        <div><input type="checkbox" class="slider" id="blue" /><label class="button" for="blue">Red filter</label></div>
+
+        <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">Randomize arrangement</label></div>
+
+        <div><input type="checkbox" class="slider" id="matched" /> <label class="button" for="matched">Matched</label></div>
+
+        <div id="qrplace"></div>
+
+        <div><input type="checkbox" class="slider" id="autoflip" /> <label class="button" for="autoflip">Auto-advance</label></div>
+
+
+
+      </div>
+    </div>
+
+    <div>
+      <input type="checkbox" id="help" />
+      <label for="help">Help</label>
+      <label id="helptext" for="help">
+        <h2>How to use this:</h2>
+        Identify the shape that appears in both clusters, and click either one to proceed to the next matched pair.
+        <h3>Settings</h3>
+        <ul>
+          <li>Use the corresponding sliders to toggle on/off shape rotation and size randomization.</li>
+          <li>Matched mode:
+            <ul>
+              <li>One cluster will display on this device.</li>
+              <li>Scan the QR code (or open the link) with a second device to display the matched cluster.</li>
+              <li>Identify and click the matching shape on both devices to proceed in parallel</li>
+            </ul>
+          </li>
+        </ul>
+      </label>
+    </div>
 
     <button id="reload">Reload</button>
 
   </div>
 
-  <div id="controls">
-    <div id="settings">*SETTINGS*</div>
-
-    <input type="checkbox" id="help" />
-    <label for="help">Help</label>
-    <label id="helptext" for="help">
-      <h2>How to use this:</h2>
-      Identify the shape that appears in both clusters, and click either one to proceed to the next matched pair.
-      <h3>Settings</h3>
-      <ul>
-        <li>Use the corresponding sliders to toggle on/off shape rotation and size randomization.</li>
-        <li>Matched mode:
-          <ul>
-            <li>One cluster will display on this device.</li>
-            <li>Scan the QR code (or open the link) with a second device to display the matched cluster.</li>
-            <li>Identify and click the matching shape on both devices to proceed in parallel</li>
-          </ul>
-        </li>
-      </ul>
-    </label>
-
-    <div class="ctrlbox">
-      <!-- <div>Seed <input placeholder="Enter a 5 digit number" type="number" id="seed" /></div> -->
-
-      <div><input type="checkbox" class="slider" id="matched" /> <label class="button" for="matched">Matched</label></div>
-
-      <div id="qrplace"></div>
-
-      <div><input type="checkbox" class="slider" id="autoflip" /> <label class="button" for="autoflip">Auto-advance</label></div>
-
-      <div><input type="checkbox" class="slider" id="rotate" checked /><label class="button" for="rotate">rotate/scale/shift</label></div>
-
-    </div>
-  </div>
 
   <div class="spotit"></div>
 

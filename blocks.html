@@ -68,17 +68,25 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
-    <div><select id="alltiles">
-        <option value="all">All tiles (64)</option>
-        <option value="36">Random 36</option>
-        <option value="rogue">More! (70)</option>
+    <div id="ctrlsettings"><input type="checkbox" id="ctrlset" /><label for="ctrlset"><img src="img/icon_ctrlsettings.svg" /></label>
 
-      </select>
+      <div class="ctrlbox">
+        <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+
+        <select id="alltiles">
+          <option value="all">All tiles (64)</option>
+          <option value="36">Random 36</option>
+          <option value="rogue">More! (70)</option>
+
+        </select>
+      </div>
     </div>
 
-    <button id="reload">New Chart</button>
+
+
+    <button id="reload">Reset</button>
   </div>
 
 

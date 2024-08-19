@@ -38,8 +38,12 @@
     }
 
 
-    #showsolution:checked~#output,
-    #output.showsolution {
+    #showsol {
+      font-size: 18pt;
+      margin: 0 2em;
+    }
+
+    #output:has(#showsol input:checked) {
       .selected {
         color: red;
         text-decoration: line-through;
@@ -59,10 +63,9 @@
       }
     }
 
-    #output.red {
+    #ctrlbar:has(#red:checked)~div #output {
       color: var(--tranared);
     }
-
 
 
     #output span.selected {
@@ -84,8 +87,7 @@
       display: none;
     }
 
-    #leveltwo:checked~#output,
-    #output.leveltwo {
+    #ctrlbar:has(#leveltwo:checked)~div #output {
       .firstchar {
         text-transform: uppercase;
       }
@@ -107,6 +109,9 @@
     }
 
 
+    #wordbank {
+      height: 8em;
+    }
 
 
     #timer {
@@ -137,7 +142,8 @@
 
       #ctrlbar,
       #controls,
-      #timer {
+      #timer,
+      #showsol {
         display: none
       }
     }
@@ -153,19 +159,25 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
-    <div>
-      <input type="checkbox" class="slider" id="showsolution" />
-      <label class="button" for="showsolution">Solution</label>
-    </div>
+    <div id="ctrlsettings"><input type="checkbox" id="ctrlset" /><label for="ctrlset"><img src="img/icon_ctrlsettings.svg" /></label>
 
-    <div><input type="checkbox" class="slider" id="leveltwo" />
-      <label class="button" for="leveltwo">Level 2</label>
-    </div>
+      <div class="ctrlbox">
+        <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
 
-    <div><input type="checkbox" class="slider" id="red" />
-      <label class="button" for="red">Red</label>
+        <div><input type="checkbox" class="slider" id="leveltwo" /><label class="button" for="leveltwo">Level 2</label></div>
+
+        <div><input type="checkbox" class="slider" id="red" /><label class="button" for="red">Red</label></div>
+
+        <div>
+          Wordbank:<br />
+          <textarea id="wordbank">th to ts te ti tu tc ta ty tl tt tr tw tg he hi ha ho ht hu hr hy er em ea el en ed ee et ev ef ei eh ex ew es eq eg ey ec ep ek eo ez eb re ry rk ra rw rd rr ri rt ro rn rg rm rs rv ru rc rh rl rp wa wh wo wi wn wr we wd as ar ab at al ay af av ac ai an ad ak am ag ap au ax no ng nk nd na ne ni nt nc ns nn ny nv nl nu nf ot or ou of oh ov oc on oo ok oa os op ow ol om og od oe ob ox in id ic it is im ie io iv ix ia ig ir if ip iq il ib so sa se sh st ss si su sl sp sc sm sk sq ve vo vi ma mu me mi mo my mp mb ms ka ke ks ki bl bb bi be bu bo by bj ba br le li lf ll la ly lo ld lm ls lu lt lk lw lv di de ds do dg da dy dd dm dr dv dl du df ce ch cc cu ct co ck cr cl ca ci cq uc ut ug ur ui ua un us ue ud um up ul ub gh ge gu gi ga gr go gn ft fe fo fl fi ff fa fu fr qu po pu pr pa pe pi pl ps pp ph pt ju je ys yi yl ye yt yw xc xe xy zo ze </textarea> <button id="go">go</button>
+          <br />
+          <div class="plain">Copy and paste any text here to use <br />
+            the letter combinations from that text.</div>
+        </div>
+
+      </div>
     </div>
 
     <button id="reload">Reload</button>
@@ -174,24 +186,14 @@
 
 
 
-  <div id="controls">
-    <div id="settings">*SETTINGS*</div>
-    <div class="ctrlbox">
-      Wordbank:<br />
-      <textarea id="wordbank">th to ts te ti tu tc ta ty tl tt tr tw tg he hi ha ho ht hu hr hy er em ea el en ed ee et ev ef ei eh ex ew es eq eg ey ec ep ek eo ez eb re ry rk ra rw rd rr ri rt ro rn rg rm rs rv ru rc rh rl rp wa wh wo wi wn wr we wd as ar ab at al ay af av ac ai an ad ak am ag ap au ax no ng nk nd na ne ni nt nc ns nn ny nv nl nu nf ot or ou of oh ov oc on oo ok oa os op ow ol om og od oe ob ox in id ic it is im ie io iv ix ia ig ir if ip iq il ib so sa se sh st ss si su sl sp sc sm sk sq ve vo vi ma mu me mi mo my mp mb ms ka ke ks ki bl bb bi be bu bo by bj ba br le li lf ll la ly lo ld lm ls lu lt lk lw lv di de ds do dg da dy dd dm dr dv dl du df ce ch cc cu ct co ck cr cl ca ci cq uc ut ug ur ui ua un us ue ud um up ul ub gh ge gu gi ga gr go gn ft fe fo fl fi ff fa fu fr qu po pu pr pa pe pi pl ps pp ph pt ju je ys yi yl ye yt yw xc xe xy zo ze </textarea> <button id="go">go</button>
-      <br />
-      <div class="plain">Copy and paste any text here to use <br />
-        the letter combinations from that text.</div>
-    </div>
-  </div>
-
-
   <div>
     <div id="alphabits"></div>
 
     <input type="checkbox" data-state="0" class="threestate" id="stopwatch" /><label class="button" id="timer" for="stopwatch">start</label>
 
     <div id="output"></div>
+    <div id="showsol"><input type="checkbox" class="slider" id="showsolution" /> <label class="button" for="showsolution">Show Solution</label></div>
+
   </div>
 
 
@@ -206,22 +208,22 @@
 
     let output = document.querySelector("#output");
 
+    let showsolution = document.querySelector("#showsolution");
 
     document.querySelector("#alphabits").innerHTML = alphabet.toUpperCase() + "<br/>" + alphabet.toLowerCase();
 
 
-    document.querySelector("#red").onclick = document.querySelector("#leveltwo").onclick = document.querySelector("#showsolution").onclick = function () {
-      accents(this.checked, this.id);
-    };
+    // document.querySelector("#red").onclick = document.querySelector("#leveltwo").onclick = showsolution.onclick = function () {
+    //   accents(this.checked, this.id);
+    // };
 
-    function accents(checked, id) {
-
-      if (checked) {
-        output.classList.add(id);
-      } else {
-        output.classList.remove(id);
-      }
-    }
+    // function accents(checked, id) {
+    //   if (checked) {
+    //     output.classList.add(id);
+    //   } else {
+    //     output.classList.remove(id);
+    //   }
+    // }
 
 
     document.querySelector("#go").onclick = function () {
@@ -342,8 +344,8 @@
         // console.log("bad digraph collection", digraphs);
         return;
       }
-      document.querySelector("#showsolution").checked = false;
-      accents(false, "showsolution");
+      showsolution.checked = false;
+      // accents(false, "showsolution");
 
       let maxwords = 70;
 
@@ -455,8 +457,8 @@
         if (selectedltrs.length >= 26 && stopwatch.dataset.state == 1) {
           // finished the exercise, stop timer
           stopwatch.click();
-          document.querySelector("#showsolution").checked = true;
-          accents(true, "showsolution");
+          showsolution.checked = true;
+          // accents(true, "showsolution");
         }
         console.log(selectedltrs.sort());
 

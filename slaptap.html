@@ -156,19 +156,24 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
 
-    <div><select id="level" name="level">
-        <option selected value="1">Level 1</option>
-        <option value="2">Level 2</option>
-        <option value="3">Level 3</option>
-        <option value="4">Level 4</option>
-        <option value="5">Level 5</option>
-      </select>
+    <div id="ctrlsettings"><input type="checkbox" id="ctrlset" /><label for="ctrlset"><img src="img/icon_ctrlsettings.svg" /></label>
+
+      <div class="ctrlbox">
+        <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+        <div><input type="checkbox" class="slider" id="colormode" /><label for="colormode">Color mode</label></div>
+
+        <select id="level" name="level">
+          <option selected value="1">Level 1</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+          <option value="4">Level 4</option>
+          <option value="5">Level 5</option>
+        </select>
+
+      </div>
     </div>
-
-    <div><input type="checkbox" class="slider" id="colormode" /><label for="colormode">Color mode</label></div>
-
 
     <button id="reload">Reload</button>
 

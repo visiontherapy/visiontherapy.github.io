@@ -123,14 +123,26 @@
       flex-direction: column;
 
 
-      #hartmain {
-        order: 1;
+      #showcode {
+        font-size: calc(var(--basefont) /2);
+        margin:1em 1em 0;
+
+        &:has(input:checked) ~ :is(#codehints, #codeout) {
+          display:block;
+        }
       }
 
       #codeout {
+        display:none;
+        /* &::before {
+          content: "Hart Code:";
+          display:block;
+        } */
+
         font-size: calc(var(--basefont) /2);
-        order: 2;
+        /* order: 2; */
         transition: all 0.5s;
+        margin:0.5em 1em;
 
         .lettercode {
           padding: 0 0.25em;
@@ -169,39 +181,51 @@
       }
 
       #codehints {
-        order: 3;
+        display:none;
+        margin: 0.5em 2em;
       }
 
-      #codehints:has(input:checked)~#codeout {
 
-        &:has([data-row="1"]:hover)~#hartmain [data-row="1"],
-        &:has([data-row="2"]:hover)~#hartmain [data-row="2"],
-        &:has([data-row="3"]:hover)~#hartmain [data-row="3"],
-        &:has([data-row="4"]:hover)~#hartmain [data-row="4"],
-        &:has([data-row="5"]:hover)~#hartmain [data-row="5"],
-        &:has([data-row="6"]:hover)~#hartmain [data-row="6"],
-        &:has([data-row="7"]:hover)~#hartmain [data-row="7"],
-        &:has([data-row="8"]:hover)~#hartmain [data-row="8"],
-        &:has([data-row="9"]:hover)~#hartmain [data-row="9"],
-        &:has([data-row="10"]:hover)~#hartmain [data-row="10"],
-        &:has([data-col="1"]:hover)~#hartmain [data-col="1"],
-        &:has([data-col="2"]:hover)~#hartmain [data-col="2"],
-        &:has([data-col="3"]:hover)~#hartmain [data-col="3"],
-        &:has([data-col="4"]:hover)~#hartmain [data-col="4"],
-        &:has([data-col="5"]:hover)~#hartmain [data-col="5"],
-        &:has([data-col="6"]:hover)~#hartmain [data-col="6"],
-        &:has([data-col="7"]:hover)~#hartmain [data-col="7"],
-        &:has([data-col="8"]:hover)~#hartmain [data-col="8"],
-        &:has([data-col="9"]:hover)~#hartmain [data-col="9"],
-        &:has([data-col="10"]:hover)~#hartmain [data-col="10"] {
+      /* #codehints:has(input:checked)~#codeout { */
+      #hartmain:has(~#codehints input:checked) {
+
+        &:has(~#codeout [data-row="1"]:hover) [data-row="1"],
+        &:has(~#codeout [data-row="2"]:hover) [data-row="2"],
+        &:has(~#codeout [data-row="3"]:hover) [data-row="3"],
+        &:has(~#codeout [data-row="4"]:hover) [data-row="4"],
+        &:has(~#codeout [data-row="5"]:hover) [data-row="5"],
+        &:has(~#codeout [data-row="6"]:hover) [data-row="6"],
+        &:has(~#codeout [data-row="7"]:hover) [data-row="7"],
+        &:has(~#codeout [data-row="8"]:hover) [data-row="8"],
+        &:has(~#codeout [data-row="9"]:hover) [data-row="9"],
+        &:has(~#codeout [data-row="10"]:hover) [data-row="10"],
+        &:has(~#codeout [data-col="1"]:hover) [data-col="1"],
+        &:has(~#codeout [data-col="2"]:hover) [data-col="2"],
+        &:has(~#codeout [data-col="3"]:hover) [data-col="3"],
+        &:has(~#codeout [data-col="4"]:hover) [data-col="4"],
+        &:has(~#codeout [data-col="5"]:hover) [data-col="5"],
+        &:has(~#codeout [data-col="6"]:hover) [data-col="6"],
+        &:has(~#codeout [data-col="7"]:hover) [data-col="7"],
+        &:has(~#codeout [data-col="8"]:hover) [data-col="8"],
+        &:has(~#codeout [data-col="9"]:hover) [data-col="9"],
+        &:has(~#codeout [data-col="10"]:hover) [data-col="10"] {
           color: var(--highlight);
         }
       }
+
+    }
+
+    #metronome {
+      display:none;
+    }
+
+    #ctrlbar:has(#showmetro:checked) #metronome {
+      display:block;
     }
 
 
 
-    #controls:has(#redmode[data-state="1"])~#hartchart #hartmain {
+    #ctrlbar:has(#redmode[data-state="1"])~#hartchart #hartmain {
       & .slot:nth-child(even) {
         background: var(--tranared);
         color: var(--bg);
@@ -214,7 +238,7 @@
 
 
 
-    #controls:has(#redmode[data-state="2"])~#hartchart #hartmain {
+    #ctrlbar:has(#redmode[data-state="2"])~#hartchart #hartmain {
       & .slot.randomred {
         background: var(--tranared);
         color: var(--bg);
@@ -229,7 +253,7 @@
     @media print {
 
 
-      #controls:has(#redmode[data-state="1"])~#hartchart #hartmain {
+      #ctrlbar:has(#redmode[data-state="1"])~#hartchart #hartmain {
         & .slot:nth-child(even) {
           background: red;
           color: black;
@@ -241,7 +265,7 @@
         }
       }
 
-      #controls:has(#redmode[data-state="2"])~#hartchart #hartmain {
+      #ctrlbar:has(#redmode[data-state="2"])~#hartchart #hartmain {
         & .slot.randomred {
           background: red;
           color: black;
@@ -277,9 +301,25 @@
   <div id="ctrlbar" class="z1">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+    <div id="ctrlsettings"><input type="checkbox" id="ctrlset" /><label for="ctrlset"><img src="img/icon_ctrlsettings.svg" /></label>
 
-    <div>
+      <div class="ctrlbox">
+        <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+        
+        <div><input type="checkbox" class="slider" id="showmetro" /><label for="showmetro">Show Metronome</label></div>
+
+        <div><input type="checkbox" class="threestate" id="redmode" /><label for="redmode">Red filter</label></div>
+
+        <div>
+          <input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>
+          <div id="qrplace"></div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div id="metronome">
       <div id="tapp">TAP</div><input type="text" id="bpm" value="60" />
       <input type="checkbox" id="metrocheck"><label for="metrocheck">
         <svg id="metro_on" xmlns="http://www.w3.org/2000/svg" version="1.0" width="500" height="500" viewBox="0 0 75 75">
@@ -307,28 +347,16 @@
   </div>
 
 
-  <div id="controls">
-    <div id="settings">*SETTINGS*</div>
-
-    <div class="ctrlbox">
-
-      <div><input type="checkbox" class="threestate" id="redmode" /><label for="redmode">Red filter</label></div>
-
-      <div>
-        <input type="checkbox" class="slider" id="qrtoggle" /><label for="qrtoggle">QR code</label>
-        <div id="qrplace"></div>
-      </div>
-
-    </div>
-  </div>
-
-
 
   <div id="hartchart" class="contents">
     <div id="boxscale"><input type="range" id="scale" max="1" min="0.3" value="1" step="0.01" /></div>
-    <div id="codehints"><input type="checkbox" class="slider" id="cheatcode" /><label for="cheatcode">Show Hints</label></div>
-    <div id="codeout"></div>
     <div id="hartmain" data-mark=""></div>
+
+
+    <div id="showcode"><input type="checkbox" class="slider" id="showcodex" /><label for="showcodex">Hart Decoder</label></div>
+    <div id="codeout"></div>
+    <div id="codehints"><input type="checkbox" class="slider" id="cheatcode" /><label for="cheatcode">Show Hints</label></div>
+
   </div>
 
   <script>
@@ -404,7 +432,8 @@
         // let qq = quotes.filter((q) => { return q.length < 50; });
         // text ??= qq[Math.floor(Math.random() * qq.length)];
         text ??= getquote();
-        codeout.innerHTML = "Hart Code:<br/>";
+        // codeout.innerHTML = "Hart Code:<br/>";
+        codeout.innerText = "";
         codeout.title = text;
         codeout.className = "";
         let count = 0;

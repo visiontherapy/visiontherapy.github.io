@@ -6,7 +6,8 @@
 [data-theme="light"] {
   --bg: #eee;
   --fg: #000;
-  --ctrlbg: #ddf;
+  --menubar: #ccc;
+  --ctrlbg: #ccc;
   --highlight: #099;
   /* -- tranared: #03f; */
   /* -- tranagreen: #f00; */
@@ -22,7 +23,8 @@
 [data-theme="dark"] {
   --bg: #000;
   --fg: #fff;
-  --ctrlbg: #222;
+  --menubar: #333;
+  --ctrlbg: #333;
   --highlight: #0ff;
   /* -- tranared: #008; */
   /* -- tranagreen: #500; */
@@ -44,7 +46,7 @@ body {
   margin: 0;
   padding: 0;
   transition-property: background-color, color;
-  transition: linear 0.3s;
+  transition: linear 0.25s;
   position: relative;
 }
 
@@ -64,61 +66,82 @@ a {
   user-select: none;
   height: 1.5em;
   z-index: 50;
+  background: var(--menubar);
 
   & img {
     height: 100%;
   }
 
   & #ctrlsettings {
-    & input {
+    position: relative;
+    user-select: none;
+    #ctrlset {
       display: none;
+      &:checked ~ label::after {
+        content: "";
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: transparent;
+      }
+    }
+
+    > label img {
+      cursor: pointer;
+      &:hover {
+        filter: brightness(0.5);
+      }
+    }
+
+    .ctrlbox {
+      line-height: 1.75em;
+      position: absolute;
+      background: var(--ctrlbg);
+      transition: opacity 0.25s linear;
+      height: auto;
+      white-space: nowrap;
+      z-index: 100;
+      opacity: 0;
+      padding: 1em;
+      left: -100%;
+      pointer-events: none;
+      border-radius: 0.25em 0.25em 1em 1em;
+      &::before {
+        content: "Settings";
+        font-size: 150%;
+        font-weight: bold;
+      }
+    }
+
+    &:has(#ctrlset:checked) .ctrlbox,
+    .ctrlbox:hover {
+      opacity: 1;
+      pointer-events: all;
     }
   }
 }
 
+.plain {
+  line-height: 1em;
+}
+
+/* 
 #controls {
   position: relative;
   line-height: 2em;
   overflow: visible;
   display: table;
 
-  .plain {
-    line-height: 1em;
-  }
-}
 
+} */
+/* 
 #settings {
   cursor: default;
   display: inline-block;
   padding: 0.3em;
-}
-
-.ctrlbox {
-  position: absolute;
-  background: transparent;
-  transition: all 0.25s linear;
-  /* width: 100%; */
-  height: auto;
-  white-space: nowrap;
-  /* overflow: hidden; */
-  z-index: 1005;
-  opacity: 0;
-  padding: 0.75em;
-  visibility: hidden;
-}
-
-#controls:hover .ctrlbox,
-.ctrlbox:hover {
-  background: var(--ctrlbg);
-  transition: all 0.25s linear;
-  opacity: 1;
-  visibility: visible;
-}
+} */
 
 button#reload {
-  /* position: absolute; */
-  /* top: 1em; */
-  /* right: 1em; */
   padding: 0.1em 0.4em;
   font-weight: bold;
   height: 2em;
@@ -134,22 +157,32 @@ input#markers {
 
 input#help {
   display: none;
-}
+  & + label {
+    margin-left: 1em;
+    top: 3em;
+    right: 1em;
+    border: solid 1px var(--fg);
+    padding: 0 0.4em;
+    border-radius: 0.5em;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  &:checked + label {
+    background: red;
 
-input#help + label {
-  margin-left: 1em;
-  top: 3em;
-  right: 1em;
-  border: solid 1px var(--fg);
-  padding: 0 0.4em;
-  border-radius: 0.5em;
-  display: inline-block;
-  cursor: pointer;
-  transition: all 0.25s;
-}
-
-input#help:checked + label {
-  background: red;
+    & + #helptext {
+      background: green;
+      display: block;
+      position: fixed;
+      left: 50%;
+      transform: translate(-50%);
+      top: 20%;
+      line-height: 1.25em;
+      padding: 0 0.5em 0.5em;
+      z-index: 100;
+    }
+  }
 }
 
 #helptext {
@@ -157,17 +190,6 @@ input#help:checked + label {
   white-space: initial;
 }
 
-input:checked + label + #helptext {
-  background: green;
-  display: block;
-  position: fixed;
-  left: 50%;
-  transform: translate(-50%);
-  top: 20%;
-  line-height: 1.25em;
-  padding: 0 0.5em 0.5em;
-  z-index: 100;
-}
 /*
 input[type="checkbox"] {
   display: none;
@@ -304,6 +326,11 @@ label h3 {
 #homeicon {
   height: 1.5em;
   width: 1.5em;
+}
+
+#homeicon,
+#ctrlsettings > label > img,
+#menuthing :is(#id1, #id2) img {
   filter: var(--homefilter);
 }
 
@@ -332,8 +359,7 @@ img {
   :root {
     --fg: black;
   }
-  #ctrlbar,
-  #controls {
+  #ctrlbar {
     display: none;
   }
 }

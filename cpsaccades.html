@@ -122,51 +122,53 @@
   <div id="ctrlbar">
     <div><a href="index.html"><img id="homeicon" src="img/home.svg" alt="home" /></a></div>
 
-    <div><input type="checkbox" class="slider" id="darkmode" /><label class="button" for="darkmode">Dark mode</label></div>
 
-    <div><input type="checkbox" class="threestate" id="spacefix" /><label class="button" for="spacefix">Space Fixator</label></div>
+    <div id="ctrlsettings"><input type="checkbox" id="ctrlset" /><label for="ctrlset"><img src="img/icon_ctrlsettings.svg" /></label>
+
+      <div class="ctrlbox">
+        <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
+
+        <div><input type="checkbox" class="threestate" id="spacefix" /><label class="button" for="spacefix">Space Fixator</label></div>
 
 
-    <div>
-      Color mode:
-      <select id="colormode">
-        <option value="default">Default</option>
-        <option value="colorful">Colorful</option>
-        <option value="redgreen">Red/green</option>
-        <option value="hybrid">Red+green</option>
-      </select>
+        <div>
+          Color mode:
+          <select id="colormode">
+            <option value="default">Default</option>
+            <option value="colorful">Colorful</option>
+            <option value="redgreen">Red/green</option>
+            <option value="hybrid">Red+green</option>
+          </select>
+        </div>
+
+        <div>Markers <input type="text" id="markers" /></div>
+
+        <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
+
+        <div>Marker spacing <input id="markslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="markscale"></span></div>
+
+        <div>Circle spacing <input id="spaceslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="spacescale"></span></div>
+
+      </div>
     </div>
 
-    <!-- div><input type="checkbox" class="slider" id="colormode_x" /><label class="button" for="colormode_x">Colorful markers</label></div>
-
-    <div><input type="checkbox" class="slider" id="redgreen" /><label class="button" for="redgreen">Red/Green mode</label></div-->
+    <div>
+      <input type="checkbox" id="help" />
+      <label for="help">Help</label>
+      <label id="helptext" for="help">
+        <h2>How to use this:</h2>
+        <h3>Customize Markers</h3>
+        Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
+        <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
+        <h3>Usage</h3>
+        Press the spacebar on the keyboard to display a new target marker in the central area.
+      </label>
+    </div>
 
     <button id="reload">Reload</button>
 
   </div>
 
-  <div id="controls">
-    <div id="settings">*SETTINGS*</div>
-    <input type="checkbox" id="help" />
-    <label for="help">Help</label>
-    <label id="helptext" for="help">
-      <h2>How to use this:</h2>
-      <h3>Customize Markers</h3>
-      Enter text in the Markers text area to use your own markers. The script recognizes commas as separators. If no commas are used, then each character will be taken as unique markers. The script will recognize duplicate entries and filters them out.
-      <h3>Size/scale</h3>Use the various sliders to adjust the size and distribution of the markers in the display area.
-      <h3>Usage</h3>
-      Press the spacebar on the keyboard to display a new target marker in the central area.
-    </label>
-    <div class="ctrlbox">
-      <div>Markers <input type="text" id="markers" /></div>
-
-      <div>Scale <input id="fontslider" type="range" min="0.5" max="2" value="1" step="0.1" /> <span id="fontscale"></span></div>
-
-      <div>Marker spacing <input id="markslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="markscale"></span></div>
-
-      <div>Circle spacing <input id="spaceslider" type="range" min="0.5" max="2" value="1" step="0.05" /> <span id="spacescale"></span></div>
-    </div>
-  </div>
 
   <div id="saccades" data-mark=""></div>
 
