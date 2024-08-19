@@ -74,18 +74,18 @@
 
       #mk_colors {
         line-height: 1.25em;
+      }
 
-        &:has(#mk_red:checked)~#saccades .mark {
-          color: var(--tranared);
-        }
+      &:has(#mk_red:checked)~#saccades .mark {
+        color: var(--tranared);
+      }
 
-        &:has(#mk_green:checked)~#saccades .mark {
-          color: var(--tranagreen);
-        }
+      &:has(#mk_green:checked)~#saccades .mark {
+        color: var(--tranagreen);
+      }
 
-        &:has(#mk_green:checked):has(#mk_red:checked)~#saccades .mk_parttwo {
-          color: var(--tranared);
-        }
+      &:has(#mk_green:checked):has(#mk_red:checked)~#saccades .mk_parttwo {
+        color: var(--tranared);
       }
     }
 
@@ -111,8 +111,9 @@
       }
 
       #saccades {
-        margin:0;
+        margin: 0;
       }
+
       .mark {
         --marksize: 0.5in;
         print-color-adjust: exact !important;
