@@ -32,19 +32,6 @@
       margin: 0.5em 1em;
     }
 
-    img {
-      vertical-align: middle;
-    }
-
-    #homelogo {
-      width: 1.5em;
-      height: 1.5em;
-
-      & img {
-        height: 100%;
-      }
-    }
-
     ul {
       margin-top: 0;
     }
@@ -70,7 +57,7 @@
     #ctrlbar[data-scroll="x"]~#totop {
       opacity: 1;
       pointer-events: all;
-      ;
+   
     }
 
     #toc {
@@ -82,16 +69,18 @@
 
       & li {
         display: block;
-        width: 50%;
+        width: 30%;
         min-width: 15em;
         ;
       }
 
-      & img {
+      & :is(img, object) {
         height: 1em;
         margin-right: 0.25em;
+        vertical-align: middle;
       }
     }
+
 
     .legend {
       margin: 0.5em 1em;
@@ -106,6 +95,9 @@
 <body>
   <div id="ctrlbar">
     <div id="homelogo"><img src="img/logo.svg" /></div>
+
+    <!-- <div id="ctrlsettings"><input type="checkbox" id="ctrlset"/><label for="ctrlset"><img src="img/icon_ctrlsettings.svg"/></label></div> -->
+
     <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
 
   </div>
@@ -352,9 +344,16 @@
 
     for (let h of document.querySelectorAll("h3")) {
       let a = h.querySelector("a");
+
+
       let bimg = document.createElement("img");
       bimg.src = "img/icon_" + h.id + ".svg";
       bimg.alt = a.innerText;
+
+      // let bimg = document.createElement("object");
+      // bimg.type = "image/svg+xml";
+      // bimg.data = "img/icon_" + h.id + ".svg";
+
       let li = document.createElement("li");
       li.append(bimg);
 
