@@ -16,6 +16,7 @@
   --trackred: #f00;
   --trackredbg: var(--bg);
   --homefilter: brightness(0);
+  --link: #14c;
 }
 
 [data-theme="dark"] {
@@ -31,6 +32,7 @@
   --trackred: var(--fg);
   --trackredbg: #ff0000;
   --homefilter: saturate(0) brightness(100);
+  --link: #6495ed;
 }
 
 body {
@@ -49,7 +51,7 @@ body {
 a {
   font-size: inherit;
   text-decoration: none;
-  color: #6495ed;
+  color: var(--link);
 }
 
 #ctrlbar {
@@ -59,7 +61,19 @@ a {
   justify-content: space-between;
   padding: 0.5em 0.5em;
   position: relative;
+  user-select: none;
+  height: 1.5em;
   z-index: 50;
+
+  & img {
+    height: 100%;
+  }
+
+  & #ctrlsettings {
+    & input {
+      display: none;
+    }
+  }
 }
 
 #controls {
@@ -76,7 +90,7 @@ a {
 #settings {
   cursor: default;
   display: inline-block;
-  padding:0.3em;
+  padding: 0.3em;
 }
 
 .ctrlbox {
@@ -308,6 +322,10 @@ label h3 {
 
 .circlemenu .togglediv img {
   filter: invert(0.5);
+}
+
+img {
+  vertical-align: middle;
 }
 
 @media print {
