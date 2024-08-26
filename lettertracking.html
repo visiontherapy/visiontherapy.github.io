@@ -248,8 +248,10 @@
 
 
     function getdigraphs() {
-      let words = document.querySelector("#wordbank").value.replace(/[^\w\s]/g, " ").toLowerCase();
+      let wordbank = document.querySelector("#wordbank");
+      let words = wordbank.value.replace(/[^\w\s]/g, " ").toLowerCase();
 
+      // console.log("original:", words);
       missing = [];
       for (const ltr of alphabet.split("")) {
         if (!words.match(new RegExp(ltr))) {
@@ -260,7 +262,7 @@
         digraphs = {};
         return;
       }
-      console.log(missing);
+      console.log("missing", missing);
 
 
 
@@ -286,11 +288,9 @@
         }
       }
 
-      // console.log(digraphs);
 
-      //** This section is for debugging only
       //** replace wordbank text with flatdigraphs to make it more concise
-      let showflat = false;
+      let showflat = true;
       // showflat = true;
       if (showflat) {
         let flatdigraphs = "";
@@ -299,10 +299,10 @@
             flatdigraphs += prima + secund + " ";
           }
         }
-        console.log(flatdigraphs);
+        // console.log(flatdigraphs);
+        wordbank.value = flatdigraphs;
+        // words.innerText = flatdigraphs;
       }
-
-
     }
 
 
