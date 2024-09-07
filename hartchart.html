@@ -125,15 +125,15 @@
 
       #showcode {
         font-size: calc(var(--basefont) /2);
-        margin:1em 1em 0;
+        margin: 1em 1em 0;
 
-        &:has(input:checked) ~ :is(#codehints, #codeout) {
-          display:block;
+        &:has(input:checked)~ :is(#codehints, #codeout) {
+          display: block;
         }
       }
 
       #codeout {
-        display:none;
+        display: none;
         /* &::before {
           content: "Hart Code:";
           display:block;
@@ -142,7 +142,7 @@
         font-size: calc(var(--basefont) /2);
         /* order: 2; */
         transition: all 0.5s;
-        margin:0.5em 1em;
+        margin: 0.5em 1em;
 
         .lettercode {
           padding: 0 0.25em;
@@ -181,7 +181,7 @@
       }
 
       #codehints {
-        display:none;
+        display: none;
         margin: 0.5em 2em;
       }
 
@@ -216,11 +216,11 @@
     }
 
     #metronome {
-      display:none;
+      display: none;
     }
 
     #ctrlbar:has(#showmetro:checked) #metronome {
-      display:block;
+      display: block;
     }
 
 
@@ -278,7 +278,10 @@
       }
 
       #boxscale,
-      #codehints {
+      #cheatcode,
+      #cheatcode+label,
+      #showcodex,
+      #showcodex+label {
         display: none;
       }
 
@@ -305,7 +308,7 @@
 
       <div class="ctrlbox">
         <div><input type="checkbox" class="slider" id="darkmode" /><label for="darkmode">Dark mode</label></div>
-        
+
         <div><input type="checkbox" class="slider" id="showmetro" /><label for="showmetro">Show Metronome</label></div>
 
         <div><input type="checkbox" class="threestate" id="redmode" /><label for="redmode">Red filter</label></div>
